@@ -1,0 +1,7 @@
+ECE 480 Project
+
+Directory structure:
+
+src - Our actual application, including the Model, View, and Controller
+vendor - Holds libraries like Silex and anything we end up using
+web - The publicly accessible directory with CSS/Javascript/images and a front controller index.php
