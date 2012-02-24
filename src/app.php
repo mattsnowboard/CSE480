@@ -5,10 +5,20 @@ require_once __DIR__.'/../vendor/Silex/silex.phar';
 
 $app = new Silex\Application();
 
+/** Register with autoloader **/
+$app['autoloader']->registerNamespaces(array(
+    'Wws' => __DIR__,
+    'Tyaga' => __DIR__ . '/../vendor'
+));
 
+$app->register(new Tyaga\Extension\LoadConfigExtension(), array(
+    'loadconfig.load' => array(
+        'database' => __DIR__ . '/config/database.yml',
+    )
+));
 
 /** Database **/
-$app->register(new Silex\Extension\DoctrineExtension(), array(
+$app->register(new Silex\Provider\DoctrineServiceProvider(), array(
     'db.options'            => array(
         'driver'    => 'pdo_mysql',
         'host'      => 'localhost',
@@ -21,14 +31,11 @@ $app->register(new Silex\Extension\DoctrineExtension(), array(
 ));
 
 /** Twig **/
-$app->register(new Silex\Extension\TwigExtension(), array(
-    'twig.path' => __DIR__.'/Wws/templates',
+$app->register(new Silex\Provider\TwigServiceProvider(), array(
+    'twig.path' => __DIR__.'/Wws/Templates',
     'twig.class_path' => __DIR__.'/../vendor/Twig/lib',
     'twig.options' => array('cache' => __DIR__.'/../cache'),
 ));
-
-/** Register with autoloader **/
-$app['autoloader']->registerNamespace('Wws', __DIR__);
 
 /** Our Services */
 $app['UserProvider'] = $app->share(function() {

@@ -1,0 +1,5 @@
+database:
+    server: 'server'
+    user: 'user'
+    password: 'password'
+    
