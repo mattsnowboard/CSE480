@@ -1,0 +1,9 @@
+[submodule "vendor/yaml"]
+	path = vendor/yaml
+	url = https://github.com/fabpot/yaml
+[submodule "vendor/Tyaga/Extension/LoadConfigExtension/vendor/yaml"]
+	path = vendor/Tyaga/Extension/LoadConfigExtension/vendor/yaml
+	url = git@github.com:fabpot/yaml.git
+[submodule "vendor/vendor/yaml"]
+	path = vendor/vendor/yaml
+	url = git@github.com:fabpot/yaml.git
