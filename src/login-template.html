@@ -1,0 +1,33 @@
+{% extends "base-template.html" %}
+
+{% block head %}
+    {{ parent() }}
+    <style type="text/css">
+        .important { color: #336699; }
+    </style>
+{% endblock %}
+
+{% block main %}
+	<section id="login">
+		<h2>Login</h2>
+		<form>
+  	        <label for="Username">Username</label>
+  		    <input type="text" name="Usermame" id="Username" />
+  		    <label for="Password">Password</label>
+  		    <input type="text" name="Password" id="Password" />
+  		    <label for="Login" class="hidden">Login</label>
+  		    <input type="button" class="login-button" value="Login"/>
+  	      </form>
+	</section>
+	
+	<section id="register">
+		<h2>Register</h2>
+		<form>
+  		    <input type="button" class="register-button" value="Register Now"/>
+			<label for="FirstName">First Name</label>
+  		    <input type="text" name="FirstName" id="FirstName" />
+			<label for="LastName">Last Name</label>
+  		    <input type="text" name="LastName" id="LastName" />
+  	    </form>
+	</section>
+{% endblock %}
