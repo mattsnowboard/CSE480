@@ -54,4 +54,8 @@ $app->get('/', function() use($app){
     return 'Hello ' . $app['User']->GetId();
 });
 
+$app->get('/test', function() use($app){
+    return $app['twig']->render('login-template.html.twig');
+});
+
 return $app;
