@@ -7,7 +7,7 @@ use Silex\ServiceProviderInterface;
 
 class LoadConfigExtension implements ServiceProviderInterface {
     public function register(Application $app) {
-	    $app['autoloader']->registerPrefix('sfYaml', __DIR__.'../../yaml/lib');
+	    $app['autoloader']->registerPrefix('sfYaml', __DIR__.'/../../yaml/lib');
 
 	    $app['config'] = $app->share(function () use($app) {
 			return new ConfigLoader($app['loadconfig.load']);

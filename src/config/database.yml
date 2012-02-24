@@ -1,5 +1,5 @@
-database:
-    server: 'server'
-    user: 'user'
-    password: 'password'
+server: 'server'
+database: 'database'
+user: 'user'
+password: 'password'
     

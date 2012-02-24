@@ -21,10 +21,10 @@ $app->register(new Tyaga\Extension\LoadConfigExtension(), array(
 $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
     'db.options'            => array(
         'driver'    => 'pdo_mysql',
-        'host'      => 'localhost',
-		'dbname'	=> 'blog',
-		'user'		=> 'ichikawa',
-		'password'	=> 'hogehoge'
+        'host'      => $app['config']['database']['server'],
+		'dbname'	=> $app['config']['database']['database'],
+		'user'		=> $app['config']['database']['user'],
+		'password'	=> $app['config']['database']['password']
     ),
     'db.dbal.class_path'    => __DIR__.'/../vendor/doctrine-dbal/lib',
     'db.common.class_path'  => __DIR__.'/../vendor/doctrine-common/lib',
