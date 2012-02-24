@@ -1,0 +1,27 @@
+{% extends "base-template.html" %}
+
+{% block head %}
+    {{ parent() }}
+    <style type="text/css">
+        .important { color: #336699; }
+    </style>
+{% endblock %}
+
+{% block main %}
+	<section id="leaderboard">
+		<h2>Words with Strangers Leaderboard</h2>
+		<p>Some sort of list/view of highest-scoring users</p>
+	</section>
+	
+	<section id="welcome-options">
+		<ul id="options-list">
+			<li><a href="#" title="Start 1-Player Game">Start 1-Player Game</a></li>
+			<li><a href="#" title="Send a Challenge">Send a Challenge</a></li>
+	</section>
+	
+	<section id="challenges">
+		<h2>Challenges</h2>
+		<p>View of challenges recieved, options to accept/deny them</p>
+	</section>
+
+{% endblock %}

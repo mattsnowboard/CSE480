@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+		{% block head %}
+			<link rel="stylesheet" href="style.css" />
+			<title>Words with Strangers</title>
+		{% endblock %}
+    </head>
+    <body>
+		{% block infobar %}
+			<section id="infobar">
+		
+			</section>
+		{% endblock %}
+		
+		<section id="banner">
+			<a href="#" id="banner-link">Link with banner image to homepg</a>
+		</section>
+		
+		{% block main %}
+			<section id="main">
+				<p>All the page-specific stuff goes here</p>
+			</section>
+		{% endblock %}
+		
+		{% block footer %}
+			<footer id="infobar">
+				<p>Footer info, links, etc here if we want</p>
+			</footer>
+		{% endblock %}
+
+    </body>
+</html>
