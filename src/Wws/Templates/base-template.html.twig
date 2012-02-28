@@ -2,7 +2,13 @@
 <html>
     <head>
 		{% block head %}
-			<link rel="stylesheet" href="style.css" />
+			<!-- <link rel="stylesheet" type="text/css" href="css/base-template-style.css" /> -->
+			<style type="text/css">
+				body{ background: #DDD; }
+				#login{ width: 45%; border: 1px solid #000;}
+				#register{width: 45%; border: 1px solid #000;}
+				
+			</style>
 			<title>Words with Strangers</title>
 		{% endblock %}
     </head>
@@ -14,7 +20,7 @@
 		{% endblock %}
 		
 		<section id="banner">
-			<a href="#" id="banner-link">Link with banner image to homepg</a>
+			<a href="#" id="banner-link">Link with banner image to homepg </a>
 		</section>
 		
 		{% block main %}
