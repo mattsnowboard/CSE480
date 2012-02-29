@@ -2,6 +2,7 @@
 
 {% block head %}
 	{{ parent() }}
+	 <link rel="stylesheet" type="text/css" href="css/login-template-style.css" />
 {% endblock %}
 
 {% block main %}
@@ -48,4 +49,15 @@
 			
   	    </form>
 	</section>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js">/script>
+	<script>
+		(function() {
+			$('.register-button').click()(function() {
+				$('form#reg-form').removeClass('hidden');
+			});
+		})();
+
+	</script>
 {% endblock %}
+
