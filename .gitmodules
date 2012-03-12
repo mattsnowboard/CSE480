@@ -1,3 +1,6 @@
 [submodule "vendor/Twig"]
 	path = vendor/Twig
 	url = https://github.com/fabpot/Twig.git
+[submodule "vendor/Doctrine"]
+	path = vendor/Doctrine
+	url = https://github.com/doctrine/dbal.git
