@@ -22,11 +22,9 @@
 	<section id="register">
 		<h2>Register</h2>
         <form id="reg-button-form">
-  		    <input type="button" class="register-button" value="Register Now"/>
+  		    <input type="button" class="show-register-button" value="Register Now"/>
 		</form>
 		<form class="hidden" id="reg-form" action="/register-check" method="post">
-  		    <input type="submit" class="register-button" value="Register Now"/>
-            
             <label for="email">Email</label>
   		    <input type="text" name="email" id="email" />
             
@@ -56,6 +54,7 @@
 			<label for="Country">Country</label>
 			<input type="text" name="Country" id="Country" size="2" />			
 			
+            <input type="submit" class="register-button" value="Submit"/>
   	    </form>
 	</section>
 	
@@ -64,10 +63,10 @@
 {% block scripts %}
     {{ parent() }}
 	<script>
-		(function() {
-			$('.register-button').click()(function() {
+        $(document).ready(function(){
+            $('.show-register-button').click(function() {
 				$('form#reg-form').removeClass('hidden');
 			});
-		})();
+        });  
 	</script>
 {% endblock %}
