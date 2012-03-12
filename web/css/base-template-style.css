@@ -1,0 +1,50 @@
+/*-------------------------------------------------------------
+	CSS for Words with Friends Base Template
+	Devan Sayles, Chelsea Carr, Matt Durak
+	CSE 480
+--------------------------------------------------------------*/
+
+ body { 
+	background: #DDD;
+	font-family: Arial, Heelvetica, sans-serif;
+ }
+ 
+.wrapper {
+	border: 1px #000 solid;
+	width:800px; 
+	margin: auto;
+}
+
+.hidden {
+	display: none;
+}
+
+#infobar {
+	background: #333;
+	width: 100%;
+	height: 32px;
+	/*margin: -15px 0px 0px -8px;*/
+	border: 1px #000 solid;
+	color: #00FF00;
+	font-size: 13px;
+}
+
+#infobar ul {
+	text-align: right;
+	margin-top: -30px;
+}
+
+#infobar li {
+	display:inline-block;
+	list-style: none;
+	margin-right: 7px;
+}
+
+#infobar a {
+	text-decoration: none;  
+}
+
+#infobar a:hover { 
+	color: #00FF00; 
+}
+

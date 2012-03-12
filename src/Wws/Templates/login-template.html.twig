@@ -1,5 +1,10 @@
 {% extends "base-template.html.twig" %}
 
+{% block stylesheets %}
+	{{ parent() }}
+	 <link rel="stylesheet" type="text/css" href="css/login-template-style.css" />
+{% endblock %}
+
 {% block main %}
 	<section id="login">
 		<h2>Login</h2>
@@ -16,7 +21,10 @@
 	
 	<section id="register">
 		<h2>Register</h2>
-		<form action="/register-check" method="post">
+        <form id="reg-button-form">
+  		    <input type="button" class="register-button" value="Register Now"/>
+		</form>
+		<form class="hidden" id="reg-form" action="/register-check" method="post">
   		    <input type="submit" class="register-button" value="Register Now"/>
             
             <label for="email">Email</label>
@@ -27,9 +35,39 @@
             
 			<label for="FirstName">First Name</label>
   		    <input type="text" name="FirstName" id="FirstName" />
-            
+			
 			<label for="LastName">Last Name</label>
   		    <input type="text" name="LastName" id="LastName" />
+			
+			<label for="EmailAddress">Email Address</label>
+  		    <input type="text" name="EmailAddress" id="EmailAddress" />
+			
+			<label for="Birthdate">Birthdate</label>
+  		    <input type="text" name="Day" id="Day" size="2" />/
+			<input type="text" name="Month" id="Month" size="2" />/
+			<input type="text" name="Year" id="Year" size="4" />
+			
+			<label for="City">City</label>
+			<input type="text" name="City" id="City" />
+			
+			<label for="State">State</label>
+			<input type="text" name="State" id="State" size="2" />
+			
+			<label for="Country">Country</label>
+			<input type="text" name="Country" id="Country" size="2" />			
+			
   	    </form>
 	</section>
+	
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+	<script>
+		(function() {
+			$('.register-button').click()(function() {
+				$('form#reg-form').removeClass('hidden');
+			});
+		})();
+	</script>
 {% endblock %}

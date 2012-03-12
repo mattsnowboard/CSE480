@@ -1,36 +1,58 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
     <head>
-		{% block head %}
-			<link rel="stylesheet" href="style.css" />
-            <style type="text/css">
-                .important { color: #336699; }
-            </style>
-			<title>Words with Strangers</title>
-		{% endblock %}
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Words with Strangers</title>
+        <meta name="description" content="">
+
+        <meta name="viewport" content="width=device-width">
+        {% block stylesheets %}
+        <link rel="stylesheet" type="text/css" href="css/boilerplate-style.css" />
+        <link rel="stylesheet" type="text/css" href="css/base-template-style.css" />
+        {% endblock %}
+
+        <script src="js/libs/modernizr-2.5.3.min.js"></script>
     </head>
     <body>
-		{% block infobar %}
-			<section id="infobar">
-		
-			</section>
-		{% endblock %}
-		
-		<section id="banner">
-			<a href="#" id="banner-link">Link with banner image to homepg</a>
-		</section>
-		
-		{% block main %}
-			<section id="main">
-				<p>All the page-specific stuff goes here</p>
-			</section>
-		{% endblock %}
-		
-		{% block footer %}
-			<footer id="infobar">
-				<p>Footer info, links, etc here if we want</p>
-			</footer>
-		{% endblock %}
+        {% block infobar %}
+        <header id="infobar">
+            <p>Username</p>
+            <ul id="infobar-nav">
+                <li><a href="#">Edit Profile</a></li>
+                <li><a href="#">Logout</a></li>
+            </ul>
+        </header>
+        {% endblock %}
 
+        <div class="wrapper">
+            <section id="banner">
+                <a href="#" id="banner-link">Link with banner image to homepg </a>
+            </section>
+
+            <div id="main" role="main">
+                {% block main %}
+                {# All the page-specific stuff goes here #}
+                {% endblock %}
+            </div>
+
+            <footer id="footer">
+                {% block footer %}
+                <p>Footer info, links, etc here if we want</p>
+                {% endblock %}
+            </footer>
+        </div>
+        
+        <!-- Google CDN for jquery -->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.1.min.js"><\/script>')</script>
+        
+        <!-- Insert other scripts here or on specific pages -->
+        {% block scripts %}
+        <script src="js/script.js"></script>
+        {% endblock %}
     </body>
 </html>

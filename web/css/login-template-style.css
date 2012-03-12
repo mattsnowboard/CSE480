@@ -1,0 +1,15 @@
+/*-------------------------------------------------------------
+	CSS for Words with Friends - Login Template
+	Devan Sayles, Chelsea Carr, Matt Durak
+	CSE 480
+--------------------------------------------------------------*/
+
+section#login {
+	width: 100%;
+	border: 1px solid #000;
+}
+
+section#register {
+	width: 100%;
+	border: 1px solid #000;
+}
