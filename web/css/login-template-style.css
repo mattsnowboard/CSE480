@@ -5,11 +5,15 @@
 --------------------------------------------------------------*/
 
 section#login {
-	width: 100%;
+	width: 75%;
+	margin: auto;
+	margin-top: 20px;
 	border: 1px solid #000;
 }
 
 section#register {
-	width: 100%;
+	width: 75%;
+	margin: auto;
+	margin-top: 20px;
 	border: 1px solid #000;
 }

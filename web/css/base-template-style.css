@@ -5,18 +5,28 @@
 --------------------------------------------------------------*/
 
  body { 
-	background: #DDD;
+	background-image: url(../images/bg-tile.png);
+	background-repeat: repeat;
 	font-family: Arial, Heelvetica, sans-serif;
  }
  
 .wrapper {
 	border: 1px #000 solid;
-	width:800px; 
+	width: 1000px; 
 	margin: auto;
+	background: #FFFFFF;
 }
 
 .hidden {
 	display: none;
+}
+
+#banner {
+	background-image: url(../images/wws-banner.png);
+	width: 1000px;
+	height: 200px;
+
+
 }
 
 #infobar {
