@@ -63,5 +63,6 @@ $app->before(function() use($app) {
 /** Routing */
 
 $app->mount('/', new Wws\Provider\Controller\DefaultControllerProvider());
+$app->mount('/game', new Wws\Provider\Controller\GameControllerProvider());
 
 return $app;

@@ -21,5 +21,13 @@ class MapperServiceProvider implements ServiceProviderInterface
         $app['wws.mapper.user'] = $app->share(function($app) {
             return new \Wws\Mapper\UserMapper($app['db']);
         });
+        
+        /**
+         * The Challenge Mapper
+         * @var closure 
+         */
+        $app['wws.mapper.challenge'] = $app->share(function($app) {
+            return new \Wws\Mapper\ChallengeMapper($app['db']);
+        });
     }
 }
