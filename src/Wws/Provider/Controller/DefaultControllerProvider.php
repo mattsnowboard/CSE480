@@ -37,7 +37,7 @@ class DefaultControllerProvider implements ControllerProviderInterface
          * This page is shown after a user logs in
          */
         $controllers->get('/welcome', function(Application $app) {
-            return $app['twig']->render('welcome-template.html.twig');
+            return $app['twig']->render('welcome-template.html.twig', array('user'=>$app['wws.user']));
         })
         ->middleware($app['wws.auth.must_be_logged_in'])
         ->bind('welcome');
