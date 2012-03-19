@@ -14,7 +14,7 @@
 	border: 1px #000 solid;
 	width: 1000px; 
 	margin: auto;
-	background: #FFFFFF;
+	background: #DDDDDD;
 }
 
 .hidden {
@@ -25,36 +25,43 @@
 	background-image: url(../images/wws-banner.png);
 	width: 1000px;
 	height: 200px;
-
-
 }
+
 
 #infobar {
 	background: #333;
 	width: 100%;
 	height: 32px;
-	/*margin: -15px 0px 0px -8px;*/
-	border: 1px #000 solid;
-	color: #00FF00;
-	font-size: 13px;
+	color: #AAAAAA;
+	font-size: 14px;
+}
+
+#infobar p {
+	margin-left: 10px;
+	font-weight: bold;
+	display: inline;
+	font-size: 16px;
+	
 }
 
 #infobar ul {
 	text-align: right;
-	margin-top: -30px;
+	margin-top: -23px;
+	
 }
 
 #infobar li {
-	display:inline-block;
+	display: inline;
 	list-style: none;
-	margin-right: 7px;
+	margin-right: 10px;
 }
 
 #infobar a {
-	text-decoration: none;  
+	text-decoration: none;
+	color: #DDDDDD;
 }
 
 #infobar a:hover { 
-	color: #00FF00; 
+	color: #FFFFFF; 
 }
 

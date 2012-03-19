@@ -25,7 +25,13 @@ namespace Wws\Model;
      * @var string $word_start_state
      */
     private $word_start_state;
+	
+	 /**
+     * @var enum $num_players
+     */
+    private $num_players;
     
+	
     /**
      * Create a Game with an optional array of parameters
      * 
@@ -66,4 +72,13 @@ namespace Wws\Model;
     {
         $this->word_start_state = $wss;
     }
+	
+    public function GetNumPlayers()
+    {
+        return $this->num_players;
+    }
+    public function SetNumPlayers($wss)
+    {
+        $this->num_players = $wss;
+    }	
 }
