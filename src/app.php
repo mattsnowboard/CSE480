@@ -10,11 +10,16 @@ $app = new Silex\Application();
  * First line gets our own namespace autoloaded
  */
 $app['autoloader']->registerNamespaces(array(
-    'Wws'   => __DIR__,
-    'Tyaga' => __DIR__ . '/../vendor'
+    'Wws'     => __DIR__,
+    'Symfony' => __DIR__.'/../vendor/Symfony/src',
+    'Tyaga'   => __DIR__ . '/../vendor'
 ));
 
 /** Config Files **/
+if (!file_exists(__DIR__.'/config/database.yml')) {
+    throw new RuntimeException('You must create your own configuration file ("src/config/database.yml"). See "src/config/database.example.yml" for an example config file.');
+}
+
 $app->register(new Tyaga\Extension\LoadConfigExtension(), array(
     'loadconfig.load' => array(
         'database' => __DIR__ . '/config/database.yml',
@@ -36,10 +41,22 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
 
 /** Twig **/
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
-    'twig.path' => __DIR__.'/Wws/Templates',
+    'twig.path' => array(
+        __DIR__.'/Wws/Templates',
+        __DIR__.'/../vendor/Symfony/src/Symfony/Bridge/Twig/Resources/views/Form'
+    ),
     'twig.class_path' => __DIR__.'/../vendor/Twig/lib',
     'twig.options' => array('cache' => __DIR__.'/../cache'),
 ));
+
+/** Forms helpful stuff **/
+$app->register(new Silex\Provider\SymfonyBridgesServiceProvider(), array(
+    'symfony_bridges.class_path'  => __DIR__.'/../vendor/Symfony/src',
+));
+$app->register(new Silex\Provider\ValidatorServiceProvider(), array(
+    'validator.class_path'    => __DIR__.'/../vendor/Symfony/src',
+));
+$app->register(new Silex\Provider\FormServiceProvider());
 
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 $app->register(new Silex\Provider\SessionServiceProvider());
@@ -58,6 +75,8 @@ $app->register(new Wws\Provider\Service\AuthServiceProvider(), array(
  */
 $app->before(function() use($app) {
     $app['wws.auth.app.before']();
+    // now we have {{ user }} in all twig files!
+    $app['twig']->addGlobal('user', $app['wws.user']);
 });
 
 /** Routing */

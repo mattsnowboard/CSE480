@@ -25,7 +25,11 @@ class DefaultControllerProvider implements ControllerProviderInterface
          * This is the home page, it displays the login/register forms
          */
         $controllers->get('/', function(Application $app) {
-            return $app['twig']->render('login-template.html.twig');
+            $loginForm = $app['form.factory']->create(new \Wws\Form\LoginType());
+            
+            return $app['twig']->render('login-template.html.twig', array(
+                'form' => $loginForm->createView()
+            ));
         })
         ->bind('home');
         
@@ -37,7 +41,11 @@ class DefaultControllerProvider implements ControllerProviderInterface
          * This page is shown after a user logs in
          */
         $controllers->get('/welcome', function(Application $app) {
-            return $app['twig']->render('welcome-template.html.twig', array('user'=>$app['wws.user']));
+            
+            
+            return $app['twig']->render('welcome-template.html.twig', array(
+                'user' => $app['wws.user']
+            ));
         })
         ->middleware($app['wws.auth.must_be_logged_in'])
         ->bind('welcome');
