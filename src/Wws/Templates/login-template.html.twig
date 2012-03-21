@@ -9,11 +9,11 @@
 	<section id="login">
 		<h2>Login</h2>
 		<form action="/login-check" method="post">
-  	        <label for="email">Email</label>
-  		    <input type="text" name="email" id="email" />
+  	        <label for="username">Username</label>
+  		    <input type="text" name="username" id="username-login" />
             
   		    <label for="password">Password</label>
-  		    <input type="password" name="password" id="password" />
+  		    <input type="password" name="password" id="password-login" />
             
   		    <input type="submit" class="login-button" value="Login"/>
   	      </form>
@@ -26,6 +26,9 @@
 		</form>
 		
 		<form class="hidden" id="reg-form" action="/register-check" method="post">
+            <label for="username">Username</label>
+  		    <input type="text" name="username" id="username" /><br />
+            
             <label for="email">Email</label>
   		    <input type="text" name="email" id="email" /><br />
             

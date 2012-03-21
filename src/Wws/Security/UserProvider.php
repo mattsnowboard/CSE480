@@ -50,21 +50,21 @@ class UserProvider
     }
     
     /**
-     * Authenticate a user by email and password
+     * Authenticate a user by username and password
      * 
-     * @param string $email Email of user
+     * @param string $username Username of user
      * @param string $password Plaintext password of user
      * @return Wws\Model\User|false
      * @throws Exception for invalide password
      */
-    public function Authenticate($email, $password)
+    public function Authenticate($username, $password)
     {
         if (strlen($password) > 72) {
-            throw new Exception('Password must be 72 characters or less');
+            throw new \Exception('Password must be 72 characters or less');
         }
 
         // get a user by email, MUST CHECK PASSWORD STILL
-        $temp = $this->mapper->FindByEmail($email);
+        $temp = $this->mapper->FindByUsername($username);
         if (is_null($temp)) {
             // @todo return an error code for bad email
             return false;
@@ -87,12 +87,13 @@ class UserProvider
     
     /**
      * Register a new user
+     * @param string $username
      * @param string $email
      * @param string $password Plaintext
      * @return bool True if successful
      * @throws Exception If failure to hash password
      */
-    public function RegisterUser($email, $password)
+    public function RegisterUser($username, $email, $password)
     {
         if (strlen($password) > 72) {
             throw new Exception('Password must be 72 characters or less');
@@ -102,7 +103,7 @@ class UserProvider
 
         if (strlen($hash) >= 20) {
             // store the hashed password
-            return $this->mapper->CreateUser($email, $hash);
+            return $this->mapper->CreateUser($username, $email, $hash);
         } else {
             // something went wrong
             throw new Exception('Failed to hash the password for storage');

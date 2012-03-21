@@ -34,7 +34,7 @@ class UserMapper
     }
     
     /**
-     * Find a user by email (used for login)
+     * Find a user by email
      * 
      * @param string $email
      * @return \Wws\Model\User|null
@@ -42,6 +42,18 @@ class UserMapper
     public function FindByEmail($email)
     {
         $userArr = $this->db->fetchAssoc('SELECT * FROM player WHERE email = ?', array($email));
+        return $this->returnUser($userArr);
+    }
+    
+    /**
+     * Find a user by username (used for login)
+     * 
+     * @param string $username
+     * @return \Wws\Model\User|null
+     */
+    public function FindByUsername($username)
+    {
+        $userArr = $this->db->fetchAssoc('SELECT * FROM player WHERE username = ?', array($username));
         return $this->returnUser($userArr);
     }
     
@@ -63,19 +75,21 @@ class UserMapper
     /**
      * Creates a User and adds them to the database
      * 
-     * @param type $email
+     * @param type $username
      * @param type $password Hashed
      * @return boolean True if successful
      */
-    public function CreateUser($email, $password)
+    public function CreateUser($username, $email, $password)
     {
         // make sure user doesn't exist
         $existing = $this->FindByEmail($email);
+        $existing2 = $this->FindByUsername($username);
         if (is_null($existing)) {
-            $count = $this->db->executeUpdate("INSERT INTO player (email, password) VALUES (:email, :password)",
+            $count = $this->db->executeUpdate("INSERT INTO player (username, email, password) VALUES (:username, :email, :password)",
                 array(
-                    "email" => $email,
-                    "password" => $password
+                    'username' => $username,
+                    'email' => $email,
+                    'password' => $password
                 )
             );
 

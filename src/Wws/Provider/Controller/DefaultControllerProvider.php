@@ -54,7 +54,7 @@ class DefaultControllerProvider implements ControllerProviderInterface
                 // validate and optionally redirect
                 try {
                     $user = $app['wws.auth.user_provider']->Authenticate(
-                        $app['request']->get('email'),
+                        $app['request']->get('username'),
                         $app['request']->get('password'));
                     if ($user !== false) {
                         // @todo where to redirect on login?
@@ -86,6 +86,7 @@ class DefaultControllerProvider implements ControllerProviderInterface
                 // validate and optionally redirect
                 try {
                     $success = $app['wws.auth.user_provider']->RegisterUser(
+                        $app['request']->get('username'),
                         $app['request']->get('email'),
                         $app['request']->get('password'));
                     if ($success) {

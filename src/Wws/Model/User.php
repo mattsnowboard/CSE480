@@ -15,6 +15,11 @@ class User
     private $id;
     
     /**
+     * @var string $username
+     */
+    private $username;
+    
+    /**
      * @var string $email
      */
     private $email;
@@ -83,12 +88,13 @@ class User
     {
         if (!is_null($u)) {
             $this->id = $u['id'];
+            $this->username = $u['username'];
             $this->email = $u['email'];
             $this->password = $u['password'];
             $this->lastActive = $u['last_active'];
             $this->totalScore = $u['total_score'];
-            $this->birthDate = $u['birthDate'];
-            $this->joinDate = $u['joinDate'];
+            $this->birthDate = $u['birthdate'];
+            $this->joinDate = $u['join_date'];
             $this->city = $u['city'];
             $this->state = $u['state'];
             $this->country = $u['country'];
@@ -106,6 +112,17 @@ class User
     {
         $this->id = (int)$id;
     }
+    
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    public function setUsername($username)
+    {
+        $this->username = $username;
+    }
+
     
     public function GetEmail()
     {
