@@ -10,6 +10,7 @@ USE `cse480` ;
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `cse480`.`player` (
   `id` INT NOT NULL AUTO_INCREMENT ,
+  `username` varchar(32) NOT NULL,
   `email` VARCHAR(64) NOT NULL ,
   `password` VARCHAR(64) NOT NULL ,
   `last_active` TIMESTAMP NOT NULL ,
@@ -23,6 +24,7 @@ CREATE  TABLE IF NOT EXISTS `cse480`.`player` (
   `phone` VARCHAR(11) NULL ,
   `is_admin` TINYINT(1) NULL ,
   PRIMARY KEY (`id`) ,
+  UNIQUE INDEX `username_UNIQUE` (`username` ASC),
   UNIQUE INDEX `email_UNIQUE` (`email` ASC) )
 ENGINE = InnoDB;
 

@@ -964,6 +964,7 @@ CREATE TABLE IF NOT EXISTS `guess` (
 
 CREATE TABLE IF NOT EXISTS `player` (
   `id` int(11) NOT NULL auto_increment,
+  `username` varchar(32) NOT NULL,
   `email` varchar(64) NOT NULL,
   `password` varchar(64) NOT NULL,
   `last_active` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
@@ -977,6 +978,7 @@ CREATE TABLE IF NOT EXISTS `player` (
   `phone` varchar(11) default NULL,
   `is_admin` tinyint(1) default NULL,
   PRIMARY KEY  (`id`),
+  UNIQUE INDEX `username_UNIQUE` (`username` ASC),
   UNIQUE KEY `email_UNIQUE` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
