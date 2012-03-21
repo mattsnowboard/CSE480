@@ -17,30 +17,6 @@ class GameControllerProvider implements ControllerProviderInterface
     public function connect(Application $app)
     {
         $controllers = new ControllerCollection();
-
-        /**
-         * @route '/testchallenges'
-         * @name home
-         * @todo DELETE this route
-         * 
-         * This is a temporary way to test the challenge mapper
-         */
-        $controllers->get('/challenge/{id}', function(Application $app, $id) {
-            $test = $app['wws.mapper.challenge']->FindById($id);
-            return var_dump($test);
-        });
-		
-		        /**
-         * @route '/testgames'
-         * @name home
-         * @todo DELETE this route
-         * 
-         * This is a temporary way to test the game mapper
-         */
-        $controllers->get('/game/{id}', function(Application $app, $id) {
-            $test = $app['wws.mapper.game']->FindById($id);
-            return var_dump($test);
-        });
         
         return $controllers;
     }

@@ -37,5 +37,13 @@ class MapperServiceProvider implements ServiceProviderInterface
         $app['wws.mapper.game'] = $app->share(function($app) {
             return new \Wws\Mapper\GameMapper($app['db']);
         });
+        
+        /**
+         * The Guess Mapper
+         * @var closure 
+         */
+        $app['wws.mapper.guess'] = $app->share(function($app) {
+            return new \Wws\Mapper\GuessMapper($app['db']);
+        });
     }
 }

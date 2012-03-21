@@ -64,5 +64,6 @@ $app->before(function() use($app) {
 
 $app->mount('/', new Wws\Provider\Controller\DefaultControllerProvider());
 $app->mount('/game', new Wws\Provider\Controller\GameControllerProvider());
+$app->mount('/test', new Wws\Provider\Controller\TestControllerProvider());
 
 return $app;
