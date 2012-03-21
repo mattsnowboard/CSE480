@@ -27,7 +27,7 @@ class DefaultControllerProvider implements ControllerProviderInterface
         $controllers->get('/', function(Application $app) {
             $loginForm = $app['form.factory']->create(new \Wws\Form\LoginType());
             
-            return $app['twig']->render('login-template.html.twig', array(
+            return $app['twig']->render('homepage-template.html.twig', array(
                 'form' => $loginForm->createView()
             ));
         })
@@ -58,22 +58,27 @@ class DefaultControllerProvider implements ControllerProviderInterface
          */
         $controllers->post('/login-check', function(Application $app) {
             // check for login
+            $loginForm = $app['form.factory']->create(new \Wws\Form\LoginType());
             if ('POST' === $app['request']->getMethod()) {
-                // validate and optionally redirect
-                try {
-                    $user = $app['wws.auth.user_provider']->Authenticate(
-                        $app['request']->get('username'),
-                        $app['request']->get('password'));
-                    if ($user !== false) {
-                        // @todo where to redirect on login?
-                        return $app->redirect($app['url_generator']->generate('welcome'));
-                    } else {
-                        // bad email or password
-                        // @todo show error message in Flash message
+                $loginForm->bindRequest($app['request']);
+                if ($loginForm->isValid()) {
+                    $data = $loginForm->getData();
+                    // validate and optionally redirect
+                    try {
+                        $user = $app['wws.auth.user_provider']->Authenticate(
+                            $data['username'],
+                            $data['password']);
+                        if ($user !== false) {
+                            // @todo where to redirect on login?
+                            return $app->redirect($app['url_generator']->generate('welcome'));
+                        } else {
+                            // bad email or password
+                            // @todo show error message in Flash message
+                        }
+                    } catch (Exception $e) {
+                        // password is too long?
+                        // @todo Show error message in Flash message
                     }
-                } catch (Exception $e) {
-                    // password is too long?
-                    // @todo Show error message in Flash message
                 }
             }
 

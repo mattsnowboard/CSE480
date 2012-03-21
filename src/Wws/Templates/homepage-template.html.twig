@@ -9,15 +9,6 @@
 	<section id="login">
 		<h2>Login</h2>
         {% include "login-form.html.twig" with {"form" : form} %}
-		<form action="/login-check" method="post">
-  	        <label for="username">Username</label>
-  		    <input type="text" name="username" id="username-login" />
-            
-  		    <label for="password">Password</label>
-  		    <input type="password" name="password" id="password-login" />
-            
-  		    <input type="submit" class="login-button" value="Login"/>
-  	      </form>
 	</section>
 	
 	<section id="register">
