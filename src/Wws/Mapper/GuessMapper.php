@@ -9,18 +9,19 @@ use Wws\Model\Guess;
  * 
  * @author Chelsea Carr <carrche2@msu.edu>
  */
-class UserMapper
+class GuessMapper
 {
+
     /**
      * @var Doctrine\DBAL\Connection 
      */
     protected $db;
-    
+
     public function __construct(\Doctrine\DBAL\Connection $db)
     {
         $this->db = $db;
     }
-    
+
     /**
      * Find a guess by gameId and timestamp
      * 
@@ -29,7 +30,9 @@ class UserMapper
      */
     public function FindByIds($gid, $time)
     {
-      $guessArr = $this->db->fetchAssoc('SELECT * FROM guesses WHERE game_id = game and timestamp = time', array("game"=>(int)$gid, "time"=>$time);
+        $guessArr = $this->db->fetchAssoc('SELECT * FROM guesses WHERE game_id = :game and timestamp = :time', array(
+            'game' => (int) $gid,
+            'time' => $time));
         return $this->returnGuess($guessArr);
     }
 
@@ -41,10 +44,12 @@ class UserMapper
      */
     public function FindByLetterGuessed($gid, $letter)
     {
-      $guessArr = $this->db->fetchAssoc('SELECT * FROM guesses WHERE game_id = :game and letter = :letter', array("game"=>(int)$gid, "letter"=>$letter);
+        $guessArr = $this->db->fetchAssoc('SELECT * FROM guesses WHERE game_id = :game and letter = :letter', array(
+            'game'   => (int) $gid,
+            'letter' => $letter));
         return $this->returnGuess($guessArr);
     }
-    
+
     /**
      * Return a Guess object for an associative array result set
      * Also checks for empty/no result
@@ -59,25 +64,23 @@ class UserMapper
         }
         return null;
     }
-    
+
     /**
      * Creates a guess and adds it to the db
      * 
      * @param type $letter, $gid, $pid
      * @return boolean True if successful
      */
-      public function CreateGuess($letter, $gid, $pid)
+    public function CreateGuess($letter, $gid, $pid)
     {
         // make sure guess hasn't already been played
-      $existing = $this->FindByLetterGuessed($gid, $letter);
+        $existing = $this->FindByLetterGuessed($gid, $letter);
         if (is_null($existing)) {
-            $count = $this->db->executeUpdate("INSERT INTO guesses (game_id, player_id, letter) VALUES (:game, :player, :letter)",
-                array(
-                    "game" => $gid,
-                    "player" => $pid,
-		    "letter" => $letter
-                )
-            );
+            $count = $this->db->executeUpdate("INSERT INTO guesses (game_id, player_id, letter) VALUES (:game, :player, :letter)", array(
+                'game'   => $gid,
+                'player' => $pid,
+                'letter' => $letter
+            ));
 
             return $count == 1;
         } else {
@@ -85,4 +88,5 @@ class UserMapper
             return false;
         }
     }
+
 }

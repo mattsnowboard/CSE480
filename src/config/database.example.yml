@@ -1,0 +1,4 @@
+server:   'localhost'
+database: 'cse480'
+user:     'cse480'
+password: 'PASSWORD'
