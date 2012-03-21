@@ -11,7 +11,7 @@ $app = new Silex\Application();
  */
 $app['autoloader']->registerNamespaces(array(
     'Wws'     => __DIR__,
-    'Symfony' => __DIR__.'/../vendor/Symfony/src',
+    'Symfony' => __DIR__.'/../vendor',
     'Tyaga'   => __DIR__ . '/../vendor'
 ));
 
@@ -43,7 +43,7 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => array(
         __DIR__.'/Wws/Templates',
-        __DIR__.'/../vendor/Symfony/src/Symfony/Bridge/Twig/Resources/views/Form'
+        __DIR__.'/../vendor/Symfony/Bridge/Twig/Resources/views/Form'
     ),
     'twig.class_path' => __DIR__.'/../vendor/Twig/lib',
     'twig.options' => array('cache' => __DIR__.'/../cache'),
@@ -51,12 +51,15 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 
 /** Forms helpful stuff **/
 $app->register(new Silex\Provider\SymfonyBridgesServiceProvider(), array(
-    'symfony_bridges.class_path'  => __DIR__.'/../vendor/Symfony/src',
+    'symfony_bridges.class_path'  => __DIR__.'/../vendor',
 ));
 $app->register(new Silex\Provider\ValidatorServiceProvider(), array(
-    'validator.class_path'    => __DIR__.'/../vendor/Symfony/src',
+    'validator.class_path'    => __DIR__.'/../vendor',
 ));
 $app->register(new Silex\Provider\FormServiceProvider());
+$app->register(new Silex\Provider\TranslationServiceProvider(), array(
+    'translator.messages' => array()
+));
 
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 $app->register(new Silex\Provider\SessionServiceProvider());
