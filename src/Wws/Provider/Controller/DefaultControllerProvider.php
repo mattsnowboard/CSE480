@@ -26,9 +26,11 @@ class DefaultControllerProvider implements ControllerProviderInterface
          */
         $controllers->get('/', function(Application $app) {
             $loginForm = $app['form.factory']->create(new \Wws\Form\LoginType());
+            $regForm = $app['form.factory']->create(new \Wws\Form\RegisterType());
             
             return $app['twig']->render('homepage-template.html.twig', array(
-                'form' => $loginForm->createView()
+                'loginform' => $loginForm->createView(),
+                'regform' => $regForm->createView()
             ));
         })
         ->bind('home');
@@ -94,23 +96,26 @@ class DefaultControllerProvider implements ControllerProviderInterface
          * This validates the register form and registers a new user
          */
         $controllers->post('/register-check', function(Application $app) {
-            // check for login
+            // check for register info
+            $regForm = $app['form.factory']->create(new \Wws\Form\RegisterType());
             if ('POST' === $app['request']->getMethod()) {
-                // validate and optionally redirect
-                try {
-                    $success = $app['wws.auth.user_provider']->RegisterUser(
-                        $app['request']->get('username'),
-                        $app['request']->get('email'),
-                        $app['request']->get('password'));
-                    if ($success) {
-                        // @todo do something
-                        return $app->redirect($app['url_generator']->generate('welcome'));
-                    } else {
-                        // @todo flash error and redirect
+                $regForm->bindRequest($app['request']);
+                if ($regForm->isValid()) {
+                    $data = $regForm->getData();
+                    // validate and optionally redirect
+                    try {
+                        $success = $app['wws.auth.user_provider']->RegisterUser(
+                            $data);
+                        if ($success) {
+                            // @todo do something
+                            return $app->redirect($app['url_generator']->generate('welcome'));
+                        } else {
+                            // @todo flash error and redirect
+                        }
+                    } catch (Exception $e) {
+                        // password is too long?
+                        // @todo Show error message in Flash message
                     }
-                } catch (Exception $e) {
-                    // password is too long?
-                    // @todo Show error message in Flash message
                 }
             }
 

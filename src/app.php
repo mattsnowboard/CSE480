@@ -15,6 +15,12 @@ $app['autoloader']->registerNamespaces(array(
     'Tyaga'   => __DIR__ . '/../vendor'
 ));
 
+if (!function_exists('intl_get_error_code')) {
+    require __DIR__.'/../vendor/Symfony/Component/Locale/Resources/stubs/functions.php';
+
+    $app['autoloader']->registerPrefixFallback(__DIR__.'/../vendor/Symfony/Component/Locale/Resources/stubs');
+}
+
 /** Config Files **/
 if (!file_exists(__DIR__.'/config/database.yml')) {
     throw new RuntimeException('You must create your own configuration file ("src/config/database.yml"). See "src/config/database.example.yml" for an example config file.');

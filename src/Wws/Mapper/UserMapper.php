@@ -75,21 +75,20 @@ class UserMapper
     /**
      * Creates a User and adds them to the database
      * 
-     * @param type $username
-     * @param type $password Hashed
+     * @param array $u Associative array with all user info (password is hashed)
      * @return boolean True if successful
      */
-    public function CreateUser($username, $email, $password)
+    public function CreateUser($u)
     {
         // make sure user doesn't exist
-        $existing = $this->FindByEmail($email);
-        $existing2 = $this->FindByUsername($username);
-        if (is_null($existing)) {
+        $existing = $this->FindByEmail($u['email']);
+        $existing2 = $this->FindByUsername($u['username']);
+        if (is_null($existing) && is_null($existing2)) {
             $count = $this->db->executeUpdate("INSERT INTO player (username, email, password) VALUES (:username, :email, :password)",
                 array(
-                    'username' => $username,
-                    'email' => $email,
-                    'password' => $password
+                    'username' => $u['username'],
+                    'email' => $u['email'],
+                    'password' => $u['password']
                 )
             );
 

@@ -87,23 +87,22 @@ class UserProvider
     
     /**
      * Register a new user
-     * @param string $username
-     * @param string $email
-     * @param string $password Plaintext
+     * @param array $u Associative array with all user info (password is plaintext)
      * @return bool True if successful
      * @throws Exception If failure to hash password
      */
-    public function RegisterUser($username, $email, $password)
+    public function RegisterUser(array $u)
     {
-        if (strlen($password) > 72) {
+        if (strlen($u['password']) > 72) {
             throw new Exception('Password must be 72 characters or less');
         }
 
-        $hash = $this->hasher->HashPassword($password);
+        $hash = $this->hasher->HashPassword($u['password']);
 
         if (strlen($hash) >= 20) {
             // store the hashed password
-            return $this->mapper->CreateUser($username, $email, $hash);
+            $u['password'] = $hash;
+            return $this->mapper->CreateUser($u);
         } else {
             // something went wrong
             throw new Exception('Failed to hash the password for storage');

@@ -8,50 +8,15 @@
 {% block main %}
 	<section id="login">
 		<h2>Login</h2>
-        {% include "login-form.html.twig" with {"form" : form} %}
+        {% include "login-form.html.twig" with {"form" : loginform} %}
 	</section>
 	
 	<section id="register">
 		<h2>Register</h2>
-        <form id="reg-button-form">
-  		    <input type="button" class="show-register-button" value="Register Now"/>
-		</form>
-		
-		<form class="hidden" id="reg-form" action="/register-check" method="post">
-            <label for="username">Username</label>
-  		    <input type="text" name="username" id="username" /><br />
-            
-            <label for="email">Email</label>
-  		    <input type="text" name="email" id="email" /><br />
-            
-  		    <label for="password">Password</label>
-  		    <input type="password" name="password" id="password" /><br />
-            
-			<label for="FirstName">First Name</label>
-  		    <input type="text" name="FirstName" id="FirstName" /><br />
-			
-			<label for="LastName">Last Name</label>
-  		    <input type="text" name="LastName" id="LastName" /><br />
-			
-			<label for="EmailAddress">Email Address</label>
-  		    <input type="text" name="EmailAddress" id="EmailAddress" /><br />
-			
-			<label for="Birthdate">Birthdate</label>
-  		    <input type="text" name="Day" id="Day" size="2" />/
-			<input type="text" name="Month" id="Month" size="2" />/
-			<input type="text" name="Year" id="Year" size="4" /><br />
-			
-			<label for="City">City</label>
-			<input type="text" name="City" id="City" /><br />
-			
-			<label for="State">State</label>
-			<input type="text" name="State" id="State" size="2" /><br />
-			
-			<label for="Country">Country</label>
-			<input type="text" name="Country" id="Country" size="2" /><br />		
-			
-            <input type="submit" class="register-button" value="Submit"/><br />
-  	    </form>
+        <div id="show-reg">
+  		    <a href="#" class="show-register-button btn" title="Register Now">Register Now</a>
+		</div>
+		{% include "register-form.html.twig" with {"form" : regform} %}
 	</section>
 	
 {% endblock %}
@@ -60,8 +25,10 @@
     {{ parent() }}
 	<script>
         $(document).ready(function(){
-            $('.show-register-button').click(function() {
+            $('#show-reg').toggle(function() {
 				$('form#reg-form').removeClass('hidden');
+			}, function() {
+				$('form#reg-form').addClass('hidden');
 			});
         });  
 	</script>
