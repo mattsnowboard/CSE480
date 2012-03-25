@@ -44,9 +44,10 @@ class DefaultControllerProvider implements ControllerProviderInterface
          */
         $controllers->get('/welcome', function(Application $app) {
             
-            
+            $games = $app['wws.mapper.game']->FindGamesByUserId($app['wws.user']->GetID(), 1);
+			
             return $app['twig']->render('welcome-template.html.twig', array(
-                'user' => $app['wws.user']
+                'games' => $games
             ));
         })
         ->middleware($app['wws.auth.must_be_logged_in'])

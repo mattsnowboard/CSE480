@@ -17,5 +17,16 @@
 		<h2>Challenges</h2>
 		<p>View of challenges recieved, options to accept/deny them</p>
 	</section>
+	
+	<section id="gamelist">
+		<h2>Games in Progress</h2>
+		<ul>
+			{% for game in games %}
+				<li>Game {{ game.id}}</li>
+				{% else %}
+					<li> No games </li>
+			{% endfor %}
+		</ul>
+	</section>
 
 {% endblock %}

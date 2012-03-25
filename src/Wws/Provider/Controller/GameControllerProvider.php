@@ -17,7 +17,24 @@ class GameControllerProvider implements ControllerProviderInterface
     public function connect(Application $app)
     {
         $controllers = new ControllerCollection();
-        
+		
+		 /**
+         * @route '/single-player'
+         * @name single-player
+         * @pre User is logged in
+         * 
+         * This page is shown during a single player game
+         
+        $controllers->get('/single-player/{id}', function(Application $app) {
+            $game = $app['wws.mapper.game']->FindById($id);
+            
+            return $app['twig']->render('single-player-template.html.twig', array(
+                'game' => $app['wws.game'];
+            ));
+        })
+        ->middleware($app['wws.auth.must_be_logged_in'])
+        ->bind('welcome');
+        */
         return $controllers;
     }
 }
