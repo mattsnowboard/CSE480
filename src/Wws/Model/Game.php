@@ -100,38 +100,38 @@ namespace Wws\Model;
         }
     }
     
-    public function GetId()
+    public function getId()
     {
         return $this->id;
     }
-    public function SetId($id)
+    public function setId($id)
     {
         $this->id = (int)$id;
     }
     
-    public function GetTimestamp()
+    public function getTimestamp()
     {
         return $this->timestamp;
     }
-    public function SetTimestamp($timestamp)
+    public function setTimestamp($timestamp)
     {
         $this->timestamp = $timestamp;
     }
     
-    public function GetWordStartState()
+    public function getWordStartState()
     {
         return $this->wordStartState;
     }
-    public function SetWordStartState($wss)
+    public function setWordStartState($wss)
     {
         $this->wordStartState = $wss;
     }
 	
-    public function GetNumPlayers()
+    public function getNumPlayers()
     {
         return $this->num_players;
     }
-    public function SetNumPlayers($wss)
+    public function setNumPlayers($wss)
     {
         $this->num_players = $wss;
     }

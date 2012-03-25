@@ -56,12 +56,19 @@ class GameMapper
      * @return boolean True if successful
      */
     public function CreateGame(\Wws\Model\Game $game)
-{
+    {
         $count = $this->db->executeUpdate("INSERT INTO game "
                 . "(word_start_state, num_players, player_turn, word_id, player1_id, player2_id, is_bonus, current_state) "
                 . "VALUES (:start, :num, :turn, :word, :player1, :player2, :bonus, :start)",
             array(
-                //'start' => $game->get
+                'start' => $game->getStartState(),
+                'num' => $game->getNumPlayers(),
+                'turn' => $game->getPlayerTurn(),
+                'word' => $game->getWordId(),
+                'player1' => $game->getPlayer1Id(),
+                'player2' => $game->getPlayer2Id(),
+                'bonus' => $game->getIsBonus(),
+                'start' => $game->getWordStartState()
             )
         );
 
