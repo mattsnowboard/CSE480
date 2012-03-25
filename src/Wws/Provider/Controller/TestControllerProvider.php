@@ -44,7 +44,7 @@ class TestControllerProvider implements ControllerProviderInterface
          * This is a temporary way to test the guess mapper
          */
         $controllers->get('/guess/{id}', function(Application $app, $id) {
-            $test = $app['wws.mapper.guess']->FindById($id);
+            $test = $app['wws.mapper.guess']->FindByGame($id);
             return var_dump($test);
         });
         

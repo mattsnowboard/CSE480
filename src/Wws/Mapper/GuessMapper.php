@@ -28,12 +28,25 @@ class GuessMapper
      * @param int $gid, $time
      * @return \Wws\Model\Guess|null
      */
-    public function FindByIds($gid, $time)
+    public function FindById($gid, $time)
     {
-        $guessArr = $this->db->fetchAssoc('SELECT * FROM guesses WHERE game_id = :game and timestamp = :time', array(
+        $guessArr = $this->db->fetchAssoc('SELECT * FROM guess WHERE game_id = :game and timestamp = :time', array(
             'game' => (int) $gid,
             'time' => $time));
         return $this->returnGuess($guessArr);
+    }
+    
+    /**
+     * Find a guess by gameId
+     * 
+     * @param int $gid
+     * @return array \Wws\Model\Guess
+     */
+    public function FindByGame($gid)
+    {
+        $guessArr = $this->db->fetchAll('SELECT * FROM guess WHERE game_id = :game', array(
+            'game' => (int) $gid));
+        return $this->returnGuesses($guessArr);
     }
 
     /**
@@ -44,7 +57,7 @@ class GuessMapper
      */
     public function FindByLetterGuessed($gid, $letter)
     {
-        $guessArr = $this->db->fetchAssoc('SELECT * FROM guesses WHERE game_id = :game and letter = :letter', array(
+        $guessArr = $this->db->fetchAssoc('SELECT * FROM guess WHERE game_id = :game and letter = :letter', array(
             'game'   => (int) $gid,
             'letter' => $letter));
         return $this->returnGuess($guessArr);
@@ -63,6 +76,16 @@ class GuessMapper
             return $guess;
         }
         return null;
+    }
+    
+    protected function returnGuesses($sqlResult)
+    {
+        $guesses = array();
+        if (!is_null($sqlResult) && $sqlResult !== false && !empty($sqlResult)) {
+            foreach ($sqlResult as $guess)
+            $guesses[] = new Guess($guess);
+        }
+        return $guesses;
     }
 
     /**
