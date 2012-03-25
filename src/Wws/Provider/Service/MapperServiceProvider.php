@@ -45,5 +45,13 @@ class MapperServiceProvider implements ServiceProviderInterface
         $app['wws.mapper.guess'] = $app->share(function($app) {
             return new \Wws\Mapper\GuessMapper($app['db']);
         });
+        
+        /**
+         * The Dictionary Mapper
+         * @var closure 
+         */
+        $app['wws.mapper.dictionary'] = $app->share(function($app) {
+            return new \Wws\Mapper\DictionaryMapper($app['db']);
+        });
     }
 }

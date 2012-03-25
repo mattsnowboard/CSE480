@@ -72,6 +72,8 @@ $app->register(new Silex\Provider\SessionServiceProvider());
 
 /** Our Services */
 
+$app->register(new Wws\Provider\Service\FactoryServiceProvider(), array(
+));
 $app->register(new Wws\Provider\Service\MapperServiceProvider(), array(
 ));
 $app->register(new Wws\Provider\Service\AuthServiceProvider(), array(

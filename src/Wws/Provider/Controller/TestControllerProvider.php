@@ -60,6 +60,14 @@ class TestControllerProvider implements ControllerProviderInterface
             return var_dump($test);
         });
         
+        /**
+         * 
+         */
+        $controllers->get('/random-word', function(Application $app) {
+            $test = $app['wws.factory.game']->CreateRandomWordStart();
+            return var_dump($test);
+        });
+        
         return $controllers;
     }
 }

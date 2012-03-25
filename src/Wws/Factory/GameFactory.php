@@ -30,10 +30,21 @@ class GameFactory
     
     public function CreateSinglePlayerGame(\Wws\Model\User $user)
     {
+        // get the word to start
+        $wordStart = $this->CreateRandomWordStart();
+    }
+    
+    /**
+     * Creates a set of a random dictionary word and a starting game state
+     * 
+     * @return array with the Word model object and the start state string
+     */
+    public function CreateRandomWordStart()
+    {
         $word = $this->dictionaryMapper->FindRandom();
         $theWord = $word->getWord();
         // shuffle the indices
-        $letters = range(0, strlen($theWord));
+        $letters = range(0, strlen($theWord) - 1);
         shuffle($letters);
         
         // pick letters so we will show at least 3 letters as hints
@@ -55,5 +66,9 @@ class GameFactory
                 $letter : '_';
         }
         
+        return array(
+            'word' => $word,
+            'start' => $wordState
+        );
     }
 }
