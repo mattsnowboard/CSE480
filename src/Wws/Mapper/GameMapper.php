@@ -48,4 +48,23 @@ class GameMapper
         }
         return null;
     }
+    
+    /**
+     * Creates a Game in the database from a Game model
+     * 
+     * @param Wws\Model\Game $game
+     * @return boolean True if successful
+     */
+    public function CreateGame(\Wws\Model\Game $game)
+{
+        $count = $this->db->executeUpdate("INSERT INTO game "
+                . "(word_start_state, num_players, player_turn, word_id, player1_id, player2_id, is_bonus, current_state) "
+                . "VALUES (:start, :num, :turn, :word, :player1, :player2, :bonus, :start)",
+            array(
+                //'start' => $game->get
+            )
+        );
+
+        return $count == 1;
+    }
 }
