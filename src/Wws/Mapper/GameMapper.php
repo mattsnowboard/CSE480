@@ -34,6 +34,42 @@ class GameMapper
         return $this->returnGame($gameArr);
     }
 	
+	 /**
+     * Find games for a userID
+     * 
+     * @param int $id
+     * @return \Wws\Model\Game|null
+     */
+	public function FindGamesByUserId($uid, $numPlayers, $result)
+    {
+		if ($result == 'playing')
+		{
+			if ((int)$numPlayers == 1)
+			{
+				// returns in-progress single-player games involving given userID
+				$gameArr = $this->db->fetchAll('SELECT * FROM game WHERE num_players = :numPlayers and winner_flag = :result and player1_id = :uid', array( 'numPlayers' => (int) $numPlayers, 'uid' => $uid, 'result' => $result));
+			}
+			else
+			{	// returns in-progress multi-player games involving given userID
+				$gameArr = $this->db->fetchAll('SELECT * FROM game WHERE num_players = :numPlayers and (player1_id = :uid or player2_id = :uid', array( 'numPlayers' => $numPlayers,
+											'uid' => $uid));
+			}
+		}
+		else
+		{
+			if ((int)$numPlayers == 1)
+			{
+				// returns all single-player games involving given userID
+			}
+			else
+			{
+				// returns all multi-player games involving given userID
+			}
+		}
+		
+        return $this->returnGames($gameArr);
+    }
+	
 	/**
      * Return a Game object for an associative array result set
      * Also checks for empty/no result
@@ -48,7 +84,16 @@ class GameMapper
         }
         return null;
     }
-    
+	
+	protected function returnGames($sqlResult)
+    {
+        $games = array();
+        if (!is_null($sqlResult) && $sqlResult !== false && !empty($sqlResult)) {
+            foreach ($sqlResult as $game)
+            $games[] = new Game($game);
+        }
+        return $games;
+    }
     /**
      * Creates a Game in the database from a Game model
      * 

@@ -1,9 +1,15 @@
 {% extends "base-template.html.twig" %}
 
+{% block stylesheets %}
+	{{ parent() }}
+	 <link rel="stylesheet" type="text/css" href="/css/game-style.css" />
+{% endblock %}
+
+
 {% block main %}
 	
 	<section id="game-display">
-	
+	 <p>Current game state: {{game.currentState}} </p>
 	</section>
 	
 	<section id="player-stats">
