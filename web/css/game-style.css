@@ -1,0 +1,13 @@
+/*-------------------------------------------------------------
+	CSS for Words with Friends Base Template
+	Devan Sayles, Chelsea Carr, Matt Durak
+	CSE 480
+--------------------------------------------------------------*/
+
+#game-display {
+	width: 80%;
+	height: 200px;
+	border: 1px #000 solid;
+	margin: auto;
+	margin-top: 20px;
+}
