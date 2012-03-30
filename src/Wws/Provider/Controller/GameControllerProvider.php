@@ -18,7 +18,7 @@ class GameControllerProvider implements ControllerProviderInterface
     {
         $controllers = new ControllerCollection();
 		
-		 /**
+		/**
          * @route '/single-player'
          * @name single-player
          * @pre User is logged in
@@ -34,6 +34,26 @@ class GameControllerProvider implements ControllerProviderInterface
         })
         ->middleware($app['wws.auth.must_be_logged_in'])
         ->bind('single_player');
+        
+        /**
+         * @route '/single-player'
+         * @name single-player
+         * @pre User is logged in
+         * 
+         * Creates a single player game
+         */
+        $controllers->get('/create/single-player', function(Application $app) {
+            $game = $app['wws.factory.game']->CreateSinglePlayerGame($app['wws.user']);
+            
+            /** @todo Check for failure (null game or exception?) **/
+            
+            // send player to new game
+            return $app->redirect($app['url_generator']->generate('single_player', array(
+                'id' => $game->getId()
+            )));
+        })
+        ->middleware($app['wws.auth.must_be_logged_in'])
+        ->bind('create_single_player');
         
         return $controllers;
     }

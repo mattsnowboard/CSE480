@@ -57,6 +57,11 @@ namespace Wws\Model;
     private $wordId;
     
     /**
+     * @var Wws\Model\Dictionary
+     */
+    private $word;
+    
+    /**
      * @var int
      */
     private $player1Id;
@@ -122,9 +127,15 @@ namespace Wws\Model;
     {
         return $this->wordStartState;
     }
+    /**
+     * Set the word start state, which is also the current state
+     * 
+     * @param string $wss 
+     */
     public function setWordStartState($wss)
     {
         $this->wordStartState = $wss;
+        $this->currentState = $wss;
     }
 	
     public function getNumPlayers()
@@ -185,8 +196,24 @@ namespace Wws\Model;
     {
         $this->wordId = $wordId;
     }
+    
+    public function getWord()
+    {
+        return $this->word;
+    }
 
-    public function getPlayer1Id()
+    /**
+     * Just a helper to set the actual Dicitonary model and the Id at once
+     * 
+     * @param \Wws\Model\Dictionary $word 
+     */
+    public function setWord(\Wws\Model\Dictionary $word)
+    {
+        $this->word = $word;
+        $this->wordId = $word->getId();
+    }
+
+        public function getPlayer1Id()
     {
         return $this->player1Id;
     }

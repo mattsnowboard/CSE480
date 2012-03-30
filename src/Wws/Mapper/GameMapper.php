@@ -34,11 +34,13 @@ class GameMapper
         return $this->returnGame($gameArr);
     }
 	
-	 /**
-     * Find games for a userID
+	/**
+     * Find all games for a User
      * 
-     * @param int $id
-     * @return \Wws\Model\Game|null
+     * @param int $uid
+     * @param int $numPlayers
+     * @param string $result What state the game is in
+     * @return type 
      */
 	public function FindGamesByUserId($uid, $numPlayers, $result)
     {
@@ -106,7 +108,7 @@ class GameMapper
                 . "(word_start_state, num_players, player_turn, word_id, player1_id, player2_id, is_bonus, current_state) "
                 . "VALUES (:start, :num, :turn, :word, :player1, :player2, :bonus, :start)",
             array(
-                'start' => $game->getStartState(),
+                'start' => $game->getWordStartState(),
                 'num' => $game->getNumPlayers(),
                 'turn' => $game->getPlayerTurn(),
                 'word' => $game->getWordId(),
@@ -116,6 +118,8 @@ class GameMapper
                 'start' => $game->getWordStartState()
             )
         );
+        
+        $game->setId($this->db->lastInsertId());
 
         return $count == 1;
     }

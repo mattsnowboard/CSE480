@@ -28,10 +28,31 @@ class GameFactory
         $this->gameMapper = $gmap;
     }
     
+    /**
+     * Create a single player game for a given user and random word
+     * This will also persist the Game in the database
+     * 
+     * @param \Wws\Model\User $user
+     * @return \Wws\Model\Game 
+     */
     public function CreateSinglePlayerGame(\Wws\Model\User $user)
     {
         // get the word to start
         $wordStart = $this->CreateRandomWordStart();
+        
+        $game = new Game();
+        $game->setWord($wordStart['word']);
+        $game->setWordStartState($wordStart['start']);
+        $game->setNumPlayers(1);
+        $game->setTimestamp(time());
+        $game->setPlayer1Id($user->getId());
+        /** @todo Query database for this */
+        $game->setIsBonus(false);
+        
+        // Now persist in DB
+        $this->gameMapper->CreateGame($game);
+        
+        return $game;
     }
     
     /**
