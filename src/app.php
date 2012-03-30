@@ -83,6 +83,8 @@ $app->register(new Wws\Provider\Service\MapperServiceProvider(), array(
 ));
 $app->register(new Wws\Provider\Service\AuthServiceProvider(), array(
 ));
+$app->register(new Wws\Provider\Service\ModelServiceProvider(), array(
+));
 
 /**
  * This is called before normal routing

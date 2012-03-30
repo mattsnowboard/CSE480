@@ -11,6 +11,23 @@ namespace Wws\Model;
 class GamePlay
 {
     /**
+     * @var Wws\Mapper\DictionaryMapper
+     */
+    protected $dictionaryMapper;
+    
+    /**
+     * @var Wws\Mapper\GameMapper
+     */
+    protected $gameMapper;
+    
+    public function __construct(\Wws\Mapper\DictionaryMapper $dmap,
+            \Wws\Mapper\GameMapper $gmap)
+    {
+        $this->dictionaryMapper = $dmap;
+        $this->gameMapper = $gmap;
+    }
+    
+    /**
      * Guess a single letter for a game. Also checks that this user is a member
      * of the game and it is their turn.  Updates the score in the game table
      * 
