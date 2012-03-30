@@ -49,6 +49,12 @@ class UserProvider
         return null;
     }
     
+    public function UpdateActivity(\Wws\Model\User $user)
+    {
+        $id = $user->GetId();
+        $this->mapper->UpdateActivity($id);
+    }
+    
     /**
      * Authenticate a user by username and password
      * 

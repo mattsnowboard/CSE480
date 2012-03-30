@@ -34,6 +34,9 @@ class AuthServiceProvider implements ServiceProviderInterface
             // get user object
             $app['session']->start();
             $app['wws.user'] = $app['wws.auth.user_provider']->GetUser();
+            if (!is_null($app['wws.user'])) {
+                $app['wws.auth.user_provider']->UpdateActivity($app['wws.user']);
+            }
         });
         
         /**

@@ -58,6 +58,19 @@ class UserMapper
     }
     
     /**
+     * Update the last active column for a user to the current time
+     * @param int $id Which user
+     */
+    public function UpdateActivity($id)
+    {
+        $this->db->executeUpdate("UPDATE player SET last_active = :now WHERE id = :id", array(
+            'now' => date('Y-m-d H:i:s', time()),
+            'id' => $id
+        ));
+    }
+        
+    
+    /**
      * Return a User object for an associative array result set
      * Also checks for empty/no result
      * @param mixed $sqlResult

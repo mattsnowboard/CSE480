@@ -5,6 +5,7 @@ namespace Wws\Provider\Controller;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Silex\ControllerCollection;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * This provides controllers under the '/' path
@@ -34,6 +35,17 @@ class DefaultControllerProvider implements ControllerProviderInterface
             ));
         })
         ->bind('home');
+        
+        /**
+         * @route '/ping'
+         * @name ping
+         * 
+         * This page can be pinged to update the user activity timestamp
+         */
+        $controllers->get('/ping', function(Application $app) {
+            return new Response('OK', 200);
+        })
+        ->bind('ping');
         
         /**
          * @route '/welcome'

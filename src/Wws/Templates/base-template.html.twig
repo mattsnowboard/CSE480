@@ -65,6 +65,17 @@
         <!-- Insert other scripts here or on specific pages -->
         {% block scripts %}
         <script src="/js/script.js"></script>
+        
+        {# Pinging for users activity updates #}
+        {% if user %}
+        <script>
+            $(document).ready(function(){
+                setInterval(function() {
+                    $.ajax('{{path('ping')}}');
+                }, 20000);
+            });  
+        </script>
+        {% endif %}
         {% endblock %}
 
     </body>
