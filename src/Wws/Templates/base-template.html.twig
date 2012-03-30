@@ -15,7 +15,7 @@
         <link rel="stylesheet" type="text/css" href="/css/base-template-style.css" />
         {% endblock %}
 
-        <script src="js/libs/modernizr-2.5.3.min.js"></script>
+        <script src="/js/libs/modernizr-2.5.3.min.js"></script>
     </head>
     <body>
         {% block infobar %}
@@ -45,18 +45,18 @@
 
             <footer id="footer">
                 {% block footer %}
-                <p>Footer info, links, etc here if we want</p>
+                <p>Words With Strangers &copy; 2012 was built by Chelsea Carr, Matt Durak, and Devan Sayles.</p>
                 {% endblock %}
             </footer>
         </div>
         
         <!-- Google CDN for jquery -->
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.1.min.js"><\/script>')</script>
+        <script>window.jQuery || document.write('<script src="/js/libs/jquery-1.7.1.min.js"><\/script>')</script>
         
         <!-- Insert other scripts here or on specific pages -->
         {% block scripts %}
-        <script src="js/script.js"></script>
+        <script src="/js/script.js"></script>
         {% endblock %}
 
     </body>

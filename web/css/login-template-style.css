@@ -5,34 +5,44 @@
 --------------------------------------------------------------*/
 
 section#login {
-	width: 75%;
+	width: 20em;
 	margin: auto;
 	margin-top: 20px;
-	border: 1px solid #000;
+	border: 1px solid #aaa;
+    padding: 1em;
 }
 
 section#register {
-	width: 75%;
+	width: 20em;
 	margin: auto;
 	margin-top: 20px;
-	border: 1px solid #000;
+	border: 1px solid #aaa;
+    padding: 1em;
 }
 
-h2 {
-	margin-left: 10px;
-}
-#reg-form {
-	margin-left: 30px;
-}
 
 #login, #register {
 	background-color: #FFFFFF;
 }
-label {
-	width: 33%;
+
+form, form div {
+    overflow: auto;
+}
+
+form input, #register_birthdate {
+    float: right;
 	margin: 8px;
 }
 
-input {
-	margin: 8px;
+#show-reg {
+    margin: 0 auto 1em auto;
+    text-align: center;
+}
+
+#show-reg a {
+    text-decoration: none;
+}
+
+input:invalid, textarea:invalid {
+    background-color: #efd3d2;
 }
