@@ -46,9 +46,14 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
 ));
 
 /** Twig **/
+$app['twig.form.templates'] = array(
+    'fields.html.twig',
+    //'form_div_layout.html.twig'
+);
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => array(
         __DIR__.'/Wws/Templates',
+        __DIR__.'/Wws/Templates/Form',
         __DIR__.'/../vendor/Symfony/Bridge/Twig/Resources/views/Form'
     ),
     'twig.class_path' => __DIR__.'/../vendor/Twig/lib',
@@ -93,7 +98,7 @@ $app->before(function() use($app) {
 $app->error(function (\Exception $e, $code) use($app) {
     // show the helpful debugging if in debug mode
     if ($app['debug']) {
-        //return;
+        return;
     }
     
     switch ($code) {
