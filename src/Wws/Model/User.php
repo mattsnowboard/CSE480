@@ -65,9 +65,14 @@ class User
     private $country;
     
     /**
-     * @var string $fullName
+     * @var string $firstName
      */
-    private $fullName;
+    private $firstName;
+
+    /**
+     * @var string $lastName
+     */
+    private $lastName;
     
     /**
      * @var string $phone
@@ -98,7 +103,8 @@ class User
             $this->city = $u['city'];
             $this->state = $u['state'];
             $this->country = $u['country'];
-            $this->fullName = $u['full_name'];
+            $this->firstName = $u['first_name'];
+	    $this->lastName = $u['last_name'];
             $this->phone = $u['phone'];
             $this->isAdmin = $u['is_admin'];
         }
@@ -206,14 +212,24 @@ class User
         $this->country = $country;
     }
 
-    public function getFullName()
+    public function getFirstName()
     {
-        return $this->fullName;
+        return $this->firstName;
     }
-    public function setFullName($fullName)
+    public function setFirstName($firstName)
     {
-        $this->fullName = $fullName;
+        $this->firstName = $firstName;
     }
+
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+    public function setLastName($lastName)
+    {
+        $this->lastName = $lastName;
+    }
+
 
     public function getPhone()
     {

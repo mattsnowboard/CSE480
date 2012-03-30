@@ -117,6 +117,7 @@ class DefaultControllerProvider implements ControllerProviderInterface
                     $data = $regForm->getData();
                     // validate and optionally redirect
                     try {
+		      //var_dump($data);
                         $success = $app['wws.auth.user_provider']->RegisterUser(
                             $data);
                         if ($success) {
@@ -133,7 +134,8 @@ class DefaultControllerProvider implements ControllerProviderInterface
             }
 
             // render registration form
-            return $app->redirect($app['url_generator']->generate('home'));
+	    //var_dump($data);
+	    return $app->redirect($app['url_generator']->generate('home'));
         })
         ->bind('register');
 

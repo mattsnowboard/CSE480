@@ -93,15 +93,22 @@ class UserMapper
      */
     public function CreateUser($u)
     {
-        // make sure user doesn't exist
+               // make sure user doesn't exist
         $existing = $this->FindByEmail($u['email']);
         $existing2 = $this->FindByUsername($u['username']);
         if (is_null($existing) && is_null($existing2)) {
-            $count = $this->db->executeUpdate("INSERT INTO player (username, email, password) VALUES (:username, :email, :password)",
+            $count = $this->db->executeUpdate("INSERT INTO player (username, email, password, first_name, last_name, birthdate, city, state, country, join_date) VALUES (:username, :email, :password, :first_name, :last_name, :birthdate, :city, :state, :country, :join_date)",
                 array(
                     'username' => $u['username'],
                     'email' => $u['email'],
-                    'password' => $u['password']
+                    'password' => $u['password'],
+		    'first_name' => $u['first_name'],
+		    'last_name' => $u['last_name'],
+		    'birthdate' => date("Y-m-d",date($u['birthdate'])),
+		    'city' => $u['city'],
+		    'state' => $u['state'],
+		    'country' => $u['country'],
+		    'join_date' => date("Y-m-d H:i:s")
                 )
             );
 

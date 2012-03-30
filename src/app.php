@@ -1,7 +1,7 @@
 <?php
 
 /**  Bootstraping */
-require_once __DIR__.'/../vendor/Silex/silex.phar';
+require_once 'phar://'.__DIR__.'/../vendor/Silex/silex.phar';
 
 $app = new Silex\Application();
 
