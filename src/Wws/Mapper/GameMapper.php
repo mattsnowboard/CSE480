@@ -3,6 +3,7 @@
 namespace Wws\Mapper;
 
 use Wws\Model\Game;
+use Wws\Model\Dictionary;
 
 /**
  * This class can look up games by ID
@@ -31,7 +32,7 @@ class GameMapper
      */
 	public function FindById($id, \Wws\Model\User $user = null)
     {
-        $gameArr = $this->db->fetchAssoc('SELECT * FROM game WHERE id = ?', array((int)$id));
+        $gameArr = $this->db->fetchAssoc('SELECT *,  game.id AS id FROM game, dictionary WHERE game.word_id = dictionary.id and game.id = ?', array((int)$id));
         $game = $this->returnGame($gameArr);
         if (!is_null($user)
                 && !($game->getPlayer1Id() == $user->getId()
@@ -64,7 +65,7 @@ class GameMapper
 			}
 			else
 			{	// returns in-progress multi-player games involving given userID
-				$gameArr = $this->db->fetchAll('SELECT *, game.id AS id FROM game '
+				$gameArr = $this->db->fetchAll('SELECT *, game.id AS id FROM game, dictionary '
                         .'WHERE num_players = :numPlayers and (player1_id = :uid or player2_id = :uid',
                     array( 'numPlayers' => $numPlayers,
                             'uid' => $uid));
@@ -97,10 +98,12 @@ class GameMapper
         if (!is_null($sqlResult) && $sqlResult !== false && !empty($sqlResult)) {
             $game = new Game($sqlResult);
 			
-			// create new Word object using same list of results
+			// create new Word object
 			$dict = new Dictionary();
-	
-			// set the new game's Dictionary to be the
+			$dict->setID($sqlResult['word_id']);
+			$dict->setWord($sqlResult['word']);
+			$dict->setDefinition($sqlResult['definition']);
+
 			$game->setDictionary($dict);
 			
             return $game;
@@ -113,7 +116,7 @@ class GameMapper
         $games = array();
         if (!is_null($sqlResult) && $sqlResult !== false && !empty($sqlResult)) {
             foreach ($sqlResult as $game)
-            $games[] = new Game($game);
+            $games[] =$this->returnGame($game);
         }
         return $games;
     }
