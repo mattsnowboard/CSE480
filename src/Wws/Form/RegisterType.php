@@ -30,10 +30,10 @@ class RegisterType extends AbstractType
         $builder->add('password', 'password', array(
             'label' => 'Password:'
         ));
-        $builder->add('firstName', 'text', array(
+        $builder->add('first_name', 'text', array(
             'label' => 'First Name:'
         ));
-        $builder->add('lastName', 'text', array(
+        $builder->add('last_name', 'text', array(
             'label' => 'Last Name:'
         ));
         $builder->add('birthdate', 'birthday', array(
@@ -58,8 +58,8 @@ class RegisterType extends AbstractType
                     'username' => new Assert\NotBlank(),
                     'email'    => new Assert\Email(),
                     'password' => new Assert\NotBlank(),
-		    'firstName' => new Assert\NotBlank(),
-                    'lastName'  => new Assert\NotBlank(),
+		    'first_name' => new Assert\NotBlank(),
+                    'last_name'  => new Assert\NotBlank(),
                     'birthdate' => new Assert\NotBlank(),
 		    'city' => new Assert\NotBlank(),
                     'state'    => new Assert\NotBlank(),
