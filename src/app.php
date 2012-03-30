@@ -57,8 +57,11 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
         __DIR__.'/../vendor/Symfony/Bridge/Twig/Resources/views/Form'
     ),
     'twig.class_path' => __DIR__.'/../vendor/Twig/lib',
-    'twig.options' => array('cache' => __DIR__.'/../cache'),
+    'twig.options' => array(
+        'cache' => __DIR__.'/../cache',
+        'debug' => true),
 ));
+
 
 /** Forms helpful stuff **/
 $app->register(new Silex\Provider\SymfonyBridgesServiceProvider(), array(
@@ -74,6 +77,8 @@ $app->register(new Silex\Provider\TranslationServiceProvider(), array(
 
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 $app->register(new Silex\Provider\SessionServiceProvider());
+
+$app['twig']->addExtension(new Twig_Extension_Debug());
 
 /** Our Services */
 

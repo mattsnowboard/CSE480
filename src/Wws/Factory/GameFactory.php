@@ -41,7 +41,7 @@ class GameFactory
         $wordStart = $this->CreateRandomWordStart();
         
         $game = new Game();
-        $game->setWord($wordStart['word']);
+        $game->setDictionary($wordStart['word']);
         $game->setWordStartState($wordStart['start']);
         $game->setNumPlayers(1);
         $game->setTimestamp(time());

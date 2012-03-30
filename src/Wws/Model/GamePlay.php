@@ -39,7 +39,22 @@ class GamePlay
      */
     public function makeLetterGuess(Game $game, User $user, $letter)
     {
+        $dictionary = $game->getDictionary();
+        $wordLetters = str_split($dictionary->getWord());
         
+        $correct = in_array(strtolower($letter), $wordLetters);
+        
+        $guess = new Guess();
+        $guess->SetPlayerId($user->GetId());
+        $guess->SetGameId($game->getId());
+        $guess->SetIsFullWord(false);
+        $guess->SetLetter(strtolower($letter));
+        $guess->SetIsCorrect($correct);
+        
+        if ($correct) {
+            // update the Game state
+            $game->updateState(strtolower($letter));
+        }
     }
     
     /**

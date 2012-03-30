@@ -32,7 +32,7 @@ class GameMapper
      */
 	public function FindById($id, \Wws\Model\User $user = null)
     {
-        $gameArr = $this->db->fetchAssoc('SELECT * FROM game WHERE id = ?', array((int)$id));
+        $gameArr = $this->db->fetchAssoc('SELECT *,  game.id AS id FROM game, dictionary WHERE game.word_id = dictionary.id and game.id = ?', array((int)$id));
         $game = $this->returnGame($gameArr);
         if (!is_null($user)
                 && !($game->getPlayer1Id() == $user->getId()
@@ -98,11 +98,12 @@ class GameMapper
         if (!is_null($sqlResult) && $sqlResult !== false && !empty($sqlResult)) {
             $game = new Game($sqlResult);
 			
-			// create new Word object using same list of results
+			// create new Word object
 			$dict = new Dictionary();
 			$dict->setID($sqlResult['word_id']);
-	
-			// set the new game's Dictionary to be the one just created
+			$dict->setWord($sqlResult['word']);
+			$dict->setDefinition($sqlResult['definition']);
+
 			$game->setDictionary($dict);
 			
             return $game;
@@ -115,7 +116,7 @@ class GameMapper
         $games = array();
         if (!is_null($sqlResult) && $sqlResult !== false && !empty($sqlResult)) {
             foreach ($sqlResult as $game)
-            $games[] = new Game($game);
+            $games[] =$this->returnGame($game);
         }
         return $games;
     }
