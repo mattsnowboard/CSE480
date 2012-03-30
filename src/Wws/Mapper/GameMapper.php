@@ -3,6 +3,7 @@
 namespace Wws\Mapper;
 
 use Wws\Model\Game;
+use Wws\Model\Dictionary;
 
 /**
  * This class can look up games by ID
@@ -64,7 +65,7 @@ class GameMapper
 			}
 			else
 			{	// returns in-progress multi-player games involving given userID
-				$gameArr = $this->db->fetchAll('SELECT *, game.id AS id FROM game '
+				$gameArr = $this->db->fetchAll('SELECT *, game.id AS id FROM game, dictionary '
                         .'WHERE num_players = :numPlayers and (player1_id = :uid or player2_id = :uid',
                     array( 'numPlayers' => $numPlayers,
                             'uid' => $uid));
@@ -99,9 +100,10 @@ class GameMapper
 			
 			// create new Word object using same list of results
 			$dict = new Dictionary();
+			$dict->setID($sqlResult['word_id']);
 	
-			// set the new game's Dictionary to be the
-			$game.setDictionary($dict);
+			// set the new game's Dictionary to be the one just created
+			$game->setDictionary($dict);
 			
             return $game;
         }
