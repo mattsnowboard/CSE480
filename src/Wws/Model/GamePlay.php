@@ -65,7 +65,13 @@ class GamePlay
      */
     public function isUserTurn(Game $game, User $user)
     {
-        
+        $turn = $game->getPlayerTurn();
+        if ($turn == 1 && $game->getPlayer1Id() == $user->GetId()) {
+            return true;
+        } else if ($turn == 2 && $game->getPlayer1Id() == $user->GetId()) {
+            return true;
+        }
+        return false;
     }
     
     /**
