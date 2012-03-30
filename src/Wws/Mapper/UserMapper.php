@@ -104,7 +104,7 @@ class UserMapper
                     'password' => $u['password'],
 		    'first_name' => $u['first_name'],
 		    'last_name' => $u['last_name'],
-		    'birthdate' => date("Y-m-d",date($u['birthdate'])),
+		    'birthdate' => $u['birthdate']->format('Y-m-d'),
 		    'city' => $u['city'],
 		    'state' => $u['state'],
 		    'country' => $u['country'],
