@@ -102,7 +102,6 @@ namespace Wws\Model;
             $this->player2Id = $g['player2_id'];
             $this->isBonus = $g['is_bonus'];
             $this->currentState = $g['current_state'];
-			$this->dictionary = $g['dictionary'];
         }
     }
     
