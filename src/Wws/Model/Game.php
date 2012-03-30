@@ -247,5 +247,20 @@ namespace Wws\Model;
 	{
 		return $this->dictionary;
 	}
+    
+    /**
+     * Update the game state by revealing more letters
+     * @param char $letter 
+     */
+    public function updateState($letter)
+    {
+        $wordLetters = str_split($this->dictionary->getWord());
+        $newState = '';
+        for ($i = 0; $i < strlen($this->currentState); $i++) {
+            $newState .= ($wordLetters[$i] == $letter) ? $wordLetters[$i]
+                : $this->currentState[$i];
+        }
+        $this->currentState = $newState;
+    }
 
 }
