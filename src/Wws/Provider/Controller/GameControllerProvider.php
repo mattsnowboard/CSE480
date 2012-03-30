@@ -5,6 +5,7 @@ namespace Wws\Provider\Controller;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Silex\ControllerCollection;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * This provides controllers under the '/game' path
@@ -26,11 +27,15 @@ class GameControllerProvider implements ControllerProviderInterface
          * This page is shown during a single player game
          */
         $controllers->get('/single-player/{id}', function(Application $app, $id) {
-            $game = $app['wws.mapper.game']->FindById($id);
-            
-            if (is_null($game)) {
-                // game not found
-                return $app->abort(404, 'The game you were looking for does not exist');
+            try {
+                $game = $app['wws.mapper.game']->FindById($id, $app['wws.user']);
+
+                if (is_null($game)) {
+                    // game not found
+                    return $app->abort(404, 'The game you were looking for does not exist');
+                }
+            } catch (\Wws\Exception\NotAuthorizedException $e) {
+                throw new HttpException(403, $e->getMessage());
             }
             
             return $app['twig']->render('single-player-template.html.twig', array(

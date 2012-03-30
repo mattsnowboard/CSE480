@@ -20,6 +20,7 @@ class AuthServiceProvider implements ServiceProviderInterface
         */
         $app['wws.auth.must_be_logged_in'] = $app->protect(function(\Symfony\Component\HttpFoundation\Request $request) use($app) {
             if (is_null($app['wws.user'])) {
+                $app['session']->setFlash('infobar', 'You must be logged in to view that page');
                 return $app->redirect($app['url_generator']->generate('home'));
             }
         });

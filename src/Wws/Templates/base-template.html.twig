@@ -21,13 +21,19 @@
         {% block infobar %}
         <header id="infobar">
             {% if user %}
-			<div>Logged in as: {{ user.username }}</div>
+			<div class="left">Logged in as: {{ user.username }}</div>
             <ul id="infobar-nav">
                 <li><a href="#">Edit Profile (TODO)</a></li>
                 <li><a href="{{ path('logout') }}">Logout</a></li>
             </ul>
             {% else %}
             <div>Log in below</div>
+            {% endif %}
+            
+            {% if app.session.hasFlash('infobar') %}
+            <div id="flash-top">
+            {{ app.session.flash('infobar') }}
+            </div>
             {% endif %}
         </header>
         {% endblock %}

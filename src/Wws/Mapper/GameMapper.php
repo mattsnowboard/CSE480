@@ -26,12 +26,21 @@ class GameMapper
      * Find a game by id
      * 
      * @param int $id
+     * @param \Wws\Model\User $user Which user the game must belong to
      * @return \Wws\Model\Game|null
      */
-	public function FindById($id)
+	public function FindById($id, \Wws\Model\User $user = null)
     {
         $gameArr = $this->db->fetchAssoc('SELECT * FROM game WHERE id = ?', array((int)$id));
-        return $this->returnGame($gameArr);
+        $game = $this->returnGame($gameArr);
+        if (!is_null($user)
+                && !($game->getPlayer1Id() == $user->getId()
+                    || $game->getPlayer2Id() == $user->getId())) {
+            // this game is for someone else
+            throw new \Wws\Exception\NotAuthorizedException('You\'re creeping on someone elses game!');
+        }
+        
+        return $game;
     }
 	
 	/**

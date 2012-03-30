@@ -105,6 +105,9 @@ $app->error(function (\Exception $e, $code) use($app) {
         case 404:
             $message = 'Hmm, looks like something is missing.';
             break;
+        case 403:
+            $message = 'Access was denied';
+            break;
         default:
             $message = 'Oh no, something is broken!';
     }

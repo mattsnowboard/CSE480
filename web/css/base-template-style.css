@@ -35,13 +35,13 @@ a:hover {
 }
 
 #infobar {
-    padding: 1em;
+    padding: 0.5em 1em;
     background: #333;
 	color: #AAAAAA;
     overflow: auto;
 }
 
-#infobar div {
+#infobar .left {
     float: left;
     width: 50%;
 }
@@ -67,6 +67,16 @@ a:hover {
 
 #infobar a:hover { 
 	color: #FFFFFF; 
+}
+
+#flash-top {
+    position: absolute;
+    top: 0.5em;
+    width: 100%;
+    text-align: center;
+    float: none;
+    font-style: italic;
+    color: #ffffff;
 }
 
 #banner {
