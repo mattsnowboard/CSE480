@@ -85,6 +85,12 @@ a:hover {
 	height: 200px;
 }
 
+#banner h1, #banner a {
+    display: block;
+    margin: 0;
+    height: 100%;
+}
+
 #main {
     padding: 1em;
     overflow: auto;
