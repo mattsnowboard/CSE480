@@ -91,7 +91,7 @@ namespace Wws\Model;
         if (!is_null($g)) {
             $this->id = $g['id'];
             $this->timestamp = $g['timestamp'];
-            $this->wordStartStates = $g['word_start_state'];
+            $this->wordStartState = $g['word_start_state'];
             $this->numPlayers = $g['num_players'];
             $this->score1 = $g['score1'];
             $this->score2 = $g['score2'];

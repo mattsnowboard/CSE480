@@ -43,10 +43,11 @@ class TestControllerProvider implements ControllerProviderInterface
          * 
          * This is a temporary way to test the game mapper
          */
-        $controllers->get('/game-user/{uid}', function(Application $app, $uid) {
-            $test = $app['wws.mapper.game']->FindGamesByUserId($uid, 1);
+        $controllers->get('/game-user/{uid}/{result}', function(Application $app, $uid, $result = 'playing') {
+            $test = $app['wws.mapper.game']->FindGamesByUserId($uid, 1, $result);
             return var_dump($test);
-        });
+        })
+        ->value('result', 'playing');;
         
 		
 		
