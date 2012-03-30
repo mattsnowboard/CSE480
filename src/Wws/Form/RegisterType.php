@@ -58,6 +58,12 @@ class RegisterType extends AbstractType
                     'username' => new Assert\NotBlank(),
                     'email'    => new Assert\Email(),
                     'password' => new Assert\NotBlank(),
+		    'firstName' => new Assert\NotBlank(),
+                    'lastName'  => new Assert\NotBlank(),
+                    'birthdate' => new Assert\NotBlank(),
+		    'city' => new Assert\NotBlank(),
+                    'state'    => new Assert\NotBlank(),
+                    'country' => new Assert\NotBlank(),
                 ),
             ))
         ), $options);

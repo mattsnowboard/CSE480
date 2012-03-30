@@ -120,7 +120,8 @@ class DefaultControllerProvider implements ControllerProviderInterface
             }
 
             // render registration form
-            return $app->redirect($app['url_generator']->generate('home'));
+	    //var_dump($data);
+	    return $app->redirect($app['url_generator']->generate('home'));
         })
         ->bind('register');
 
