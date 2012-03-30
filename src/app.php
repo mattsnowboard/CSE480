@@ -90,6 +90,27 @@ $app->before(function() use($app) {
     $app['twig']->addGlobal('user', $app['wws.user']);
 });
 
+$app->error(function (\Exception $e, $code) use($app) {
+    // show the helpful debugging if in debug mode
+    if ($app['debug']) {
+        //return;
+    }
+    
+    switch ($code) {
+        case 404:
+            $message = 'Hmm, looks like something is missing.';
+            break;
+        default:
+            $message = 'Oh no, something is broken!';
+    }
+
+    return $app['twig']->render('error-template.html.twig', array(
+        'code' => $code,
+        'message' => $message,
+        'messageDetail' => $e->getMessage()
+    ));
+});
+
 /** Routing */
 
 $app->mount('/', new Wws\Provider\Controller\DefaultControllerProvider());

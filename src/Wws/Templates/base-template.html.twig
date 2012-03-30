@@ -20,11 +20,15 @@
     <body>
         {% block infobar %}
         <header id="infobar">
-			<p> Username </p>
+            {% if user %}
+			<div>Logged in as: {{ user.username }}</div>
             <ul id="infobar-nav">
-                <li><a href="#">Edit Profile</a></li>
+                <li><a href="#">Edit Profile (TODO)</a></li>
                 <li><a href="{{ path('logout') }}">Logout</a></li>
             </ul>
+            {% else %}
+            <div>Log in below</div>
+            {% endif %}
         </header>
         {% endblock %}
 

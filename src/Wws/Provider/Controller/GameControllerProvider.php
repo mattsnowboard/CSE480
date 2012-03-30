@@ -28,6 +28,11 @@ class GameControllerProvider implements ControllerProviderInterface
         $controllers->get('/single-player/{id}', function(Application $app, $id) {
             $game = $app['wws.mapper.game']->FindById($id);
             
+            if (is_null($game)) {
+                // game not found
+                return $app->abort(404, 'The game you were looking for does not exist');
+            }
+            
             return $app['twig']->render('single-player-template.html.twig', array(
                 'game' => $game
             ));
