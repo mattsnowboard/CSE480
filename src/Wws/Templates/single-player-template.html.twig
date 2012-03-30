@@ -8,6 +8,12 @@
 
 {% block main %}
 	
+    {% if app.session.hasFlash('gamemsg') %}
+    <div id="flash-game-msg">
+    {{ app.session.flash('gamemsg') }}
+    </div>
+    {% endif %}
+     
 	<section id="game-display">
 	 <p>Current game state: {{game.currentState}} </p>
 	</section>

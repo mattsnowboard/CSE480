@@ -71,7 +71,7 @@ class GameFactory
         // pick letters so we will show at least 3 letters as hints
         $lettersPicked = array();
         $letterCount = 0;
-        while ($letterCount < 3) {
+        while ($letterCount < 2) {
             $index = array_pop($letters);
             $letter = substr($theWord, $index, 1);
             // count occurance of random letter
