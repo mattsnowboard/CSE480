@@ -117,6 +117,7 @@ class DefaultControllerProvider implements ControllerProviderInterface
                     $data = $regForm->getData();
                     // validate and optionally redirect
                     try {
+		      //var_dump($data);
                         $success = $app['wws.auth.user_provider']->RegisterUser(
                             $data);
                         if ($success) {
