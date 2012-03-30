@@ -57,11 +57,6 @@ namespace Wws\Model;
     private $wordId;
     
     /**
-     * @var Wws\Model\Dictionary
-     */
-    private $word;
-    
-    /**
      * @var int
      */
     private $player1Id;
@@ -82,7 +77,7 @@ namespace Wws\Model;
     private $currentState;
 	
 	 /**
-     * Dictionary object
+     * @var Wws\Model\Dictionary
      */
     private $dictionary;
 	
@@ -202,24 +197,8 @@ namespace Wws\Model;
     {
         $this->wordId = $wordId;
     }
-    
-    public function getWord()
-    {
-        return $this->word;
-    }
 
-    /**
-     * Just a helper to set the actual Dicitonary model and the Id at once
-     * 
-     * @param \Wws\Model\Dictionary $word 
-     */
-    public function setWord(\Wws\Model\Dictionary $word)
-    {
-        $this->word = $word;
-        $this->wordId = $word->getId();
-    }
-
-        public function getPlayer1Id()
+    public function getPlayer1Id()
     {
         return $this->player1Id;
     }
@@ -262,6 +241,7 @@ namespace Wws\Model;
 	public function setDictionary($dict)
 	{
 		$this->dictionary = $dict;
+        $this->wordId = $dict->getId();
 	}
 	
 	public function getDictionary()

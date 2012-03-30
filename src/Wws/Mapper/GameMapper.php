@@ -101,7 +101,7 @@ class GameMapper
 			$dict = new Dictionary();
 	
 			// set the new game's Dictionary to be the
-			$game.setDictionary($dict);
+			$game->setDictionary($dict);
 			
             return $game;
         }
