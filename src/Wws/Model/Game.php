@@ -57,6 +57,11 @@ namespace Wws\Model;
     private $wordId;
     
     /**
+     * @var Wws\Model\Dictionary
+     */
+    private $word;
+    
+    /**
      * @var int
      */
     private $player1Id;
@@ -86,7 +91,7 @@ namespace Wws\Model;
         if (!is_null($g)) {
             $this->id = $g['id'];
             $this->timestamp = $g['timestamp'];
-            $this->wordStartStates = $g['word_start_state'];
+            $this->wordStartState = $g['word_start_state'];
             $this->numPlayers = $g['num_players'];
             $this->score1 = $g['score1'];
             $this->score2 = $g['score2'];
@@ -100,38 +105,44 @@ namespace Wws\Model;
         }
     }
     
-    public function GetId()
+    public function getId()
     {
         return $this->id;
     }
-    public function SetId($id)
+    public function setId($id)
     {
         $this->id = (int)$id;
     }
     
-    public function GetTimestamp()
+    public function getTimestamp()
     {
         return $this->timestamp;
     }
-    public function SetTimestamp($timestamp)
+    public function setTimestamp($timestamp)
     {
         $this->timestamp = $timestamp;
     }
     
-    public function GetWordStartState()
+    public function getWordStartState()
     {
         return $this->wordStartState;
     }
-    public function SetWordStartState($wss)
+    /**
+     * Set the word start state, which is also the current state
+     * 
+     * @param string $wss 
+     */
+    public function setWordStartState($wss)
     {
         $this->wordStartState = $wss;
+        $this->currentState = $wss;
     }
 	
-    public function GetNumPlayers()
+    public function getNumPlayers()
     {
         return $this->num_players;
     }
-    public function SetNumPlayers($wss)
+    public function setNumPlayers($wss)
     {
         $this->num_players = $wss;
     }
@@ -185,8 +196,24 @@ namespace Wws\Model;
     {
         $this->wordId = $wordId;
     }
+    
+    public function getWord()
+    {
+        return $this->word;
+    }
 
-    public function getPlayer1Id()
+    /**
+     * Just a helper to set the actual Dicitonary model and the Id at once
+     * 
+     * @param \Wws\Model\Dictionary $word 
+     */
+    public function setWord(\Wws\Model\Dictionary $word)
+    {
+        $this->word = $word;
+        $this->wordId = $word->getId();
+    }
+
+        public function getPlayer1Id()
     {
         return $this->player1Id;
     }

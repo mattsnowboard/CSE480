@@ -6,11 +6,11 @@ use Silex\Application;
 use Silex\ServiceProviderInterface;
 
 /**
- * This provides all factories
+ * This provides all gameplay logic services
  * 
  * @author Matt Durak <durakmat@msu.edu> 
  */
-class FactoryServiceProvider implements ServiceProviderInterface
+class ModelServiceProvider implements ServiceProviderInterface
 {
     public function register(Application $app)
     {
@@ -18,8 +18,8 @@ class FactoryServiceProvider implements ServiceProviderInterface
          * The Game Factory
          * @var closure 
          */
-        $app['wws.factory.game'] = $app->share(function($app) {
-            return new \Wws\Factory\GameFactory($app['wws.mapper.dictionary'], $app['wws.mapper.game']);
+        $app['wws.gameplay'] = $app->share(function($app) {
+            return new \Wws\Model\GamePlay($app['wws.mapper.dictionary'], $app['wws.mapper.game']);
         });
         
     }

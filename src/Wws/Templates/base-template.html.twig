@@ -11,26 +11,38 @@
 
         <meta name="viewport" content="width=device-width">
         {% block stylesheets %}
-        <link rel="stylesheet" type="text/css" href="css/boilerplate-style.css" />
-        <link rel="stylesheet" type="text/css" href="css/base-template-style.css" />
+        <link rel="stylesheet" type="text/css" href="/css/boilerplate-style.css" />
+        <link rel="stylesheet" type="text/css" href="/css/base-template-style.css" />
         {% endblock %}
 
-        <script src="js/libs/modernizr-2.5.3.min.js"></script>
+        <script src="/js/libs/modernizr-2.5.3.min.js"></script>
     </head>
     <body>
         {% block infobar %}
         <header id="infobar">
-			<p> Username </p>
+            {% if user %}
+			<div class="left">Logged in as: {{ user.username }}</div>
             <ul id="infobar-nav">
-                <li><a href="#">Edit Profile</a></li>
+                <li><a href="#">Edit Profile (TODO)</a></li>
                 <li><a href="{{ path('logout') }}">Logout</a></li>
             </ul>
+            {% else %}
+            <div>Log in below</div>
+            {% endif %}
+            
+            {% if app.session.hasFlash('infobar') %}
+            <div id="flash-top">
+            {{ app.session.flash('infobar') }}
+            </div>
+            {% endif %}
         </header>
         {% endblock %}
 
         <div class="wrapper">
             <section id="banner">
-                
+                <a class="ir" href="{{ path('welcome') }}">
+                    <h1>Words With Strangers</h1>
+                </a>
             </section>
 
             <div id="main" role="main">
@@ -41,18 +53,29 @@
 
             <footer id="footer">
                 {% block footer %}
-                <p>Footer info, links, etc here if we want</p>
+                <p>Words With Strangers &copy; 2012 was built by Chelsea Carr, Matt Durak, and Devan Sayles.</p>
                 {% endblock %}
             </footer>
         </div>
         
         <!-- Google CDN for jquery -->
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.1.min.js"><\/script>')</script>
+        <script>window.jQuery || document.write('<script src="/js/libs/jquery-1.7.1.min.js"><\/script>')</script>
         
         <!-- Insert other scripts here or on specific pages -->
         {% block scripts %}
-        <script src="js/script.js"></script>
+        <script src="/js/script.js"></script>
+        
+        {# Pinging for users activity updates #}
+        {% if user %}
+        <script>
+            $(document).ready(function(){
+                setInterval(function() {
+                    $.ajax('{{path('ping')}}');
+                }, 20000);
+            });  
+        </script>
+        {% endif %}
         {% endblock %}
 
     </body>

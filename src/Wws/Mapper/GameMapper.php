@@ -26,12 +26,59 @@ class GameMapper
      * Find a game by id
      * 
      * @param int $id
+     * @param \Wws\Model\User $user Which user the game must belong to
      * @return \Wws\Model\Game|null
      */
-	public function FindById($id)
+	public function FindById($id, \Wws\Model\User $user = null)
     {
         $gameArr = $this->db->fetchAssoc('SELECT * FROM game WHERE id = ?', array((int)$id));
-        return $this->returnGame($gameArr);
+        $game = $this->returnGame($gameArr);
+        if (!is_null($user)
+                && !($game->getPlayer1Id() == $user->getId()
+                    || $game->getPlayer2Id() == $user->getId())) {
+            // this game is for someone else
+            throw new \Wws\Exception\NotAuthorizedException('You\'re creeping on someone elses game!');
+        }
+        
+        return $game;
+    }
+	
+	/**
+     * Find all games for a User
+     * 
+     * @param int $uid
+     * @param int $numPlayers
+     * @param string $result What state the game is in
+     * @return type 
+     */
+	public function FindGamesByUserId($uid, $numPlayers, $result)
+    {
+		if ($result == 'playing')
+		{
+			if ((int)$numPlayers == 1)
+			{
+				// returns in-progress single-player games involving given userID
+				$gameArr = $this->db->fetchAll('SELECT * FROM game WHERE num_players = :numPlayers and winner_flag = :result and player1_id = :uid', array( 'numPlayers' => (int) $numPlayers, 'uid' => $uid, 'result' => $result));
+			}
+			else
+			{	// returns in-progress multi-player games involving given userID
+				$gameArr = $this->db->fetchAll('SELECT * FROM game WHERE num_players = :numPlayers and (player1_id = :uid or player2_id = :uid', array( 'numPlayers' => $numPlayers,
+											'uid' => $uid));
+			}
+		}
+		else
+		{
+			if ((int)$numPlayers == 1)
+			{
+				// returns all single-player games involving given userID
+			}
+			else
+			{
+				// returns all multi-player games involving given userID
+			}
+		}
+		
+        return $this->returnGames($gameArr);
     }
 	
 	/**
@@ -48,7 +95,16 @@ class GameMapper
         }
         return null;
     }
-    
+	
+	protected function returnGames($sqlResult)
+    {
+        $games = array();
+        if (!is_null($sqlResult) && $sqlResult !== false && !empty($sqlResult)) {
+            foreach ($sqlResult as $game)
+            $games[] = new Game($game);
+        }
+        return $games;
+    }
     /**
      * Creates a Game in the database from a Game model
      * 
@@ -56,14 +112,23 @@ class GameMapper
      * @return boolean True if successful
      */
     public function CreateGame(\Wws\Model\Game $game)
-{
+    {
         $count = $this->db->executeUpdate("INSERT INTO game "
                 . "(word_start_state, num_players, player_turn, word_id, player1_id, player2_id, is_bonus, current_state) "
                 . "VALUES (:start, :num, :turn, :word, :player1, :player2, :bonus, :start)",
             array(
-                //'start' => $game->get
+                'start' => $game->getWordStartState(),
+                'num' => $game->getNumPlayers(),
+                'turn' => $game->getPlayerTurn(),
+                'word' => $game->getWordId(),
+                'player1' => $game->getPlayer1Id(),
+                'player2' => $game->getPlayer2Id(),
+                'bonus' => $game->getIsBonus(),
+                'start' => $game->getWordStartState()
             )
         );
+        
+        $game->setId($this->db->lastInsertId());
 
         return $count == 1;
     }

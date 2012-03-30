@@ -37,7 +37,20 @@ class TestControllerProvider implements ControllerProviderInterface
             $test = $app['wws.mapper.game']->FindById($id);
             return var_dump($test);
         });
+		
+		 /**
+         * @route '/game-user/{uid}'
+         * 
+         * This is a temporary way to test the game mapper
+         */
+        $controllers->get('/game-user/{uid}/{result}', function(Application $app, $uid, $result = 'playing') {
+            $test = $app['wws.mapper.game']->FindGamesByUserId($uid, 1, $result);
+            return var_dump($test);
+        })
+        ->value('result', 'playing');;
         
+		
+		
         /**
          * @route '/guess/{id}'
          * 
@@ -45,6 +58,14 @@ class TestControllerProvider implements ControllerProviderInterface
          */
         $controllers->get('/guess/{id}', function(Application $app, $id) {
             $test = $app['wws.mapper.guess']->FindByGame($id);
+            return var_dump($test);
+        });
+        
+        /**
+         * 
+         */
+        $controllers->get('/random-word', function(Application $app) {
+            $test = $app['wws.factory.game']->CreateRandomWordStart();
             return var_dump($test);
         });
         

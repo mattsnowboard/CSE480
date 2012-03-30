@@ -46,9 +46,14 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
 ));
 
 /** Twig **/
+$app['twig.form.templates'] = array(
+    'fields.html.twig',
+    //'form_div_layout.html.twig'
+);
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => array(
         __DIR__.'/Wws/Templates',
+        __DIR__.'/Wws/Templates/Form',
         __DIR__.'/../vendor/Symfony/Bridge/Twig/Resources/views/Form'
     ),
     'twig.class_path' => __DIR__.'/../vendor/Twig/lib',
@@ -72,9 +77,13 @@ $app->register(new Silex\Provider\SessionServiceProvider());
 
 /** Our Services */
 
+$app->register(new Wws\Provider\Service\FactoryServiceProvider(), array(
+));
 $app->register(new Wws\Provider\Service\MapperServiceProvider(), array(
 ));
 $app->register(new Wws\Provider\Service\AuthServiceProvider(), array(
+));
+$app->register(new Wws\Provider\Service\ModelServiceProvider(), array(
 ));
 
 /**
@@ -86,6 +95,30 @@ $app->before(function() use($app) {
     $app['wws.auth.app.before']();
     // now we have {{ user }} in all twig files!
     $app['twig']->addGlobal('user', $app['wws.user']);
+});
+
+$app->error(function (\Exception $e, $code) use($app) {
+    // show the helpful debugging if in debug mode
+    if ($app['debug']) {
+        return;
+    }
+    
+    switch ($code) {
+        case 404:
+            $message = 'Hmm, looks like something is missing.';
+            break;
+        case 403:
+            $message = 'Access was denied';
+            break;
+        default:
+            $message = 'Oh no, something is broken!';
+    }
+
+    return $app['twig']->render('error-template.html.twig', array(
+        'code' => $code,
+        'message' => $message,
+        'messageDetail' => $e->getMessage()
+    ));
 });
 
 /** Routing */

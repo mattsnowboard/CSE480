@@ -9,13 +9,24 @@
 	
 	<section id="welcome-options">
 		<ul id="options-list">
-			<li><a href="#" title="Start 1-Player Game">Start 1-Player Game</a></li>
+			<li><a href="{{ path('create_single_player') }}" title="Start 1-Player Game">Start 1-Player Game</a></li>
 			<li><a href="#" title="Send a Challenge">Send a Challenge</a></li>
 	</section>
 	
 	<section id="challenges">
 		<h2>Challenges</h2>
 		<p>View of challenges recieved, options to accept/deny them</p>
+	</section>
+	
+	<section id="gamelist">
+		<h2>Games in Progress</h2>
+		<ul>
+			{% for game in games %}
+				<li><a href="{{path("single_player", {'id':game.id})}}">Game {{ game.id}}</a> Current state:  {{game.currentState}}</li>
+				{% else %}
+					<li> No games </li>
+			{% endfor %}
+		</ul>
 	</section>
 
 {% endblock %}
