@@ -58,12 +58,16 @@ class GameMapper
 			if ((int)$numPlayers == 1)
 			{
 				// returns in-progress single-player games involving given userID
-				$gameArr = $this->db->fetchAll('SELECT * FROM game, dictionary WHERE game.word_id = dictionary.id and num_players = :numPlayers and winner_flag = :result and player1_id = :uid', array( 'numPlayers' => (int) $numPlayers, 'uid' => $uid, 'result' => $result));
+				$gameArr = $this->db->fetchAll('SELECT *, game.id AS id FROM game, dictionary '
+                        . 'WHERE game.word_id = dictionary.id and num_players = :numPlayers and winner_flag = :result and player1_id = :uid',
+                    array( 'numPlayers' => (int) $numPlayers, 'uid' => $uid, 'result' => $result));
 			}
 			else
 			{	// returns in-progress multi-player games involving given userID
-				$gameArr = $this->db->fetchAll('SELECT * FROM game WHERE num_players = :numPlayers and (player1_id = :uid or player2_id = :uid', array( 'numPlayers' => $numPlayers,
-											'uid' => $uid));
+				$gameArr = $this->db->fetchAll('SELECT *, game.id AS id FROM game '
+                        .'WHERE num_players = :numPlayers and (player1_id = :uid or player2_id = :uid',
+                    array( 'numPlayers' => $numPlayers,
+                            'uid' => $uid));
 			}
 		}
 		else
@@ -94,7 +98,7 @@ class GameMapper
             $game = new Game($sqlResult);
 			
 			// create new Word object using same list of results
-			$dict = new Dictionary($sqlResult);
+			$dict = new Dictionary();
 	
 			// set the new game's Dictionary to be the
 			$game.setDictionary($dict);
