@@ -92,6 +92,13 @@ class GameMapper
     {
         if (!is_null($sqlResult) && $sqlResult !== false && !empty($sqlResult)) {
             $game = new Game($sqlResult);
+			
+			// create new Word object using same list of results
+			$dict = new Dictionary($sqlResult);
+	
+			// set the new game's Dictionary to be the
+			$game.setDictionary($dict);
+			
             return $game;
         }
         return null;

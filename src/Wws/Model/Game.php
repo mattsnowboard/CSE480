@@ -82,9 +82,9 @@ namespace Wws\Model;
     private $currentState;
 	
 	 /**
-     * @var string
+     * Dictionary object
      */
-    private $wordDefinition;
+    private $dictionary;
 	
     /**
      * Create a Game with an optional array of parameters
@@ -107,7 +107,7 @@ namespace Wws\Model;
             $this->player2Id = $g['player2_id'];
             $this->isBonus = $g['is_bonus'];
             $this->currentState = $g['current_state'];
-			$this->wordDefinition = $g['word_definition'];
+			$this->dictionary = $g['dictionary'];
         }
     }
     
@@ -258,5 +258,15 @@ namespace Wws\Model;
     {
         $this->currentState = $currentState;
     }
+	
+	public function setDictionary($dict)
+	{
+		$this->dictionary = $dict;
+	}
+	
+	public function getDictionary()
+	{
+		return $this->dictionary;
+	}
 
 }
