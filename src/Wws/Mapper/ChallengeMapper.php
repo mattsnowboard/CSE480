@@ -32,6 +32,22 @@ class ChallengeMapper
         $challengeArr = $this->db->fetchAssoc('SELECT * FROM challenge WHERE id = ?', array((int)$id));
         return $this->returnChallenge($challengeArr);
     }
+	
+	/**
+     * Find Challenges recieved by userID
+     * 
+     * @param int $id
+     * @return \Wws\Model\Challenge|null
+     */
+    public function FindRecievedChallengesByUserId($id, $status)
+    {
+        $challengeArr = $this->db->fetchAll('SELECT * FROM challenge, player WHERE challenger_id=player.id AND recipient_id = :id AND status = :status',
+			array('id' => (int)$id, 'status' => $status));
+			
+        return $this->returnChallenges($challengeArr);
+    }
+	
+	
         
     /**
      * Return a Challenge object for an associative array result set
@@ -47,4 +63,15 @@ class ChallengeMapper
         }
         return null;
     }
+	
+    protected function returnChallenges($sqlResult)
+    {
+        if (!is_null($sqlResult) && $sqlResult !== false && !empty($sqlResult)) {
+            foreach ($sqlResult as $challenge)
+				$challenges[] =$this->returnChallenge($challenge);
+        }
+		return $challenges;
+    }
+	
+	
 }

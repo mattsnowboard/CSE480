@@ -15,8 +15,18 @@
     {% endif %}
      
 	<section id="game-display">
-	 <p>Current game state: {{game.currentState}} </p>
-	 <p>Definition: {{game.dictionary.definition}} </p>
+		<div id="game-state">{{game.currentState}}</div>
+		<div id="definition"><p>Definition: {{game.dictionary.definition}} </p></div>
+		<div id="play">
+			<form id="guess-form">
+				Guess a character: <input type="text" name="char-guess" size=3 maxlength=1 />
+				<input type="submit" value="Submit" />
+			</form>
+			<div id="guessed-chars">
+				<p>Characters guessed: </p>
+			</div>
+			<div id="p1-points">Game points: </div>
+		</div>
 	</section>
 	
 	<section id="player-stats">
