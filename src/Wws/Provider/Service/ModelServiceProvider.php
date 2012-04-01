@@ -19,7 +19,9 @@ class ModelServiceProvider implements ServiceProviderInterface
          * @var closure 
          */
         $app['wws.gameplay'] = $app->share(function($app) {
-            return new \Wws\Model\GamePlay($app['wws.mapper.dictionary'], $app['wws.mapper.game']);
+            return new \Wws\Model\GamePlay($app['wws.mapper.dictionary'],
+                $app['wws.mapper.game'],
+                $app['wws.mapper.guess']);
         });
         
     }

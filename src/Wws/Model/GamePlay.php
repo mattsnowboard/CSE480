@@ -20,11 +20,18 @@ class GamePlay
      */
     protected $gameMapper;
     
+    /**
+     * @var Wws\Mapper\GuessMapper
+     */
+    protected $guessMapper;
+    
     public function __construct(\Wws\Mapper\DictionaryMapper $dmap,
-            \Wws\Mapper\GameMapper $gmap)
+            \Wws\Mapper\GameMapper $gmap,
+            \Wws\Mapper\GuessMapper $guessMap)
     {
         $this->dictionaryMapper = $dmap;
         $this->gameMapper = $gmap;
+        $this->guessMapper = $guessMap;
     }
     
     /**
@@ -51,10 +58,22 @@ class GamePlay
         $guess->SetLetter(strtolower($letter));
         $guess->SetIsCorrect($correct);
         
+        // store new guess in database
+        $this->guessMapper->CreateGuess($guess);
+        
+        // tell the game that the guess was made so it can update the score and turn
+        $game->updateGuess($user, $correct);
         if ($correct) {
             // update the Game state
             $game->updateState(strtolower($letter));
         }
+        // check if the game is now over
+        if ($game->isGuessed()) {
+            // they guessed it, end the game
+            $game->endGame();
+        }
+        
+        $this->gameMapper->UpdateGame($game);
     }
     
     /**

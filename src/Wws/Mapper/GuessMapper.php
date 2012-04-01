@@ -87,29 +87,32 @@ class GuessMapper
         }
         return $guesses;
     }
-
+    
     /**
-     * Creates a guess and adds it to the db
+     * Creates a Guess in the database from a Guess model
      * 
-     * @param type $letter, $gid, $pid
+     * @param Wws\Model\Guess $guess
+     * 
      * @return boolean True if successful
      */
-    public function CreateGuess($letter, $gid, $pid)
+    public function CreateGuess(\Wws\Model\Guess $guess)
     {
-        // make sure guess hasn't already been played
-        $existing = $this->FindByLetterGuessed($gid, $letter);
-        if (is_null($existing)) {
-            $count = $this->db->executeUpdate("INSERT INTO guesses (game_id, player_id, letter) VALUES (:game, :player, :letter)", array(
-                'game'   => $gid,
-                'player' => $pid,
-                'letter' => $letter
-            ));
+        $count = $this->db->executeUpdate("INSERT INTO guess "
+                . "(is_correct, word, letter, is_full_word, player_id, game_id) "
+                . "VALUES (:correct, :word, :letter, :isWord, :player, :game)",
+            array(
+                'correct' => $guess->GetIsCorect(),
+                'word' => $guess->GetWord(),
+                'letter' => $guess->GetLetter(),
+                'isWord' => $guess->GetIsFullWord(),
+                'player' => $guess->GetPlayerId(),
+                'game' => $guess->GetGameId()
+            )
+        );
+        
+        $game->setId($this->db->lastInsertId());
 
-            return $count == 1;
-        } else {
-            // already exists
-            return false;
-        }
+        return $count == 1;
     }
 
 }

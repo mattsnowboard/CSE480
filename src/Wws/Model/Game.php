@@ -262,5 +262,74 @@ namespace Wws\Model;
         }
         $this->currentState = $newState;
     }
+    
+    /**
+     * Update the score based on a letter guess.  Also updates the player turn
+     * 
+     * @param User $user    Who guessed
+     * @param type $correct Whether it was correct or not
+     */
+    public function updateGuess(User $user, $correct)
+    {
+        $whichPlayer = ($this->player1Id == $user->getId()) ? 1
+            : ($this->player2Id == $user->getId()) ? 2
+            : -1;
+        
+        $points = ($correct) ? 1 : -1;
+        if ($this->isBonus) {
+            $points *= 2;
+        }
+        
+        if ($whichPlayer === 1) {
+            $this->score1 += $points;
+        } else if ($whichPlayer === 2) {
+            $this->score2 += $points;
+        }
+        
+        $this->updateTurn();
+    }
+    
+    /**
+     * Update whose turn it is (does nothing for 1 player game) 
+     */
+    public function updateTurn()
+    {
+        if ($this->numPlayers > 1) {
+            $this->playerTurn++;
+            if ($this->playerTurn > $this->numPlayers) {
+                $this->playerTurn = 1;
+            }
+        }
+    }
+    
+    /**
+     * End the game. The current user wins if the word is guessed otherwise it is
+     * a lose or draw
+     */
+    public function endGame()
+    {
+        if ($this->numPlayers == 1) {
+            if ($this->isGuessed()) {
+                // correct/they won, they get 5 points (8 for bonus round)
+                $this->score1 += ($this->isBonus) ? 8 : 5;
+                // update state to Player 1 wins
+                $this->winnerFlag = '1';
+            } else {
+                // update state to lose
+                $this->winnerFlag = 'lose';
+            }
+        } else {
+            /** @todo End multi-player game */
+        }
+    }
+    
+    /**
+     * Checks if the word has been fully guessed
+     * @return bool True if the game is now over
+     */
+    public function isGuessed()
+    {
+        return $this->currentState === $this->dictionary->getWord();
+    }
 
 }

@@ -120,6 +120,7 @@ class GameMapper
         }
         return $games;
     }
+    
     /**
      * Creates a Game in the database from a Game model
      * 
@@ -145,6 +146,22 @@ class GameMapper
         
         $game->setId($this->db->lastInsertId());
 
+        return $count == 1;
+    }
+    
+    public function UpdateGame(\Wws\Model\Game $game)
+    {
+        $count = $this->db->executeUpdate("UPDATE game "
+                . "(player_turn, current_state, score1, score2) "
+                . "VALUES (:turn, :state, :s1, :s2)",
+            array(
+                'turn' => $game->getPlayerTurn(),
+                'state' => $game->getCurrentState(),
+                's1' => $game->getScore1(),
+                's2' => $game->getScore2()
+            )
+        );
+        
         return $count == 1;
     }
 	
