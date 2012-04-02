@@ -1,0 +1,14 @@
+{% extends "base-template.html.twig" %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	 <link rel="stylesheet" type="text/css" href="css/login-template-style.css" />
+{% endblock %}
+
+{% block main %}	
+	<section id="edit">
+		<h2>Edit Profile</h2>
+		{% include "edit-profile-form.html.twig" with {"form" : editform} %}
+	</section>
+	
+{% endblock %}
