@@ -80,6 +80,11 @@ namespace Wws\Model;
      * @var Wws\Model\Dictionary
      */
     private $dictionary;
+    
+    /**
+     * @var Wws\Model\Guess[] array
+     */
+    private $guesses = array();
 	
     /**
      * Create a Game with an optional array of parameters
@@ -140,11 +145,11 @@ namespace Wws\Model;
 	
     public function getNumPlayers()
     {
-        return $this->num_players;
+        return $this->numPlayers;
     }
     public function setNumPlayers($wss)
     {
-        $this->num_players = $wss;
+        $this->numPlayers = $wss;
     }
     
     public function getScore1()
@@ -237,7 +242,7 @@ namespace Wws\Model;
         $this->currentState = $currentState;
     }
 	
-	public function setDictionary($dict)
+	public function setDictionary(Dictionary $dict)
 	{
 		$this->dictionary = $dict;
         $this->wordId = $dict->getId();
@@ -247,6 +252,22 @@ namespace Wws\Model;
 	{
 		return $this->dictionary;
 	}
+    
+    public function getGuesses()
+    {
+        return $this->guesses;
+    }
+
+    public function setGuesses(array $guesses)
+    {
+        $this->guesses = $guesses;
+    }
+    
+    public function addGuess(Guess $guess)
+    {
+        $this->guesses[] = $guess;
+    }
+
     
     /**
      * Update the game state by revealing more letters

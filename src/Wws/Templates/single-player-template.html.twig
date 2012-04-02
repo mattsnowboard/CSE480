@@ -18,8 +18,8 @@
 		<div id="game-state">{{game.currentState}}</div>
 		<div id="definition"><p>Definition: {{game.dictionary.definition}} </p></div>
 		<div id="play">
-			<form id="guess-form">
-				Guess a character: <input type="text" name="char-guess" size=3 maxlength=1 />
+			<form id="guess-form" method="post" action="{{ path('guess_single_player', {'id': game.id} ) }}">
+				Guess a character: <input type="text" name="letter" size="3" maxlength="1" />
 				<input type="submit" value="Submit" />
 			</form>
 			<div id="guessed-chars">

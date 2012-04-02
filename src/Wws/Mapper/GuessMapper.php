@@ -110,8 +110,6 @@ class GuessMapper
             )
         );
         
-        $game->setId($this->db->lastInsertId());
-
         return $count == 1;
     }
 

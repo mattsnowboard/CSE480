@@ -2,6 +2,8 @@
 
 namespace Wws\Model;
 
+use Wws\Exception\GamePlayException;
+
 /**
  * Manages the actual game play logic
  * 
@@ -43,9 +45,15 @@ class GamePlay
      * @param Game $game
      * @param User $user
      * @param char $letter 
+     * 
+     * @return bool is correct guess
      */
     public function makeLetterGuess(Game $game, User $user, $letter)
     {
+        if (!$this->userCanGuessLetter($game, $user)) {
+            throw new GamePlayException('User is not allowed to guess more letters');
+        }
+        
         $dictionary = $game->getDictionary();
         $wordLetters = str_split($dictionary->getWord());
         
@@ -74,6 +82,8 @@ class GamePlay
         }
         
         $this->gameMapper->UpdateGame($game);
+        
+        return $correct;
     }
     
     /**
@@ -104,6 +114,20 @@ class GamePlay
             return true;
         } else if ($turn == 2 && $game->getPlayer1Id() == $user->GetId()) {
             return true;
+        }
+        return false;
+    }
+    
+    
+    public function userCanGuessLetter(Game $game, User $user)
+    {
+        if ($game->getNumPlayers() == 1) {
+            $guesses = $game->getGuesses();
+            if (is_null($guesses)) {
+                throw new \Exception('The guesses were not retrieved from the database');
+            }
+            echo 'alkfsjfsldf';
+            return count($guesses) < 3;
         }
         return false;
     }
