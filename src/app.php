@@ -2,6 +2,7 @@
 
 /**  Bootstraping */
 require_once 'phar://'.__DIR__.'/../vendor/Silex/silex.phar';
+//phpinfo();
 
 $app = new Silex\Application();
 
@@ -90,6 +91,11 @@ $app->register(new Wws\Provider\Service\AuthServiceProvider(), array(
 ));
 $app->register(new Wws\Provider\Service\ModelServiceProvider(), array(
 ));
+
+/*
+ *The base url of the sites current page
+ */
+$app['twig']->addGlobal('baseURL', dirname($_SERVER['SCRIPT_NAME']));
 
 /**
  * This is called before normal routing
