@@ -110,6 +110,45 @@ class GamePlay
      */
     public function makeWordGuess(Game $game, User $user, $word)
     {
+      /*if (!$this->userCanGuessWord($game, $user)) {
+            throw new GamePlayException('User is not allowed to guess more letters');
+	    }*/
+        
+        $dictionary = $game->getDictionary();
+        $correctWord = $dictionary->getWord();
+
+        $correct = ($correctWord == $word);
+        var_dump($correct);
+        $guess = new Guess();
+        $guess->SetPlayerId($user->GetId());
+        $guess->SetGameId($game->getId());
+        $guess->SetIsFullWord(true);
+        $guess->SetWord(strtolower($word));
+        $guess->SetIsCorrect($correct);
+        
+        // store new guess in database
+        $this->guessMapper->CreateGuess($guess);
+        
+        // tell the game that the guess was made so it can update the score and turn
+        $game->updateGuess($user, $correct);
+        if ($correct) {
+            // update the Game state
+            $game->SetCurrentState(strtolower($word));
+        }
+        // check if the game is now over
+        if ($game->isGuessed()) {
+            // they guessed it, end the game
+            $game->endGame();
+            // update scores
+            $this->userMapper->UpdateScore($game->getPlayer1Id(), $game->getScore1());
+            if ($game->getNumPlayers() > 1 && !is_null($game->getPlayer2Id())) {
+                $this->userMapper->UpdateScore($game->getPlayer2Id(), $game->getScore2());
+            }
+        }
+        
+        $this->gameMapper->UpdateGame($game);
+        
+        return $correct;
         
     }
     
@@ -132,6 +171,18 @@ class GamePlay
     
     
     public function userCanGuessLetter(Game $game, User $user)
+    {
+        if ($game->getNumPlayers() == 1) {
+            $guesses = $game->getGuesses();
+            if (is_null($guesses)) {
+                throw new \Exception('The guesses were not retrieved from the database');
+            }
+            return count($guesses) < 10;
+        }
+        return false;
+    }
+
+    public function userCanGuessWord(Game $game, User $user)
     {
         if ($game->getNumPlayers() == 1) {
             $guesses = $game->getGuesses();
