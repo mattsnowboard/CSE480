@@ -35,7 +35,7 @@ class EditProfileType extends AbstractType
         $builder->add('password', 'password', array(
             'label' => 'Password:'
         ));
-        $builder->add('first_name', 'text', array(
+        $builder->add('firstName', 'text', array(
             'label' => 'First Name:'
         ));
         $builder->add('last_name', 'text', array(
@@ -61,11 +61,10 @@ class EditProfileType extends AbstractType
             'validation_constraint' => new Assert\Collection(array(
                 'fields' => array(
                     'email'    => new Assert\Email(),
-                    'password' => new Assert\NotBlank(),
-		    'first_name' => new Assert\NotBlank(),
+                    'firstName' => new Assert\NotBlank(),
                     'last_name'  => new Assert\NotBlank(),
                     'birthdate' => new Assert\NotBlank(),
-		    'city' => new Assert\NotBlank(),
+                    'city' => new Assert\NotBlank(),
                     'state'    => new Assert\NotBlank(),
                     'country' => new Assert\NotBlank(),
                 ),

@@ -67,12 +67,12 @@ class User
     /**
      * @var string $firstName
      */
-    private $first_name;
+    private $firstName;
 
     /**
      * @var string $lastName
      */
-    private $last_name;
+    private $lastName;
     
     /**
      * @var string $phone
@@ -103,8 +103,8 @@ class User
             $this->city = $u['city'];
             $this->state = $u['state'];
             $this->country = $u['country'];
-            $this->first_name = $u['first_name'];
-	    $this->last_name = $u['last_name'];
+            $this->firstName = $u['first_name'];
+            $this->lastName = $u['last_name'];
             $this->phone = $u['phone'];
             $this->isAdmin = $u['is_admin'];
         }
@@ -169,7 +169,7 @@ class User
 
     public function getBirthDate()
     {
-        return $this->birthDate;
+        return new \DateTime($this->birthDate);
     }
     public function setBirthDate($birthDate)
     {
@@ -218,16 +218,16 @@ class User
     }
     public function setFirstName($first_name)
     {
-        $this->first_name = $first_name;
+        $this->firstName = $first_name;
     }
 
     public function getLastName()
     {
-        return $this->last_name;
+        return $this->lastName;
     }
     public function setLastName($last_name)
     {
-        $this->last_name = $last_name;
+        $this->lastName = $last_name;
     }
 
 
@@ -249,5 +249,4 @@ class User
     {
         $this->isAdmin = $isAdmin;
     }
-
 }

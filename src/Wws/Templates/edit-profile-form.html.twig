@@ -1,7 +1,7 @@
 
 <form action="{{ path('edit_profile') }}" method="post" {{ form_enctype(form) }}>
 
-	<p>Username: 	{{ user.username }} </p>
+	<p>Username: 	{{ user.username }}, {{user.firstName}} </p>
 
     {{ form_widget(form) }}
 	
