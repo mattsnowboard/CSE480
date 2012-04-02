@@ -29,11 +29,18 @@
 		<div id="definition"><p>Definition: {{game.dictionary.definition}} </p></div>
 		<div id="play">
 			<form id="guess-form" method="post" action="{{ path('guess_single_player', {'id': game.id} ) }}">
-				Guess a character: <input type="text" name="letter" size="3" maxlength="1" />
+				<div id="char-guess">Guess a character: <input type="text" name="letter" size="3" maxlength="1" /></div>
+				<div id="word-guess">Guess a word: <input type="text" name="word" size="40" /></div>
 				<input type="submit" value="Submit" />
 			</form>
 			<div id="guessed-chars">
-				<p>Characters guessed: </p>
+				<p>Characters guessed:
+					{% for guess in game.guesses %}
+						{{guess.letter}}
+						{% else %}
+							none
+					{% endfor %}
+				</p>
 			</div>
 			<div id="p1-points">Game points: {{ game.score1 }}</div>
 		</div>

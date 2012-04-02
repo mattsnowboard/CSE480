@@ -102,7 +102,7 @@ $app->register(new Wws\Provider\Service\ModelServiceProvider(), array(
 /*
  *The base url of the sites current page
  */
-$app['twig']->addGlobal('baseURL', dirname($_SERVER['SCRIPT_NAME']));
+$app['twig']->addGlobal('baseURL', str_replace('\\', '/',dirname($_SERVER['SCRIPT_NAME'])));
 
 /**
  * This is called before normal routing
