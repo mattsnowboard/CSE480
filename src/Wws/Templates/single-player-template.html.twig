@@ -30,10 +30,18 @@
 		<div id="play">
 			<form id="guess-form" method="post" action="{{ path('guess_single_player', {'id': game.id} ) }}">
 				Guess a character: <input type="text" name="letter" size="3" maxlength="1" />
+				Guess a word: <input type="text" name="word" size="40" />
 				<input type="submit" value="Submit" />
 			</form>
 			<div id="guessed-chars">
 				<p>Characters guessed: </p>
+				<ul>
+					{ % for guess in guesses % }
+						<li>{{guess.letter}}</li>
+						{ % else % }
+							<li>none</li>
+					{ % endfor %}
+				</ul>
 			</div>
 			<div id="p1-points">Game points: {{ game.score1 }}</div>
 		</div>
