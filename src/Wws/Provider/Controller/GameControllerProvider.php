@@ -110,6 +110,20 @@ class GameControllerProvider implements ControllerProviderInterface
             if (!is_null($word) && !empty($word)) {
                 // guessed the full word
                 $app['session']->setFlash('gamemsg', 'The word "' . $word . '"');
+
+		if (!$app['wws.gameplay']->userCanGuessWord($game, $app['wws.user'])) {
+                    // trying to make a 4th letter guess
+                    $app['session']->setFlash('gamemsg', 'You cannot guess the letter 4 times');
+                }
+		else {
+                    $correct = $app['wws.gameplay']->makeWordGuess($game, $app['wws.user'], $letter);
+                    if ($correct) {
+                        $app['session']->setFlash('gamemsg', 'The Word "' . $word . '" is correct!');
+                    } else {
+                        $app['session']->setFlash('gamemsg', 'The Word "' . $word . '" is NOT the word!');
+                    }
+		
+                }
             } else if (!is_null($letter) && !empty($letter)) {
                 $app['monolog']->addDebug('The user: "' . $app['wws.user']->getId() .'" guessed the letter "' . $letter
                     . '" for the game: "' . $game->getId() . '"');
