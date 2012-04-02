@@ -5,6 +5,7 @@ namespace Wws\Provider\Controller;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Silex\ControllerCollection;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
@@ -34,6 +35,8 @@ class GameControllerProvider implements ControllerProviderInterface
                     // game not found
                     return $app->abort(404, 'The game you were looking for does not exist');
                 }
+                $guesses = $app['wws.mapper.guess']->FindByGame($game->getId());
+                $game->setGuesses($guesses);
             } catch (\Wws\Exception\NotAuthorizedException $e) {
                 throw new HttpException(403, $e->getMessage());
             }
@@ -72,19 +75,26 @@ class GameControllerProvider implements ControllerProviderInterface
          * 
          * Make a guess
          */
-        $controllers->post('/guess/single-player/{id}', function(Application $app, $id) {
+        $controllers->post('/guess/single-player/{id}', function(Application $app,
+                Request $request, $id) {
             try {
+                /**
+                 * @var \Wws\Model\Game $game
+                 */
                 $game = $app['wws.mapper.game']->FindById($id, $app['wws.user']);
 
                 if (is_null($game)) {
                     // game not found
                     return $app->abort(404, 'The game you were looking for does not exist');
                 }
+                
+                $guesses = $app['wws.mapper.guess']->FindByGame($game->getId());
+                $game->setGuesses($guesses);
             } catch (\Wws\Exception\NotAuthorizedException $e) {
                 throw new HttpException(403, $e->getMessage());
             }
             
-            if (!$app['wws.gameplay']->isUserTurn($app['wws.user'])) {
+            if (!$app['wws.gameplay']->isUserTurn($game, $app['wws.user'])) {
                 // it's not their turn yet
                 $app['session']->setFlash('gamemsg', 'Wait your turn!');
                 return $app->redirect($app['url_generator']->generate('single_player', array(
@@ -93,11 +103,32 @@ class GameControllerProvider implements ControllerProviderInterface
             }
             
             // check post params, we get either 'letter' or 'word' and want to guess it
+            $letter = $request->get('letter');
+            $word = $request->get('word');
+            $app['session']->setFlash('gamemsg', 'The letter "' . $letter . '"');
+            // word can have precendence over letter
+            if (!is_null($word) && !empty($word)) {
+                // guessed the full word
+                $app['session']->setFlash('gamemsg', 'The word "' . $word . '"');
+            } else if (!is_null($letter) && !empty($letter)) {
+                if (!$app['wws.gameplay']->userCanGuessLetter($game, $app['wws.user'])) {
+                    // trying to make a 4th letter guess
+                    $app['session']->setFlash('gamemsg', 'You cannot guess the letter 4 times');
+                } else {
+                    $correct = $app['wws.gameplay']->makeLetterGuess($game, $app['wws.user'], $letter);
+                    if ($correct) {
+                        $app['session']->setFlash('gamemsg', 'The letter "' . $letter . '" is in the word!');
+                    } else {
+                        $app['session']->setFlash('gamemsg', 'The letter "' . $letter . '" is NOT in the word!');
+                    }
+                }
+            } else {
+                // no guess made
+            }
             
-            
-            return $app['twig']->render('single-player-template.html.twig', array(
-                'game' => $game
-            ));
+            return $app->redirect($app['url_generator']->generate('single_player', array(
+                'id' => $game->getId()
+            )));
         })
         ->middleware($app['wws.auth.must_be_logged_in'])
         ->bind('guess_single_player');

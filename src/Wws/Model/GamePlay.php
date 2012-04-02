@@ -2,6 +2,8 @@
 
 namespace Wws\Model;
 
+use Wws\Exception\GamePlayException;
+
 /**
  * Manages the actual game play logic
  * 
@@ -20,11 +22,18 @@ class GamePlay
      */
     protected $gameMapper;
     
+    /**
+     * @var Wws\Mapper\GuessMapper
+     */
+    protected $guessMapper;
+    
     public function __construct(\Wws\Mapper\DictionaryMapper $dmap,
-            \Wws\Mapper\GameMapper $gmap)
+            \Wws\Mapper\GameMapper $gmap,
+            \Wws\Mapper\GuessMapper $guessMap)
     {
         $this->dictionaryMapper = $dmap;
         $this->gameMapper = $gmap;
+        $this->guessMapper = $guessMap;
     }
     
     /**
@@ -36,9 +45,15 @@ class GamePlay
      * @param Game $game
      * @param User $user
      * @param char $letter 
+     * 
+     * @return bool is correct guess
      */
     public function makeLetterGuess(Game $game, User $user, $letter)
     {
+        if (!$this->userCanGuessLetter($game, $user)) {
+            throw new GamePlayException('User is not allowed to guess more letters');
+        }
+        
         $dictionary = $game->getDictionary();
         $wordLetters = str_split($dictionary->getWord());
         
@@ -51,10 +66,24 @@ class GamePlay
         $guess->SetLetter(strtolower($letter));
         $guess->SetIsCorrect($correct);
         
+        // store new guess in database
+        $this->guessMapper->CreateGuess($guess);
+        
+        // tell the game that the guess was made so it can update the score and turn
+        $game->updateGuess($user, $correct);
         if ($correct) {
             // update the Game state
             $game->updateState(strtolower($letter));
         }
+        // check if the game is now over
+        if ($game->isGuessed()) {
+            // they guessed it, end the game
+            $game->endGame();
+        }
+        
+        $this->gameMapper->UpdateGame($game);
+        
+        return $correct;
     }
     
     /**
@@ -85,6 +114,20 @@ class GamePlay
             return true;
         } else if ($turn == 2 && $game->getPlayer1Id() == $user->GetId()) {
             return true;
+        }
+        return false;
+    }
+    
+    
+    public function userCanGuessLetter(Game $game, User $user)
+    {
+        if ($game->getNumPlayers() == 1) {
+            $guesses = $game->getGuesses();
+            if (is_null($guesses)) {
+                throw new \Exception('The guesses were not retrieved from the database');
+            }
+            echo 'alkfsjfsldf';
+            return count($guesses) < 3;
         }
         return false;
     }

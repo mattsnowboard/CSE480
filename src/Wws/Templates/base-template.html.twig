@@ -11,11 +11,11 @@
 
         <meta name="viewport" content="width=device-width">
         {% block stylesheets %}
-        <link rel="stylesheet" type="text/css" href="/css/boilerplate-style.css" />
-        <link rel="stylesheet" type="text/css" href="/css/base-template-style.css" />
+        <link rel="stylesheet" type="text/css" href="css/boilerplate-style.css" />
+        <link rel="stylesheet" type="text/css" href="css/base-template-style.css" />
         {% endblock %}
 
-        <script src="/js/libs/modernizr-2.5.3.min.js"></script>
+        <script src="js/libs/modernizr-2.5.3.min.js"></script>
     </head>
     <body>
         {% block infobar %}
@@ -35,6 +35,7 @@
             {{ app.session.flash('infobar') }}
             </div>
             {% endif %}
+	    
         </header>
         {% endblock %}
 
@@ -64,7 +65,7 @@
         
         <!-- Insert other scripts here or on specific pages -->
         {% block scripts %}
-        <script src="/js/script.js"></script>
+        <script src="js/script.js"></script>
         
         {# Pinging for users activity updates #}
         {% if user %}

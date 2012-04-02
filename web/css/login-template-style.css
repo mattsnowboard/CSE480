@@ -29,6 +29,16 @@ section#edit {
     margin: auto;
 }
 
+
+#flashReg, #flashLogin {
+    top: 0.5em;
+    width: 100%;
+    text-align: center;
+    float: none;
+    font-style: italic;
+    color: #650604;
+}
+
 #login, #register, #edit {
 	background-color: #FFFFFF;
 }

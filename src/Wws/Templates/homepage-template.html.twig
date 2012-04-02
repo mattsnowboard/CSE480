@@ -7,11 +7,23 @@
 
 {% block main %}
 	<section id="login">
+	  {% if app.session.hasFlash('login') %}
+            <div id="flashLogin">
+            {{ app.session.flash('login') }}
+            </div>
+           {% endif %}
+
 		<h2>Login</h2>
         {% include "login-form.html.twig" with {"form" : loginform} %}
 	</section>
 	
 	<section id="register">
+	   {% if app.session.hasFlash('reg') %}
+            <div id="flashReg">
+            {{ app.session.flash('reg') }}
+            </div>
+           {% endif %}
+
 		<h2>Register</h2>
         <div id="show-reg">
   		    <a href="#" class="show-register-button btn" title="Show Registration Form">Register Now</a>
