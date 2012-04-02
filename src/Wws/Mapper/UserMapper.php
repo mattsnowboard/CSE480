@@ -120,6 +120,34 @@ class UserMapper
     }
     
     /**
+     * Update a player profile
+     * 
+     * @param User  $user
+     * 
+     * @return bool True if successful 
+     */
+    public function UpdateProfile(User $user)
+    {
+        $count = $this->db->executeUpdate("UPDATE player "
+                . "SET email = :email, first_name = :fname, last_name = :lname, birthdate = :bday, city = :city, state = :state, country = :country, password = :password "
+                . "WHERE id = :id",
+            array(
+                'email' => $user->getEmail(),
+                'fname' => $user->getFirstName(),
+                'lname' => $user->getLastName(),
+                'bday' => $user->getBirthDate()->format('Y-m-d'),
+                'city' => $user->getCity(),
+                'state' => $user->getState(),
+                'country' => $user->getCountry(),
+                'password' => $user->GetPassword(),
+                'id' => $user->getId()
+            )
+        );
+        
+        return $count == 1;
+    }
+    
+    /**
      * Update a player score by adding points
      * 
      * @param int  $userId

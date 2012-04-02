@@ -4,6 +4,8 @@ namespace Wws\Security;
 
 require_once(__DIR__.'/../../../vendor/phpass-0.3/PasswordHash.php');
 
+use Wws\Model\User;
+
 /**
  * This is used to authenticate users or retrieve users by cookie 
  */
@@ -113,6 +115,37 @@ class UserProvider
             // something went wrong
             throw new Exception('Failed to hash the password for storage');
         }
+    }
+    
+    /**
+     * Update Profile
+     * @param User $user
+     * 
+     * @return bool True if successful
+     * @throws Exception If failure to hash password
+     */
+    public function UpdateUserProfile(User $user)
+    {
+        $pw = $user->GetPassword();
+        if (!empty($pw)) {
+            if (strlen($pw) > 72) {
+                throw new Exception('Password must be 72 characters or less');
+            }
+
+            $hash = $this->hasher->HashPassword($user->GetPassword());
+
+            if (strlen($hash) >= 20) {
+                // store the hashed password
+                $user->SetPassword($hash);
+            } else {
+                // something went wrong
+                throw new Exception('Failed to hash the password for storage');
+            }
+        } else {
+            $user->SetPassword($user->GetOriginalPassword());
+        }
+        
+        return $this->mapper->UpdateProfile($user);
     }
     
     public function Logout()

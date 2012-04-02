@@ -28,6 +28,10 @@ class User
      * @var string $password (hashed) 
      */
     private $password;
+    /**
+     * @var string $password (hashed) 
+     */
+    private $origPassword;
     
     /**
      * @var int $lastActive Used to determine if a player is probably online
@@ -67,12 +71,12 @@ class User
     /**
      * @var string $firstName
      */
-    private $first_name;
+    private $firstName;
 
     /**
      * @var string $lastName
      */
-    private $last_name;
+    private $lastName;
     
     /**
      * @var string $phone
@@ -96,6 +100,7 @@ class User
             $this->username = $u['username'];
             $this->email = $u['email'];
             $this->password = $u['password'];
+            $this->origPassword = $u['password'];
             $this->lastActive = $u['last_active'];
             $this->totalScore = $u['total_score'];
             $this->birthDate = $u['birthdate'];
@@ -103,8 +108,8 @@ class User
             $this->city = $u['city'];
             $this->state = $u['state'];
             $this->country = $u['country'];
-            $this->first_name = $u['first_name'];
-	    $this->last_name = $u['last_name'];
+            $this->firstName = $u['first_name'];
+            $this->lastName = $u['last_name'];
             $this->phone = $u['phone'];
             $this->isAdmin = $u['is_admin'];
         }
@@ -143,6 +148,10 @@ class User
     {
         return $this->password;
     }
+    public function GetOriginalPassword()
+    {
+        return $this->origPassword;
+    }
     public function SetPassword($password)
     {
         $this->password = $password;
@@ -169,7 +178,11 @@ class User
 
     public function getBirthDate()
     {
-        return $this->birthDate;
+        if ($this->birthDate instanceof \DateTime) {
+            return $this->birthDate;
+        } else {
+            return new \DateTime($this->birthDate);
+        }
     }
     public function setBirthDate($birthDate)
     {
@@ -218,16 +231,16 @@ class User
     }
     public function setFirstName($first_name)
     {
-        $this->first_name = $first_name;
+        $this->firstName = $first_name;
     }
 
     public function getLastName()
     {
-        return $this->last_name;
+        return $this->lastName;
     }
     public function setLastName($last_name)
     {
-        $this->last_name = $last_name;
+        $this->lastName = $last_name;
     }
 
 
@@ -249,5 +262,4 @@ class User
     {
         $this->isAdmin = $isAdmin;
     }
-
 }

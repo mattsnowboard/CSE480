@@ -356,5 +356,14 @@ namespace Wws\Model;
     {
         return $this->currentState === $this->dictionary->getWord();
     }
+    
+    /**
+     * Check if the game is over
+     * @return bool True if the game is over, can't make more guesses if true
+     */
+    public function isOver()
+    {
+        return $this->winnerFlag != 'playing';
+    }
 
 }
