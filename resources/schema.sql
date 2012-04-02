@@ -1034,20 +1034,20 @@ INSERT INTO `player` (`id`, `username`, `email`, `password`, `last_active`, `tot
 --
 ALTER TABLE `challenge`
   ADD CONSTRAINT `fk_challenge_game1` FOREIGN KEY (`game_id`) REFERENCES `game` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_challenge_player1` FOREIGN KEY (`challenger_id`) REFERENCES `player` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_challenge_player2` FOREIGN KEY (`recipient_id`) REFERENCES `player` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_challenge_player1` FOREIGN KEY (`challenger_id`) REFERENCES `player` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_challenge_player2` FOREIGN KEY (`recipient_id`) REFERENCES `player` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `game`
 --
 ALTER TABLE `game`
   ADD CONSTRAINT `fk_game_dictionary` FOREIGN KEY (`word_id`) REFERENCES `dictionary` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_game_player1` FOREIGN KEY (`player1_id`) REFERENCES `player` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_game_player2` FOREIGN KEY (`player2_id`) REFERENCES `player` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_game_player1` FOREIGN KEY (`player1_id`) REFERENCES `player` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_game_player2` FOREIGN KEY (`player2_id`) REFERENCES `player` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `guess`
 --
 ALTER TABLE `guess`
-  ADD CONSTRAINT `fk_guess_game1` FOREIGN KEY (`game_id`) REFERENCES `game` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_guess_player1` FOREIGN KEY (`player_id`) REFERENCES `player` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_guess_game1` FOREIGN KEY (`game_id`) REFERENCES `game` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_guess_player1` FOREIGN KEY (`player_id`) REFERENCES `player` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;

@@ -13,7 +13,8 @@ $app = new Silex\Application();
 $app['autoloader']->registerNamespaces(array(
     'Wws'     => __DIR__,
     'Symfony' => __DIR__.'/../vendor',
-    'Tyaga'   => __DIR__ . '/../vendor'
+    'Tyaga'   => __DIR__.'/../vendor',
+    'Monolog' => __DIR__.'/../vendor/Monolog/src',
 ));
 
 if (!function_exists('intl_get_error_code')) {
@@ -63,6 +64,12 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
         'debug' => true),
 ));
 
+/** Logging **/
+$app->register(new Silex\Provider\MonologServiceProvider(), array(
+    'monolog.logfile'       => __DIR__.'/../logs/development.log',
+    'monolog.class_path'    => __DIR__.'/../vendor/Monolog/src',
+    'monolog.level'         => Monolog\Logger::DEBUG
+));
 
 /** Forms helpful stuff **/
 $app->register(new Silex\Provider\SymfonyBridgesServiceProvider(), array(

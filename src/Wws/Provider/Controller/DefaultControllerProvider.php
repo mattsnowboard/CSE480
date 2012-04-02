@@ -133,6 +133,21 @@ class DefaultControllerProvider implements ControllerProviderInterface
         ->middleware($app['wws.auth.must_be_logged_in'])
         ->bind('welcome');
         
+		
+		 /**
+         * @route '/edit_profile'
+         * @name edit_profile
+         * 
+         * This page allows the user to edit their profile information, it displays the edit profile forms
+         */
+        $controllers->get('/edit_profile', function(Application $app) {
+            $editForm = $app['form.factory']->create(new \Wws\Form\EditProfileType());
+            
+            return $app['twig']->render('edit-profile-template.html.twig', array(
+                'editform' => $editForm->createView()
+            ));
+        })
+        ->bind('edit_profile');
 
         /**
          * @route '/logout'

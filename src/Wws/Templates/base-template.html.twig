@@ -15,7 +15,7 @@
         <link rel="stylesheet" type="text/css" href="{{baseURL}}/css/base-template-style.css" />
         {% endblock %}
 
-        <script src="js/libs/modernizr-2.5.3.min.js"></script>
+        <script src="/js/libs/modernizr-2.5.3.min.js"></script>
     </head>
     <body>
         {% block infobar %}
@@ -23,7 +23,7 @@
             {% if user %}
 			<div class="left">Logged in as: {{ user.username }}</div>
             <ul id="infobar-nav">
-                <li><a href="#">Edit Profile (TODO)</a></li>
+                <li><a href="{{ path('edit_profile') }}">Edit Profile</a></li>
                 <li><a href="{{ path('logout') }}">Logout</a></li>
             </ul>
             {% else %}
@@ -65,7 +65,7 @@
         
         <!-- Insert other scripts here or on specific pages -->
         {% block scripts %}
-        <script src="js/script.js"></script>
+        <script src="/js/script.js"></script>
         
         {# Pinging for users activity updates #}
         {% if user %}
