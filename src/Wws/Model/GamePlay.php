@@ -27,13 +27,20 @@ class GamePlay
      */
     protected $guessMapper;
     
+    /**
+     * @var Wws\Mapper\UserMapper
+     */
+    protected $userMapper;
+    
     public function __construct(\Wws\Mapper\DictionaryMapper $dmap,
             \Wws\Mapper\GameMapper $gmap,
-            \Wws\Mapper\GuessMapper $guessMap)
+            \Wws\Mapper\GuessMapper $guessMap,
+            \Wws\Mapper\UserMapper $umap)
     {
         $this->dictionaryMapper = $dmap;
         $this->gameMapper = $gmap;
         $this->guessMapper = $guessMap;
+        $this->userMapper = $umap;
     }
     
     /**
@@ -79,6 +86,11 @@ class GamePlay
         if ($game->isGuessed()) {
             // they guessed it, end the game
             $game->endGame();
+            // update scores
+            $this->userMapper->UpdateScore($game->getPlayer1Id(), $game->getScore1());
+            if ($game->getNumPlayers() > 1 && !is_null($game->getPlayer2Id())) {
+                $this->userMapper->UpdateScore($game->getPlayer2Id(), $game->getScore2());
+            }
         }
         
         $this->gameMapper->UpdateGame($game);
@@ -126,8 +138,7 @@ class GamePlay
             if (is_null($guesses)) {
                 throw new \Exception('The guesses were not retrieved from the database');
             }
-            echo 'alkfsjfsldf';
-            return count($guesses) < 3;
+            return count($guesses) < 10;
         }
         return false;
     }

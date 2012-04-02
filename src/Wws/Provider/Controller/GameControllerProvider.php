@@ -105,12 +105,14 @@ class GameControllerProvider implements ControllerProviderInterface
             // check post params, we get either 'letter' or 'word' and want to guess it
             $letter = $request->get('letter');
             $word = $request->get('word');
-            $app['session']->setFlash('gamemsg', 'The letter "' . $letter . '"');
+            
             // word can have precendence over letter
             if (!is_null($word) && !empty($word)) {
                 // guessed the full word
                 $app['session']->setFlash('gamemsg', 'The word "' . $word . '"');
             } else if (!is_null($letter) && !empty($letter)) {
+                $app['monolog']->addDebug('The user: "' . $app['wws.user']->getId() .'" guessed the letter "' . $letter
+                    . '" for the game: "' . $game->getId() . '"');
                 if (!$app['wws.gameplay']->userCanGuessLetter($game, $app['wws.user'])) {
                     // trying to make a 4th letter guess
                     $app['session']->setFlash('gamemsg', 'You cannot guess the letter 4 times');
@@ -125,6 +127,8 @@ class GameControllerProvider implements ControllerProviderInterface
             } else {
                 // no guess made
             }
+            
+            $app['monolog']->addDebug('After guessing the Game score is: ' . $game->getScore1() . ' to ' . $game->getScore2());
             
             return $app->redirect($app['url_generator']->generate('single_player', array(
                 'id' => $game->getId()

@@ -19,3 +19,6 @@
 [submodule "vendor/Symfony/Component/Locale"]
 	path = vendor/Symfony/Component/Locale
 	url = https://github.com/symfony/Locale.git
+[submodule "vendor/Monolog"]
+	path = vendor/Monolog
+	url = https://github.com/Seldaek/monolog.git

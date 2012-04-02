@@ -993,7 +993,7 @@ CREATE TABLE IF NOT EXISTS `player` (
   `email` varchar(64) NOT NULL,
   `password` varchar(64) NOT NULL,
   `last_active` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `total_score` int(11) DEFAULT NULL,
+  `total_score` int(11) NOT NULL DEFAULT 0,
   `birthdate` date DEFAULT NULL,
   `join_date` date DEFAULT NULL,
   `city` varchar(64) DEFAULT NULL,
@@ -1013,17 +1013,10 @@ CREATE TABLE IF NOT EXISTS `player` (
 --
 
 INSERT INTO `player` (`id`, `username`, `email`, `password`, `last_active`, `total_score`, `birthdate`, `join_date`, `city`, `state`, `country`, `first_name`, `last_name`, `phone`, `is_admin`) VALUES
-(1, 'devan', 'saylesd1@msu.edu', '$2a$08$gJvm8Wh2Rb8cCpoeAwqEku7OAGKjmKvmHVAYkL9KICh5sAfJ10/fO', '2012-03-16 13:38:22', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(2, 'matt', 'durakmat@msu.edu', '$2a$08$HS7T2AWfsUaTlNkC6FgyLeSDkeGqnbbqGwKOjsVAmB/GGsqjBwmpC', '2012-03-16 14:44:59', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(3, 'chelsea', 'carrche2@msu.edu', '$2a$08$5o1qmwqNYd0xaNoF2/1bpuC2AdLkZfRakR3dLAwNLd.MrwyQyp7Ii', '2012-03-16 14:45:28', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(4, 'stranger', 'stranger@msu.edu', '$2a$08$dznb3tb.Du3ROYFiVLg0tuIU2zcKKyfBBuHO1yMl/I7ICg9SttA2W', '2012-03-16 14:50:44', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(18, 'r', 'r@msu.edu', '$2a$08$PxWxVbgsRyVtahbOzWHKN.UxNjtTlcy1Itmm7edlDKDshj6.pQr.y', '2012-03-30 14:58:38', NULL, '1970-01-01', '2012-03-30', 'r', 'r', 'r', NULL, NULL, NULL, NULL),
-(19, 'a', 'a@msu.edu', '$2a$08$/b0mMxMPeD/WeFNc6Z5dbuh1s98V2dRUpZEKn9qgiNp5aGfICB7UG', '2012-03-30 15:06:48', NULL, '2012-03-30', '2012-03-30', 'a', 'a', 'a', NULL, NULL, NULL, NULL),
-(20, 'e', 'e@msu.edu', '$2a$08$V6H3ngnja0SjIum2nW3Yo.CyERFwlo8FsZc8mgvHCxWzmqJBjf.Na', '2012-03-30 15:09:02', NULL, '1970-01-01', '2012-03-30', 'e', 'e', 'e', NULL, NULL, NULL, NULL),
-(21, 'h', 'h@msu.edu', '$2a$08$OaxayW6pwCmsb.9NFkVNPO2ZntJcH7fwkNR6cBP5qMNEjO5mODlTe', '2012-03-30 15:11:06', NULL, '1970-01-01', '2012-03-30', 'h', 'h', 'h', NULL, NULL, NULL, NULL),
-(22, 'j', 'j@msu.edu', '$2a$08$O00rV1UsHTdcw7eIlz5hB.wbfZGh1Vrc0GjzAar8aYqtxrvoJ3noO', '2012-03-30 15:11:34', NULL, '1970-01-01', '2012-03-30', 'j', 'j', 'j', NULL, NULL, NULL, NULL),
-(23, 'k', 'k@msu.edu', '$2a$08$Yzp2qpZPa53z42KsvnOrnekhWDZE/o4W5DOKfAc9gdIpcyKVfsnOa', '2012-03-30 15:12:43', NULL, '1970-01-01', '2012-03-30', 'k', 'k', 'k', NULL, NULL, NULL, NULL),
-(24, 'g', 'g@msu.edu', '$2a$08$.sBFKMRrQ3.QhH2jVp5p.epNpPf3jqm.xMZM5deAPr76yrz7yBaSm', '2012-03-30 15:26:59', NULL, '1892-01-01', '2012-03-30', 'g', 'g', 'g', NULL, NULL, NULL, NULL);
+(1, 'devan', 'saylesd1@msu.edu', '$2a$08$gJvm8Wh2Rb8cCpoeAwqEku7OAGKjmKvmHVAYkL9KICh5sAfJ10/fO', '2012-03-16 13:38:22', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(2, 'matt', 'durakmat@msu.edu', '$2a$08$HS7T2AWfsUaTlNkC6FgyLeSDkeGqnbbqGwKOjsVAmB/GGsqjBwmpC', '2012-03-16 14:44:59', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(3, 'chelsea', 'carrche2@msu.edu', '$2a$08$5o1qmwqNYd0xaNoF2/1bpuC2AdLkZfRakR3dLAwNLd.MrwyQyp7Ii', '2012-03-16 14:45:28', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(4, 'stranger', 'stranger@msu.edu', '$2a$08$dznb3tb.Du3ROYFiVLg0tuIU2zcKKyfBBuHO1yMl/I7ICg9SttA2W', '2012-03-16 14:50:44', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 
 --
 -- Constraints for dumped tables
@@ -1034,20 +1027,20 @@ INSERT INTO `player` (`id`, `username`, `email`, `password`, `last_active`, `tot
 --
 ALTER TABLE `challenge`
   ADD CONSTRAINT `fk_challenge_game1` FOREIGN KEY (`game_id`) REFERENCES `game` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_challenge_player1` FOREIGN KEY (`challenger_id`) REFERENCES `player` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_challenge_player2` FOREIGN KEY (`recipient_id`) REFERENCES `player` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_challenge_player1` FOREIGN KEY (`challenger_id`) REFERENCES `player` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_challenge_player2` FOREIGN KEY (`recipient_id`) REFERENCES `player` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `game`
 --
 ALTER TABLE `game`
   ADD CONSTRAINT `fk_game_dictionary` FOREIGN KEY (`word_id`) REFERENCES `dictionary` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_game_player1` FOREIGN KEY (`player1_id`) REFERENCES `player` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_game_player2` FOREIGN KEY (`player2_id`) REFERENCES `player` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_game_player1` FOREIGN KEY (`player1_id`) REFERENCES `player` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_game_player2` FOREIGN KEY (`player2_id`) REFERENCES `player` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `guess`
 --
 ALTER TABLE `guess`
-  ADD CONSTRAINT `fk_guess_game1` FOREIGN KEY (`game_id`) REFERENCES `game` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_guess_player1` FOREIGN KEY (`player_id`) REFERENCES `player` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_guess_game1` FOREIGN KEY (`game_id`) REFERENCES `game` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_guess_player1` FOREIGN KEY (`player_id`) REFERENCES `player` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;

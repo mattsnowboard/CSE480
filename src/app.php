@@ -2,6 +2,7 @@
 
 /**  Bootstraping */
 require_once 'phar://'.__DIR__.'/../vendor/Silex/silex.phar';
+//phpinfo();
 
 $app = new Silex\Application();
 
@@ -12,7 +13,8 @@ $app = new Silex\Application();
 $app['autoloader']->registerNamespaces(array(
     'Wws'     => __DIR__,
     'Symfony' => __DIR__.'/../vendor',
-    'Tyaga'   => __DIR__ . '/../vendor'
+    'Tyaga'   => __DIR__.'/../vendor',
+    'Monolog' => __DIR__.'/../vendor/Monolog/src',
 ));
 
 if (!function_exists('intl_get_error_code')) {
@@ -62,6 +64,12 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
         'debug' => true),
 ));
 
+/** Logging **/
+$app->register(new Silex\Provider\MonologServiceProvider(), array(
+    'monolog.logfile'       => __DIR__.'/../logs/development.log',
+    'monolog.class_path'    => __DIR__.'/../vendor/Monolog/src',
+    'monolog.level'         => Monolog\Logger::DEBUG
+));
 
 /** Forms helpful stuff **/
 $app->register(new Silex\Provider\SymfonyBridgesServiceProvider(), array(
@@ -90,6 +98,11 @@ $app->register(new Wws\Provider\Service\AuthServiceProvider(), array(
 ));
 $app->register(new Wws\Provider\Service\ModelServiceProvider(), array(
 ));
+
+/*
+ *The base url of the sites current page
+ */
+$app['twig']->addGlobal('baseURL', dirname($_SERVER['SCRIPT_NAME']));
 
 /**
  * This is called before normal routing

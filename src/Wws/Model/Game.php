@@ -297,9 +297,8 @@ namespace Wws\Model;
      */
     public function updateGuess(User $user, $correct)
     {
-        $whichPlayer = ($this->player1Id == $user->getId()) ? 1
-            : ($this->player2Id == $user->getId()) ? 2
-            : -1;
+        $whichPlayer = ($this->player1Id == $user->getId()) ? 1 : (
+                ($this->player2Id == $user->getId()) ? 2 : -1);
         
         $points = ($correct) ? 1 : -1;
         if ($this->isBonus) {
