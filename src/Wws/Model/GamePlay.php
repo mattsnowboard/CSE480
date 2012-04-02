@@ -138,7 +138,6 @@ class GamePlay
             if (is_null($guesses)) {
                 throw new \Exception('The guesses were not retrieved from the database');
             }
-            echo 'alkfsjfsldf';
             return count($guesses) < 10;
         }
         return false;
