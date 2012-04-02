@@ -15,7 +15,33 @@
 #game-state {
 	font-size: 40px;
 	text-align: center;
+    margin: 0 auto;
+    overflow: auto;
+}
 
+#game-state .letter {
+    float: left;
+    width: 40px;
+    margin: 10px;
+    padding: 5px;
+    background-color: #650604;
+    color: #ffffff;
+    
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    
+    background: #ad0906; /* Old browsers */
+    background: -moz-linear-gradient(top,  #ad0906 0%, #650604 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ad0906), color-stop(100%,#650604)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #ad0906 0%,#650604 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #ad0906 0%,#650604 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #ad0906 0%,#650604 100%); /* IE10+ */
+    background: linear-gradient(top,  #ad0906 0%,#650604 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ad0906', endColorstr='#650604',GradientType=0 ); /* IE6-9 */
+}
+#game-state .blank {
+    color: #650604;
 }
 
 #definition {

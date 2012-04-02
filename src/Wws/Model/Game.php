@@ -236,6 +236,11 @@ namespace Wws\Model;
     {
         return $this->currentState;
     }
+    
+    public function getLettersArray()
+    {
+        return str_split($this->currentState);
+    }
 
     public function setCurrentState($currentState)
     {

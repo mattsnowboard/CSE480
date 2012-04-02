@@ -15,7 +15,17 @@
     {% endif %}
      
 	<section id="game-display">
-		<div id="game-state">{{game.currentState}}</div>
+		<div id="game-state">
+            {% for letter in game.lettersArray %}
+            {% if letter !='_' %}
+            <div class="letter">
+            {% else %}
+            <div class="letter blank">
+            {% endif %}
+                {{ letter }}
+            </div>
+            {% endfor %}
+        </div>
 		<div id="definition"><p>Definition: {{game.dictionary.definition}} </p></div>
 		<div id="play">
 			<form id="guess-form" method="post" action="{{ path('guess_single_player', {'id': game.id} ) }}">
@@ -25,7 +35,7 @@
 			<div id="guessed-chars">
 				<p>Characters guessed: </p>
 			</div>
-			<div id="p1-points">Game points: </div>
+			<div id="p1-points">Game points: {{ game.score1 }}</div>
 		</div>
 	</section>
 	
