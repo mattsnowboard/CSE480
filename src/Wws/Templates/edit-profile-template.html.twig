@@ -7,7 +7,13 @@
 
 {% block main %}	
 	<section id="edit">
+        
 		<h2>Edit Profile</h2>
+        {% if app.session.hasFlash('edit') %}
+        <div id="flash-edit">
+            {{ app.session.flash('edit') }}
+        </div>
+        {% endif %}
 		{% include "edit-profile-form.html.twig" with {"form" : editform} %}
 	</section>
 	

@@ -29,71 +29,59 @@ class DefaultControllerProvider implements ControllerProviderInterface
             $loginForm = $app['form.factory']->create(new \Wws\Form\LoginType());
             $regForm = $app['form.factory']->create(new \Wws\Form\RegisterType());
 
-	     if ('POST' === $app['request']->getMethod()) {
-	       if($app['request']->request->has('register'))
-		 {
-		   $regForm->bindRequest($app['request']);
-		   //Register
-		   if ($regForm->isValid()) {
-		     $data = $regForm->getData();
-		     // validate and optionally redirect
-		     try {
-		       $success = $app['wws.auth.user_provider']->RegisterUser($data);
-                       if ($success) {
-			 // @todo do something
-			 return $app->redirect($app['url_generator']->generate('welcome'));
+            if ('POST' === $app['request']->getMethod()) {
+                if($app['request']->request->has('register')) {
+                    $regForm->bindRequest($app['request']);
+                    //Register
+                    if ($regForm->isValid()) {
+                        $data = $regForm->getData();
+                        // validate and optionally redirect
+                        try {
+                            $success = $app['wws.auth.user_provider']->RegisterUser($data);
+                            if ($success) {
+                                return $app->redirect($app['url_generator']->generate('welcome'));
+                            }
+                            else {
+                                if(!is_null($app['wws.mapper.user']->FindByUsername($data['username']))) {
+                                    $app['session']->setFlash('reg', 'Username already exists.  Please try again.');
+                                }
+                            }
+                        } catch (Exception $e) {
+                            // password is too long?
+                            $app['session']->setFlash('reg', 'FAIL');
                         }
-		       else {
-                            // @todo flash error and redirect
-			 if(!is_null($app['wws.mapper.user']->FindByUsername($data['username'])))
-			    {
-			      $app['session']->setFlash('reg', 'Username already exists.  Please try again.');
-			    }
-		       }
-		     } catch (Exception $e) {
-                        // password is too long?
-                        // @todo Show error message in Flash message
-		      	$app['session']->setFlash('reg', 'FAIL');
-		     }
-		   }
-		 }
+                    }
+                }
 
-		//login
-		else if($app['request']->request->has('login'))
-		  {
-		    $loginForm->bindRequest($app['request']);
-		  
-		    if ($loginForm->isValid()) {
-		      $data = $loginForm->getData();
-		      // validate and optionally redirect
-		      try {
-                        $user = $app['wws.auth.user_provider']->Authenticate(
-									     $data['username'],
-									     $data['password']);
-                        if ($user !== false) {
-                            // @todo where to redirect on login?
-                            return $app->redirect($app['url_generator']->generate('welcome'));
-                        } else {
-                            // bad email or password
-                            // @todo show error message in Flash message
-			  if (is_null($app['wws.mapper.user']->FindByUsername($data['username'])))
-			    {
-			      $app['session']->setFlash('login', 'The Username entered does not exist');
-			    }
-			  else if ($app['wws.mapper.user']->FindByUsername($data['username'])->GetPassword() != $data['password'])
-			    {
-			      $app['session']->setFlash('login', 'The password entered is incorrect');
-			    }
+                //login
+                else if($app['request']->request->has('login')) {
+                    $loginForm->bindRequest($app['request']);
+
+                    if ($loginForm->isValid()) {
+                        $data = $loginForm->getData();
+                        // validate and optionally redirect
+                        try {
+                            $user = $app['wws.auth.user_provider']->Authenticate(
+                            $data['username'],
+                            $data['password']);
+                            if ($user !== false) {
+                                return $app->redirect($app['url_generator']->generate('welcome'));
+                            } else {
+                                // bad email or password
+                                if (is_null($app['wws.mapper.user']->FindByUsername($data['username']))) {
+                                    $app['session']->setFlash('login', 'The Username entered does not exist');
+                                } else if ($app['wws.mapper.user']->FindByUsername($data['username'])->GetPassword() != $data['password']) {
+                                    $app['session']->setFlash('login', 'The password entered is incorrect');
+                                }
+                            }
+                        } catch (Exception $e) {
+                            // password is too long?
+                            $app['session']->setFlash('login', $e);
                         }
-		      } catch (Exception $e) {
-                        // password is too long?
-                        // @todo Show error message in Flash message
-		        $app['session']->setFlash('login', $e);
-		      }
-		    }
-		  }
-	     }
-	     
+                    }
+                }
+            }
+
             return $app['twig']->render('homepage-template.html.twig', array(
                 'loginform' => $loginForm->createView(),
                 'regform' => $regForm->createView()
@@ -140,8 +128,28 @@ class DefaultControllerProvider implements ControllerProviderInterface
          * 
          * This page allows the user to edit their profile information, it displays the edit profile forms
          */
-        $controllers->get('/edit_profile', function(Application $app) {
+        $controllers->match('/edit_profile', function(Application $app) {
             $editForm = $app['form.factory']->create(new \Wws\Form\EditProfileType());
+            
+            $editForm->setData($app['wws.user']);
+            
+            if ('POST' === $app['request']->getMethod()) {
+                $editForm->bindRequest($app['request']);
+                //Register
+                if ($editForm->isValid()) {
+                    $data = $editForm->getData();
+                    // validate and optionally redirect
+                    try {
+                        $success = $app['wws.auth.user_provider']->UpdateUserProfile($data);
+                        if (!$success) {
+                            $app['session']->setFlash('edit', 'Error message goes here.');
+                        }
+                    } catch (Exception $e) {
+                        // password is too long?
+                        $app['session']->setFlash('edit', 'FAIL');
+                    }
+                }
+            }
             
             return $app['twig']->render('edit-profile-template.html.twig', array(
                 'editform' => $editForm->createView()
