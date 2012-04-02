@@ -21,6 +21,15 @@ section#register {
     float: right;
 }
 
+section#edit {
+	width: 20em;
+	margin: 20px 10% 0 0;
+	border: 1px solid #aaa;
+    padding: 1em;
+    margin: auto;
+}
+
+
 #flashReg, #flashLogin {
     top: 0.5em;
     width: 100%;
@@ -30,9 +39,7 @@ section#register {
     color: #650604;
 }
 
-
-
-#login, #register {
+#login, #register, #edit {
 	background-color: #FFFFFF;
 }
 
@@ -43,7 +50,7 @@ form .form-row {
     margin: 1em 0 1em 0;
 }
 
-form input, #register_birthdate {
+form input, #register_birthdate, #edit_profile_birthdate {
     float: right;
 }
 
