@@ -15,7 +15,12 @@
 	
 	<section id="challenges">
 		<h2>Challenges</h2>
-		<p>View of challenges recieved, options to accept/deny them</p>
+		<ul>
+			{% for challenge in recievedChallenges %}
+				<li>Challenge from {{challenge.challengerId}} <a href="#">Accept</a> <a href="#">Deny</a> </li>
+				{% else %}
+					<li> No challenges </li>
+			{% endfor %}
 	</section>
 	
 	<section id="gamelist">

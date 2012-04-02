@@ -45,6 +45,8 @@ INSERT INTO `game` (`id`, `timestamp`, `word_start_state`, `num_players`, `score
 INSERT INTO `challenge` (`id`, `status`, `game_id`, `challenger_id`, `recipient_id`) VALUES
 (1, 'pending', NULL, 1, 2),
 (2, 'pending', NULL, 4, 3);
+(3, 'pending', NULL, 3, 1);
+(4, 'pending', NULL, 2, 1);
 
 --
 -- Dumping data for table `guess`

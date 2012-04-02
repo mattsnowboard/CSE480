@@ -23,17 +23,17 @@ class Guess
     /**
      * @var string $word
      */
-    private $word;
+    private $word = null;
 
     /**
      * @var string $letter
      */
-    private $letter;
+    private $letter = null;
 
     /**
      * @var string $is_full_word
      */
-    private $is_full_word;
+    private $is_full_word = false;
 
     /**
      * @var string $player_id
@@ -85,7 +85,7 @@ class Guess
 
     public function GetWord()
     {
-        return $this->word;
+        return ($this->is_full_word) ? $this->word : null;
     }
 
     public function Setword($word)
@@ -95,7 +95,7 @@ class Guess
 
     public function GetLetter()
     {
-        return $this->letter;
+        return (!$this->is_full_word) ? $this->letter : null;
     }
 
     public function SetLetter($letter)
@@ -103,7 +103,7 @@ class Guess
         $this->letter = $letter;
     }
 
-    public function GetWordStartState()
+    public function GetIsFullWord()
     {
         return $this->is_full_word;
     }

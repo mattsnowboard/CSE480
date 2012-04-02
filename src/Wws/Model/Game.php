@@ -57,11 +57,6 @@ namespace Wws\Model;
     private $wordId;
     
     /**
-     * @var Wws\Model\Dictionary
-     */
-    private $word;
-    
-    /**
      * @var int
      */
     private $player1Id;
@@ -82,9 +77,14 @@ namespace Wws\Model;
     private $currentState;
 	
 	 /**
-     * Dictionary object
+     * @var Wws\Model\Dictionary
      */
     private $dictionary;
+    
+    /**
+     * @var Wws\Model\Guess[] array
+     */
+    private $guesses = array();
 	
     /**
      * Create a Game with an optional array of parameters
@@ -107,7 +107,6 @@ namespace Wws\Model;
             $this->player2Id = $g['player2_id'];
             $this->isBonus = $g['is_bonus'];
             $this->currentState = $g['current_state'];
-			$this->dictionary = $g['dictionary'];
         }
     }
     
@@ -146,11 +145,11 @@ namespace Wws\Model;
 	
     public function getNumPlayers()
     {
-        return $this->num_players;
+        return $this->numPlayers;
     }
     public function setNumPlayers($wss)
     {
-        $this->num_players = $wss;
+        $this->numPlayers = $wss;
     }
     
     public function getScore1()
@@ -202,24 +201,8 @@ namespace Wws\Model;
     {
         $this->wordId = $wordId;
     }
-    
-    public function getWord()
-    {
-        return $this->word;
-    }
 
-    /**
-     * Just a helper to set the actual Dicitonary model and the Id at once
-     * 
-     * @param \Wws\Model\Dictionary $word 
-     */
-    public function setWord(\Wws\Model\Dictionary $word)
-    {
-        $this->word = $word;
-        $this->wordId = $word->getId();
-    }
-
-        public function getPlayer1Id()
+    public function getPlayer1Id()
     {
         return $this->player1Id;
     }
@@ -259,14 +242,115 @@ namespace Wws\Model;
         $this->currentState = $currentState;
     }
 	
-	public function setDictionary($dict)
+	public function setDictionary(Dictionary $dict)
 	{
 		$this->dictionary = $dict;
+        $this->wordId = $dict->getId();
 	}
 	
 	public function getDictionary()
 	{
 		return $this->dictionary;
 	}
+    
+    public function getGuesses()
+    {
+        return $this->guesses;
+    }
+
+    public function setGuesses(array $guesses)
+    {
+        $this->guesses = $guesses;
+    }
+    
+    public function addGuess(Guess $guess)
+    {
+        $this->guesses[] = $guess;
+    }
+
+    
+    /**
+     * Update the game state by revealing more letters
+     * @param char $letter 
+     */
+    public function updateState($letter)
+    {
+        $wordLetters = str_split($this->dictionary->getWord());
+        $newState = '';
+        for ($i = 0; $i < strlen($this->currentState); $i++) {
+            $newState .= ($wordLetters[$i] == $letter) ? $wordLetters[$i]
+                : $this->currentState[$i];
+        }
+        $this->currentState = $newState;
+    }
+    
+    /**
+     * Update the score based on a letter guess.  Also updates the player turn
+     * 
+     * @param User $user    Who guessed
+     * @param type $correct Whether it was correct or not
+     */
+    public function updateGuess(User $user, $correct)
+    {
+        $whichPlayer = ($this->player1Id == $user->getId()) ? 1
+            : ($this->player2Id == $user->getId()) ? 2
+            : -1;
+        
+        $points = ($correct) ? 1 : -1;
+        if ($this->isBonus) {
+            $points *= 2;
+        }
+        
+        if ($whichPlayer === 1) {
+            $this->score1 += $points;
+        } else if ($whichPlayer === 2) {
+            $this->score2 += $points;
+        }
+        
+        $this->updateTurn();
+    }
+    
+    /**
+     * Update whose turn it is (does nothing for 1 player game) 
+     */
+    public function updateTurn()
+    {
+        if ($this->numPlayers > 1) {
+            $this->playerTurn++;
+            if ($this->playerTurn > $this->numPlayers) {
+                $this->playerTurn = 1;
+            }
+        }
+    }
+    
+    /**
+     * End the game. The current user wins if the word is guessed otherwise it is
+     * a lose or draw
+     */
+    public function endGame()
+    {
+        if ($this->numPlayers == 1) {
+            if ($this->isGuessed()) {
+                // correct/they won, they get 5 points (8 for bonus round)
+                $this->score1 += ($this->isBonus) ? 8 : 5;
+                // update state to Player 1 wins
+                $this->winnerFlag = '1';
+            } else {
+                // update state to lose
+                $this->winnerFlag = 'lose';
+            }
+        } else {
+            /** @todo End multi-player game */
+        }
+    }
+    
+    /**
+     * Checks if the word has been fully guessed
+     * @return bool True if the game is now over
+     */
+    public function isGuessed()
+    {
+        return $this->currentState === $this->dictionary->getWord();
+    }
 
 }

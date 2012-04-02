@@ -6,8 +6,26 @@
 
 #game-display {
 	width: 80%;
-	height: 200px;
+	height: auto;
 	border: 1px #000 solid;
 	margin: auto;
 	margin-top: 20px;
+}
+
+#game-state {
+	font-size: 40px;
+	text-align: center;
+
+}
+
+#definition {
+	margin: auto;
+	width: 80%;
+	
+}
+
+#play {
+	margin: auto;
+	width: 80%;
+
 }
