@@ -93,7 +93,7 @@ class UserMapper
      */
     public function CreateUser($u)
     {
-               // make sure user doesn't exist
+        // make sure user doesn't exist
         $existing = $this->FindByEmail($u['email']);
         $existing2 = $this->FindByUsername($u['username']);
         if (is_null($existing) && is_null($existing2)) {
@@ -102,13 +102,13 @@ class UserMapper
                     'username' => $u['username'],
                     'email' => $u['email'],
                     'password' => $u['password'],
-		    'first_name' => $u['first_name'],
-		    'last_name' => $u['last_name'],
-		    'birthdate' => $u['birthdate']->format('Y-m-d'),
-		    'city' => $u['city'],
-		    'state' => $u['state'],
-		    'country' => $u['country'],
-		    'join_date' => date("Y-m-d H:i:s")
+                    'first_name' => $u['first_name'],
+                    'last_name' => $u['last_name'],
+                    'birthdate' => $u['birthdate']->format('Y-m-d'),
+                    'city' => $u['city'],
+                    'state' => $u['state'],
+                    'country' => $u['country'],
+                    'join_date' => date("Y-m-d H:i:s")
                 )
             );
 
@@ -117,5 +117,26 @@ class UserMapper
             // already exists
             return false;
         }
+    }
+    
+    /**
+     * Update a player score by adding points
+     * 
+     * @param int  $userId
+     * @param int  $pointsToAdd
+     * @return bool True if successful 
+     */
+    public function UpdateScore($userId, $pointsToAdd)
+    {
+        $count = $this->db->executeUpdate("UPDATE player "
+                . "SET total_score = total_score + :points "
+                . "WHERE id = :id",
+            array(
+                'points' => $pointsToAdd,
+                'id' => $userId
+            )
+        );
+        
+        return $count == 1;
     }
 }
