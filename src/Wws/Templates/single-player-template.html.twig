@@ -29,8 +29,16 @@
 		<div id="definition"><p>Definition: {{game.dictionary.definition}} </p></div>
 		<div id="play">
 			<form id="guess-form" method="post" action="{{ path('guess_single_player', {'id': game.id} ) }}">
-				<div id="char-guess">Guess a character: <input type="text" name="letter" size="3" maxlength="1" /></div>
-				<div id="word-guess">Guess a word: <input type="text" name="word" size="40" /></div>
+				{% if (game.guesses | length) < 3 %}
+			        <div id="char-guess">Guess a
+			        character: <input type="text"
+			        name="letter" size="3" maxlength="1"
+			        /></div>
+				{% elseif (game.guesses | length) == 3  %}
+				<div id="word-guess">Guess a word:
+				<input type="text" name="word"
+				size="40" /></div>
+				{% endif %}
 				<input type="submit" value="Submit" />
 			</form>
 			<div id="guessed-chars">
