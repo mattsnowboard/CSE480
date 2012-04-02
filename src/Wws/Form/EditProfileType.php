@@ -33,7 +33,8 @@ class EditProfileType extends AbstractType
             'label' => 'Email:'
         ));
         $builder->add('password', 'password', array(
-            'label' => 'Password:'
+            'label' => 'Password:',
+            'required' => false
         ));
         $builder->add('firstName', 'text', array(
             'label' => 'First Name:'

@@ -128,7 +128,7 @@ class DefaultControllerProvider implements ControllerProviderInterface
          * 
          * This page allows the user to edit their profile information, it displays the edit profile forms
          */
-        $controllers->get('/edit_profile', function(Application $app) {
+        $controllers->match('/edit_profile', function(Application $app) {
             $editForm = $app['form.factory']->create(new \Wws\Form\EditProfileType());
             
             $editForm->setData($app['wws.user']);
@@ -140,7 +140,7 @@ class DefaultControllerProvider implements ControllerProviderInterface
                     $data = $editForm->getData();
                     // validate and optionally redirect
                     try {
-                        $success = $app['wws.auth.user_provider']->EditUser($data);
+                        $success = $app['wws.auth.user_provider']->UpdateUserProfile($data);
                         if (!$success) {
                             $app['session']->setFlash('edit', 'Error message goes here.');
                         }
@@ -149,8 +149,6 @@ class DefaultControllerProvider implements ControllerProviderInterface
                         $app['session']->setFlash('edit', 'FAIL');
                     }
                 }
-            } else {
-                //$editForm->bind($app['wws.user']->toArray());
             }
             
             return $app['twig']->render('edit-profile-template.html.twig', array(
