@@ -116,7 +116,7 @@ class GameControllerProvider implements ControllerProviderInterface
                     $app['session']->setFlash('gamemsg', 'You cannot guess the letter 4 times');
                 }
 		else {
-                    $correct = $app['wws.gameplay']->makeWordGuess($game, $app['wws.user'], $letter);
+                    $correct = $app['wws.gameplay']->makeWordGuess($game, $app['wws.user'], $word);
                     if ($correct) {
                         $app['session']->setFlash('gamemsg', 'The Word "' . $word . '" is correct!');
                     } else {

@@ -110,15 +110,15 @@ class GamePlay
      */
     public function makeWordGuess(Game $game, User $user, $word)
     {
-        if (!$this->userCanGuessWord($game, $user)) {
+      /*if (!$this->userCanGuessWord($game, $user)) {
             throw new GamePlayException('User is not allowed to guess more letters');
-        }
+	    }*/
         
         $dictionary = $game->getDictionary();
         $correctWord = $dictionary->getWord();
 
-        $correct = ($correctWord == $wordLetters);
-        
+        $correct = ($correctWord == $word);
+        var_dump($correct);
         $guess = new Guess();
         $guess->SetPlayerId($user->GetId());
         $guess->SetGameId($game->getId());
@@ -189,7 +189,7 @@ class GamePlay
             if (is_null($guesses)) {
                 throw new \Exception('The guesses were not retrieved from the database');
             }
-            return count($guesses) > 10;
+            return count($guesses) < 10;
         }
         return false;
     }
