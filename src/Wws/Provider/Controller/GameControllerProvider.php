@@ -157,7 +157,7 @@ class GameControllerProvider implements ControllerProviderInterface
          * 
          * Make a guess
          */
-        $controllers->post('/exit/single-player/{id}', function(Application $app,
+        $controllers->get('/exit/single-player/{id}', function(Application $app,
                 Request $request, $id) {
             try {
                 /**
@@ -179,7 +179,7 @@ class GameControllerProvider implements ControllerProviderInterface
             if ($game->isOver()) {
                 $app['session']->setFlash('gamemsg', 'You\'ve already given up on this game');
             } else {
-                $game->exitGame();
+                $app['wws.gameplay']->exitGame($game, $app['wws.user']);
                 $app['session']->setFlash('gamemsg', 'Giving up already?');
 
                 $app['monolog']->addDebug('The user quit game "' . $game->getId() . '", final score is: ' . $game->getScore1());

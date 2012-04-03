@@ -21,7 +21,8 @@
 		<h2>Games in Progress</h2>
 		<ul>
 			{% for game in games %}
-				<li><a href="{{path("single_player", {'id':game.id})}}">Game {{ game.id}}</a> Current state:  {{game.currentState}}</li>
+				<li><a href="{{path("single_player", {'id':game.id})}}">Game {{ game.id}}</a>:
+                    Current state: {{game.currentState}} (Score: {{game.score1}})</li>
 				{% else %}
 					<li> No games </li>
 			{% endfor %}

@@ -17,7 +17,7 @@
 	<div id="game-nav-buttons"> 
 		{% if (game.guesses | length) < 4 %}
 	
-		<a href="#" class="forfeit-button btn btn-danger" title="Forfeit">Forfeit</a>
+		<a href="{{ path('exit_single_player', {'id': game.id} ) }}" class="forfeit-button btn btn-danger" title="Forfeit">Forfeit</a>
 	
 		{% else %}
 		<a href="{{baseURL}}welcome" class="return-home-button btn" >Return to Home Page</a>
