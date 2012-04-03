@@ -111,18 +111,17 @@ class GameControllerProvider implements ControllerProviderInterface
                 // guessed the full word
                 $app['session']->setFlash('gamemsg', 'The word "' . $word . '"');
 
-		if (!$app['wws.gameplay']->userCanGuessWord($game, $app['wws.user'])) {
+                if (!$app['wws.gameplay']->userCanGuessWord($game, $app['wws.user'])) {
                     // trying to make a 4th letter guess
                     $app['session']->setFlash('gamemsg', 'You cannot guess the letter 4 times');
-                }
-		else {
+                } else {
                     $correct = $app['wws.gameplay']->makeWordGuess($game, $app['wws.user'], $word);
                     if ($correct) {
                         $app['session']->setFlash('gamemsg', 'The Word "' . $word . '" is correct!');
                     } else {
                         $app['session']->setFlash('gamemsg', 'The Word "' . $word . '" is NOT the word!');
                     }
-		
+
                 }
             } else if (!is_null($letter) && !empty($letter)) {
                 $app['monolog']->addDebug('The user: "' . $app['wws.user']->getId() .'" guessed the letter "' . $letter
@@ -150,6 +149,48 @@ class GameControllerProvider implements ControllerProviderInterface
         })
         ->middleware($app['wws.auth.must_be_logged_in'])
         ->bind('guess_single_player');
+        
+        /**
+         * @route '/exit/single-player/{id}'
+         * @name exit_single_player
+         * @pre User is logged in
+         * 
+         * Make a guess
+         */
+        $controllers->post('/exit/single-player/{id}', function(Application $app,
+                Request $request, $id) {
+            try {
+                /**
+                 * @var \Wws\Model\Game $game
+                 */
+                $game = $app['wws.mapper.game']->FindById($id, $app['wws.user']);
+
+                if (is_null($game)) {
+                    // game not found
+                    return $app->abort(404, 'The game you were looking for does not exist');
+                }
+                
+                $guesses = $app['wws.mapper.guess']->FindByGame($game->getId());
+                $game->setGuesses($guesses);
+            } catch (\Wws\Exception\NotAuthorizedException $e) {
+                throw new HttpException(403, $e->getMessage());
+            }
+            
+            if ($game->isOver()) {
+                $app['session']->setFlash('gamemsg', 'You\'ve already given up on this game');
+            } else {
+                $game->exitGame();
+                $app['session']->setFlash('gamemsg', 'Giving up already?');
+
+                $app['monolog']->addDebug('The user quit game "' . $game->getId() . '", final score is: ' . $game->getScore1());
+            }
+            
+            return $app->redirect($app['url_generator']->generate('single_player', array(
+                'id' => $game->getId()
+            )));
+        })
+        ->middleware($app['wws.auth.must_be_logged_in'])
+        ->bind('exit_single_player');
         
         return $controllers;
     }
