@@ -102,6 +102,14 @@ class GameControllerProvider implements ControllerProviderInterface
                 )));
             }
             
+            if ($game->isOver()) {
+                // it's not their turn yet
+                $app['session']->setFlash('gamemsg', 'No more guessing! The game is over');
+                return $app->redirect($app['url_generator']->generate('single_player', array(
+                    'id' => $game->getId()
+                )));
+            }
+            
             // check post params, we get either 'letter' or 'word' and want to guess it
             $letter = $request->get('letter');
             $word = $request->get('word');

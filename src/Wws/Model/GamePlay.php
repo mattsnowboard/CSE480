@@ -140,7 +140,6 @@ class GamePlay
         $correctWord = $dictionary->getWord();
 
         $correct = ($correctWord == $word);
-        var_dump($correct);
         $guess = new Guess();
         $guess->SetPlayerId($user->GetId());
         $guess->SetGameId($game->getId());
