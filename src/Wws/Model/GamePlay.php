@@ -147,8 +147,10 @@ class GamePlay
         $guess->SetWord(strtolower($word));
         $guess->SetIsCorrect($correct);
         
+        if ($correct) {
             // update the Game state
             $game->SetCurrentState(strtolower($correctWord));
+        }
         
         $this->conn->beginTransaction();
         try {

@@ -9,7 +9,7 @@ namespace Wws\Model;
  * @author Matt Durak <durakmat@msu.edu> 
  */
  
- class Game
+class Game
 {
     /**
      * @var int $id
@@ -239,6 +239,10 @@ namespace Wws\Model;
     
     public function getLettersArray()
     {
+        // if the game is over, return the correct word
+        if ($this->isOver()) {
+            return str_split($this->dictionary->getWord());
+        }
         return str_split($this->currentState);
     }
 
