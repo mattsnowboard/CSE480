@@ -93,6 +93,7 @@ class DefaultControllerProvider implements ControllerProviderInterface
                 'regform' => $regForm->createView()
             ));
         })
+        ->middleware($app['wws.auth.must_not_be_logged_in'])
         ->bind('home');
         
         /**

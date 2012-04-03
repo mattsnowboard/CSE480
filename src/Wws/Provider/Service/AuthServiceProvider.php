@@ -26,6 +26,17 @@ class AuthServiceProvider implements ServiceProviderInterface
         });
         
         /**
+        * This is the opposite of the above
+        * @var closure
+        */
+        $app['wws.auth.must_not_be_logged_in'] = $app->protect(function(\Symfony\Component\HttpFoundation\Request $request) use($app) {
+            if (!is_null($app['wws.user'])) {
+                $app['session']->setFlash('infobar', 'You are already logged in!');
+                return $app->redirect($app['url_generator']->generate('welcome'));
+            }
+        });
+        
+        /**
          * This is called before other controllers, used to store the user if they are logged in
          * @var closure 
          */
