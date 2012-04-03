@@ -35,15 +35,12 @@ CREATE TABLE IF NOT EXISTS `challenge` (
   KEY `fk_challenge_game1` (`game_id`),
   KEY `fk_challenge_player1` (`challenger_id`),
   KEY `fk_challenge_player2` (`recipient_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `challenge`
 --
 
-INSERT INTO `challenge` (`id`, `status`, `game_id`, `challenger_id`, `recipient_id`) VALUES
-(1, 'pending', NULL, 1, 2),
-(2, 'pending', NULL, 4, 3);
 
 -- --------------------------------------------------------
 
@@ -941,16 +938,11 @@ CREATE TABLE IF NOT EXISTS `game` (
   KEY `fk_game_dictionary` (`word_id`),
   KEY `fk_game_player1` (`player1_id`),
   KEY `fk_game_player2` (`player2_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ;
 
 --
 -- Dumping data for table `game`
 --
-
-INSERT INTO `game` (`id`, `timestamp`, `word_start_state`, `num_players`, `score1`, `score2`, `player_turn`, `winner_flag`, `word_id`, `player1_id`, `player2_id`, `is_bonus`, `current_state`) VALUES
-(1, '2012-03-16 15:18:44', 'a_al_ne', '1', 10, 0, '1', 'playing', 1, 1, NULL, 0, 'abal_ne'),
-(2, '2012-03-16 15:18:44', 'aba__oir', '1', 7, 0, '1', 'playing', 2, 3, NULL, 0, 'aba__oir'),
-(3, '2012-03-16 15:18:44', 'a_y_ma_', '1', 12, 0, '1', 'playing', 10, 4, NULL, 0, 'a_y_ma_');
 
 -- --------------------------------------------------------
 
@@ -975,12 +967,6 @@ CREATE TABLE IF NOT EXISTS `guess` (
 --
 -- Dumping data for table `guess`
 --
-
-INSERT INTO `guess` (`timestamp`, `is_correct`, `word`, `letter`, `is_full_word`, `player_id`, `game_id`) VALUES
-('2012-03-16 15:18:44', 0, NULL, 'z', 0, 1, 1),
-('2012-03-16 15:18:44', 0, NULL, 'j', 0, 3, 2),
-('2012-03-16 15:18:44', 0, NULL, 'w', 0, 4, 3);
-
 -- --------------------------------------------------------
 
 --
@@ -1006,7 +992,7 @@ CREATE TABLE IF NOT EXISTS `player` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `username_UNIQUE` (`username`),
   UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=25 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `player`
@@ -1016,7 +1002,7 @@ INSERT INTO `player` (`id`, `username`, `email`, `password`, `last_active`, `tot
 (1, 'devan', 'saylesd1@msu.edu', '$2a$08$gJvm8Wh2Rb8cCpoeAwqEku7OAGKjmKvmHVAYkL9KICh5sAfJ10/fO', '2012-03-16 13:38:22', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (2, 'matt', 'durakmat@msu.edu', '$2a$08$HS7T2AWfsUaTlNkC6FgyLeSDkeGqnbbqGwKOjsVAmB/GGsqjBwmpC', '2012-03-16 14:44:59', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (3, 'chelsea', 'carrche2@msu.edu', '$2a$08$5o1qmwqNYd0xaNoF2/1bpuC2AdLkZfRakR3dLAwNLd.MrwyQyp7Ii', '2012-03-16 14:45:28', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(4, 'stranger', 'stranger@msu.edu', '$2a$08$dznb3tb.Du3ROYFiVLg0tuIU2zcKKyfBBuHO1yMl/I7ICg9SttA2W', '2012-03-16 14:50:44', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(4, 'stranger', 'stranger@msu.edu', '$2a$08$dznb3tb.Du3ROYFiVLg0tuIU2zcKKyfBBuHO1yMl/I7ICg9SttA2W', '2012-03-16 14:50:44', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 --
 -- Constraints for dumped tables
