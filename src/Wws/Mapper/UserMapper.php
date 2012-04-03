@@ -53,7 +53,7 @@ class UserMapper
      */
     public function FindByUsername($username)
     {
-        $userArr = $this->db->fetchAssoc('SELECT * FROM player WHERE username = ?', array($username));
+        $userArr = $this->db->fetchAssoc('SELECT * FROM player WHERE username = ? FOR UPDATE', array($username));
         return $this->returnUser($userArr);
     }
     
@@ -93,28 +93,36 @@ class UserMapper
      */
     public function CreateUser($u)
     {
-        // make sure user doesn't exist
-        $existing = $this->FindByEmail($u['email']);
-        $existing2 = $this->FindByUsername($u['username']);
-        if (is_null($existing) && is_null($existing2)) {
-            $count = $this->db->executeUpdate("INSERT INTO player (username, email, password, first_name, last_name, birthdate, city, state, country, join_date) VALUES (:username, :email, :password, :first_name, :last_name, :birthdate, :city, :state, :country, :join_date)",
-                array(
-                    'username' => $u['username'],
-                    'email' => $u['email'],
-                    'password' => $u['password'],
-                    'first_name' => $u['first_name'],
-                    'last_name' => $u['last_name'],
-                    'birthdate' => $u['birthdate']->format('Y-m-d'),
-                    'city' => $u['city'],
-                    'state' => $u['state'],
-                    'country' => $u['country'],
-                    'join_date' => date("Y-m-d H:i:s")
-                )
-            );
+        // transaction
+        $this->db->beginTransaction();
+        try {
+            // make sure user doesn't exist
+            $existing = $this->FindByUsername($u['username']);
+            if (is_null($existing)) {
+                $count = $this->db->executeUpdate("INSERT INTO player (username, email, password, first_name, last_name, birthdate, city, state, country, join_date) VALUES (:username, :email, :password, :first_name, :last_name, :birthdate, :city, :state, :country, :join_date)",
+                    array(
+                        'username' => $u['username'],
+                        'email' => $u['email'],
+                        'password' => $u['password'],
+                        'first_name' => $u['first_name'],
+                        'last_name' => $u['last_name'],
+                        'birthdate' => $u['birthdate']->format('Y-m-d'),
+                        'city' => $u['city'],
+                        'state' => $u['state'],
+                        'country' => $u['country'],
+                        'join_date' => date("Y-m-d H:i:s")
+                    )
+                );
 
-            return $count == 1;
-        } else {
+                $this->db->commit();
+                return $count == 1;
+            } else {
+                // already exists
+                return false;
+            }
+        } catch (\Exception $e) {
             // already exists
+            $this->db->rollback();
             return false;
         }
     }

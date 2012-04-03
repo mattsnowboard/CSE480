@@ -13,6 +13,11 @@ use Wws\Exception\GamePlayException;
 class GamePlay
 {
     /**
+     * @var \Doctrine\DBAL\Connection
+     */
+    protected $conn;
+    
+    /**
      * @var Wws\Mapper\DictionaryMapper
      */
     protected $dictionaryMapper;
@@ -32,11 +37,13 @@ class GamePlay
      */
     protected $userMapper;
     
-    public function __construct(\Wws\Mapper\DictionaryMapper $dmap,
+    public function __construct(\Doctrine\DBAL\Connection $conn,
+            \Wws\Mapper\DictionaryMapper $dmap,
             \Wws\Mapper\GameMapper $gmap,
             \Wws\Mapper\GuessMapper $guessMap,
             \Wws\Mapper\UserMapper $umap)
     {
+        $this->conn = $conn;
         $this->dictionaryMapper = $dmap;
         $this->gameMapper = $gmap;
         $this->guessMapper = $guessMap;
@@ -72,30 +79,39 @@ class GamePlay
         $guess->SetIsFullWord(false);
         $guess->SetLetter(strtolower($letter));
         $guess->SetIsCorrect($correct);
-        
-        // store new guess in database
-        $this->guessMapper->CreateGuess($guess);
-        
+                
         // tell the game that the guess was made so it can update the score and turn
         $game->updateGuess($user, $correct);
         if ($correct) {
             // update the Game state
             $game->updateState(strtolower($letter));
         }
-        // check if the game is now over
-        if ($game->isGuessed()) {
-			
-            // they guessed it, end the game
-            $game->endGame();
-			$game->isOver();
-            // update scores
-            $this->userMapper->UpdateScore($game->getPlayer1Id(), $game->getScore1());
-            if ($game->getNumPlayers() > 1 && !is_null($game->getPlayer2Id())) {
-                $this->userMapper->UpdateScore($game->getPlayer2Id(), $game->getScore2());
-            }
-        }
         
-        $this->gameMapper->UpdateGame($game);
+        $this->conn->beginTransaction();
+        try {
+            // store new guess in database
+            $this->guessMapper->CreateGuess($guess);
+            
+            // check if the game is now over
+            if ($game->isGuessed()) {
+
+                // they guessed it, end the game
+                $game->endGame();
+                $game->isOver();
+                // update scores
+                $this->userMapper->UpdateScore($game->getPlayer1Id(), $game->getScore1());
+                if ($game->getNumPlayers() > 1 && !is_null($game->getPlayer2Id())) {
+                    $this->userMapper->UpdateScore($game->getPlayer2Id(), $game->getScore2());
+                }
+            }
+
+            $this->gameMapper->UpdateGame($game);
+            
+            $this->conn->commit();
+        } catch (\Exception $e) {
+            // already exists
+            $this->conn->rollback();
+        }
         
         return $correct;
     }
@@ -128,32 +144,38 @@ class GamePlay
         $guess->SetWord(strtolower($word));
         $guess->SetIsCorrect($correct);
         
-        // store new guess in database
-        $this->guessMapper->CreateGuess($guess);
-        
-        // tell the game that the guess was made so it can update the score and turn
-        $game->updateGuess($user, $correct);
         if ($correct) {
             // update the Game state
             $game->SetCurrentState(strtolower($word));
         }
-        // check if the game is now over
-        if ($game->isGuessed()) {
-			
-            // they guessed it, end the game
-            $game->endGame();
-			$game->isOver();
-            // update scores
-            $this->userMapper->UpdateScore($game->getPlayer1Id(), $game->getScore1());
-            if ($game->getNumPlayers() > 1 && !is_null($game->getPlayer2Id())) {
-                $this->userMapper->UpdateScore($game->getPlayer2Id(), $game->getScore2());
+        
+        $this->conn->beginTransaction();
+        try {
+            // store new guess in database
+            $this->guessMapper->CreateGuess($guess);
+            
+            // check if the game is now over
+            if ($game->isGuessed()) {
+
+                // they guessed it, end the game
+                $game->endGame();
+                $game->isOver();
+                // update scores
+                $this->userMapper->UpdateScore($game->getPlayer1Id(), $game->getScore1());
+                if ($game->getNumPlayers() > 1 && !is_null($game->getPlayer2Id())) {
+                    $this->userMapper->UpdateScore($game->getPlayer2Id(), $game->getScore2());
+                }
             }
+
+            $this->gameMapper->UpdateGame($game);
+            
+            $this->conn->commit();
+        } catch (\Exception $e) {
+            // already exists
+            $this->conn->rollback();
         }
         
-        $this->gameMapper->UpdateGame($game);
-        
         return $correct;
-        
     }
     
     /**
