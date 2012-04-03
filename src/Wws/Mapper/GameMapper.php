@@ -32,7 +32,9 @@ class GameMapper
      */
 	public function FindById($id, \Wws\Model\User $user = null)
     {
-        $gameArr = $this->db->fetchAssoc('SELECT *,  game.id AS id FROM game, dictionary WHERE game.word_id = dictionary.id and game.id = ?', array((int)$id));
+        $gameArr = $this->db->fetchAssoc('SELECT *,  game.id AS id FROM game, dictionary '
+                . 'WHERE game.word_id = dictionary.id and game.id = ? FOR UPDATE',
+            array((int)$id));
         $game = $this->returnGame($gameArr);
         if (!is_null($user)
                 && !($game->getPlayer1Id() == $user->getId()
@@ -66,7 +68,7 @@ class GameMapper
 			else
 			{	// returns in-progress multi-player games involving given userID
 				$gameArr = $this->db->fetchAll('SELECT *, game.id AS id FROM game, dictionary '
-                        .'WHERE num_players = :numPlayers and (player1_id = :uid or player2_id = :uid',
+                        . 'WHERE num_players = :numPlayers and (player1_id = :uid or player2_id = :uid',
                     array( 'numPlayers' => $numPlayers,
                             'uid' => $uid));
 			}
