@@ -14,12 +14,14 @@
     </div>
     {% endif %}
      
-	{% if (game.guesses | length) < 4 %}
-    <a href="#" title="Forfeit">Forfeit</a>
+	{% if game.isOver == false %}
+    <a href="{{ path('exit_single_player', {'id': game.id, } ) }}" title="Forfeit">Forfeit</a>
 	
 	{% else %}
 	<a href="{{baseURL}}welcome">Return to Home Page</a>
 	{% endif %}
+	
+	{{game.winnerFlag}}
 	
 	
 	

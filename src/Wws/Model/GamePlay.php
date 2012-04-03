@@ -94,6 +94,10 @@ class GamePlay
                 $this->userMapper->UpdateScore($game->getPlayer2Id(), $game->getScore2());
             }
         }
+		if ($game->isOver())
+		{
+			$game->endGame();
+		}
         
         $this->gameMapper->UpdateGame($game);
         
@@ -149,6 +153,11 @@ class GamePlay
                 $this->userMapper->UpdateScore($game->getPlayer2Id(), $game->getScore2());
             }
         }
+		
+		if ($game->isOver())
+		{
+			$game->endGame();
+		}
         
         $this->gameMapper->UpdateGame($game);
         
