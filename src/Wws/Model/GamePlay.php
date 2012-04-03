@@ -84,8 +84,10 @@ class GamePlay
         }
         // check if the game is now over
         if ($game->isGuessed()) {
+			
             // they guessed it, end the game
             $game->endGame();
+			$game->isOver();
             // update scores
             $this->userMapper->UpdateScore($game->getPlayer1Id(), $game->getScore1());
             if ($game->getNumPlayers() > 1 && !is_null($game->getPlayer2Id())) {
@@ -137,8 +139,10 @@ class GamePlay
         }
         // check if the game is now over
         if ($game->isGuessed()) {
+			
             // they guessed it, end the game
             $game->endGame();
+			$game->isOver();
             // update scores
             $this->userMapper->UpdateScore($game->getPlayer1Id(), $game->getScore1());
             if ($game->getNumPlayers() > 1 && !is_null($game->getPlayer2Id())) {
@@ -203,6 +207,12 @@ class GamePlay
      */
     public function exitGame(Game $game, User $user)
     {
-        
+        /** @todo check something first maybe? */
+        // only exit on single player?
+        if ($game->getNumPlayers() == 1 && is_null($game->getPlayer2Id())) {
+            $game->endGame(true);
+            $this->userMapper->UpdateScore($game->getPlayer1Id(), $game->getScore1());
+            $this->gameMapper->UpdateGame($game);
+        }
     }
 }
