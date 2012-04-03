@@ -14,6 +14,15 @@
     </div>
     {% endif %}
      
+	{% if (game.guesses | length) < 4 %}
+    <a href="#" title="Forfeit">Forfeit</a>
+	
+	{% else %}
+	<a href="{{baseURL}}welcome">Return to Home Page</a>
+	{% endif %}
+	
+	
+	
 	<section id="game-display">
 		<div id="game-state">
             {% for letter in game.lettersArray %}
@@ -34,12 +43,16 @@
 			        character: <input type="text"
 			        name="letter" size="3" maxlength="1"
 			        /></div>
+
 				{% elseif (game.guesses | length) == 3  %}
 				<div id="word-guess">Guess a word:
 				<input type="text" name="word"
 				size="40" /></div>
 				{% endif %}
+
+				{% if (game.guesses | length) < 4 %}
 				<input type="submit" value="Submit" />
+				{% endif %}
 			</form>
 			<div id="guessed-chars">
 				<p>Characters guessed:
