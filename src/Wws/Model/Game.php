@@ -330,10 +330,15 @@ namespace Wws\Model;
     /**
      * End the game. The current user wins if the word is guessed otherwise it is
      * a lose or draw
+     * 
+     * @param bool $isExit True if the player chose to quit and they will lose points
      */
-    public function endGame()
+    public function endGame($isExit = false)
     {
         if ($this->numPlayers == 1) {
+            if ($isExit) {
+                $this->score1 -= 1;
+            }
             if ($this->isGuessed()) {
                 // correct/they won, they get 5 points (8 for bonus round)
                 $this->score1 += ($this->isBonus) ? 8 : 5;

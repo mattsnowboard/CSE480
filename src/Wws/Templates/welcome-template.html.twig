@@ -1,11 +1,6 @@
 {% extends "base-template.html.twig" %}
 
 {% block main %}
-	<section id="leaderboard">
-		<h2>Words with Strangers Leaderboard</h2>
-		<p>Some sort of list/view of highest-scoring users</p>
-		<p>{{user.email}}</p>
-	</section>
 	
 	<section id="welcome-options">
 		<ul id="options-list">
@@ -32,6 +27,11 @@
 					<li> No games </li>
 			{% endfor %}
 		</ul>
+	</section>
+	
+	<section id="leaderboard">
+		<h2>Words with Strangers Leaderboard</h2>
+		<p>List/view of highest-scoring users</p>
 	</section>
 
 {% endblock %}
