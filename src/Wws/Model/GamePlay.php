@@ -144,13 +144,11 @@ class GamePlay
         $guess->SetPlayerId($user->GetId());
         $guess->SetGameId($game->getId());
         $guess->SetIsFullWord(true);
-        $guess->SetWord(strtolower($word));
+        $guess->SetWord($word);
         $guess->SetIsCorrect($correct);
         
-        if ($correct) {
             // update the Game state
-            $game->SetCurrentState(strtolower($word));
-        }
+            $game->SetCurrentState(strtolower($correctWord));
         
         $this->conn->beginTransaction();
         try {
