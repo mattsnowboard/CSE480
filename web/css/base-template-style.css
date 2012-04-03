@@ -107,6 +107,16 @@ a:hover {
     margin: 0;
 }
 
+/*----------------------------------------
+	CSS for Welcome template
+-----------------------------------------*/
+
+#welcome-options a{
+	text-decoration: none;
+}
+
+
+
 /**
 * Stolen from the Twitter Bootstrap
 * Maybe overkill, but I wanted to try it...

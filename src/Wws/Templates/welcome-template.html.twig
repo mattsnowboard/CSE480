@@ -3,9 +3,8 @@
 {% block main %}
 	
 	<section id="welcome-options">
-		<ul id="options-list">
-			<li><a href="{{ path('create_single_player') }}" title="Start 1-Player Game">Start 1-Player Game</a></li>
-			<li><a href="#" title="Send a Challenge">Send a Challenge</a></li>
+		<a href="{{ path('create_single_player') }}" class="start-1player-game-button btn btn-large" title="Start 1-Player Game">Start 1-Player Game</a>
+		<a href="#"  class="send-challenge-button btn btn-large" title="Send a Challenge">Send a Challenge</a>
 	</section>
 	
 	<section id="challenges">
