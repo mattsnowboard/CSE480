@@ -31,7 +31,7 @@ class GameControllerProvider implements ControllerProviderInterface
             try {
                 $game = $app['wws.mapper.game']->FindById($id, $app['wws.user']);
 
-                if (is_null($game)) {
+                if (is_null($game) || $game->getNumPlayers() != 1) {
                     // game not found
                     return $app->abort(404, 'The game you were looking for does not exist');
                 }
@@ -83,7 +83,7 @@ class GameControllerProvider implements ControllerProviderInterface
                  */
                 $game = $app['wws.mapper.game']->FindById($id, $app['wws.user']);
 
-                if (is_null($game)) {
+                if (is_null($game) || $game->getNumPlayers() != 1) {
                     // game not found
                     return $app->abort(404, 'The game you were looking for does not exist');
                 }
@@ -165,7 +165,7 @@ class GameControllerProvider implements ControllerProviderInterface
                  */
                 $game = $app['wws.mapper.game']->FindById($id, $app['wws.user']);
 
-                if (is_null($game)) {
+                if (is_null($game) || $game->getNumPlayers() != 1) {
                     // game not found
                     return $app->abort(404, 'The game you were looking for does not exist');
                 }
