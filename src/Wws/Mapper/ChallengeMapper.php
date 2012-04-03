@@ -65,6 +65,7 @@ class ChallengeMapper
 
     protected function returnChallenges($sqlResult)
     {
+        $challenges = array();
         if (!is_null($sqlResult) && $sqlResult !== false && !empty($sqlResult)) {
             foreach ($sqlResult as $challenge) {
                 $challenges[] = $this->returnChallenge($challenge);

@@ -39,7 +39,13 @@ class DefaultControllerProvider implements ControllerProviderInterface
                         try {
                             $success = $app['wws.auth.user_provider']->RegisterUser($data);
                             if ($success) {
-                                return $app->redirect($app['url_generator']->generate('welcome'));
+                                $app['session']->setFlash('infobar', 'Successfully registered');
+                                $user = $app['wws.auth.user_provider']->Authenticate(
+                                    $data['username'],
+                                    $data['password']);
+                                if ($user !== false) {
+                                    return $app->redirect($app['url_generator']->generate('welcome'));
+                                }
                             }
                             else {
                                 if(!is_null($app['wws.mapper.user']->FindByUsername($data['username']))) {
@@ -62,8 +68,8 @@ class DefaultControllerProvider implements ControllerProviderInterface
                         // validate and optionally redirect
                         try {
                             $user = $app['wws.auth.user_provider']->Authenticate(
-                            $data['username'],
-                            $data['password']);
+                                $data['username'],
+                                $data['password']);
                             if ($user !== false) {
                                 return $app->redirect($app['url_generator']->generate('welcome'));
                             } else {
