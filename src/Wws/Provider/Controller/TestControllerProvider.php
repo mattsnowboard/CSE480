@@ -5,6 +5,7 @@ namespace Wws\Provider\Controller;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Silex\ControllerCollection;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * This provides controllers under the '/test' path
@@ -67,6 +68,11 @@ class TestControllerProvider implements ControllerProviderInterface
         $controllers->get('/random-word', function(Application $app) {
             $test = $app['wws.factory.game']->CreateRandomWordStart();
             return var_dump($test);
+        });
+        
+        $controllers->get('/clear-cache', function(Application $app) {
+            $app['twig']->clearCacheFiles();
+            return new Response('Cache cleared!');
         });
         
         return $controllers;

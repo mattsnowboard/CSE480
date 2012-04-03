@@ -36,7 +36,7 @@ class GameMapper
                 . 'WHERE game.word_id = dictionary.id and game.id = ? FOR UPDATE',
             array((int)$id));
         $game = $this->returnGame($gameArr);
-        if (!is_null($user)
+        if (!is_null($game) && !is_null($user)
                 && !($game->getPlayer1Id() == $user->getId()
                     || $game->getPlayer2Id() == $user->getId())) {
             // this game is for someone else
