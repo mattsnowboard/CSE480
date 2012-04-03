@@ -5,11 +5,12 @@
 --------------------------------------------------------------*/
 
 #game-display {
-	width: 80%;
+	width: 95%;
 	height: auto;
-	border: 1px #000 solid;
+	border: 1px #aaa solid;
 	margin: auto;
 	margin-top: 20px;
+	background: #FFF;
 }
 
 #game-state {
@@ -55,3 +56,8 @@
 	width: 80%;
 
 }
+
+#game-nav-buttons a {
+	text-decoration: none;
+}
+ 
