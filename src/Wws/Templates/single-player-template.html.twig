@@ -14,12 +14,15 @@
     </div>
     {% endif %}
      
-	{% if game.isOver == false %}
-    <a href="{{ path('exit_single_player', {'id': game.id, } ) }}" title="Forfeit">Forfeit</a>
+
+	<div id="game-nav-buttons"> 
+		{% if game.isOver == false %}
+    		<a href="{{ path('exit_single_player', {'id': game.id, } ) }}" title="Forfeit">Forfeit</a>
 	
-	{% else %}
-	<a href="{{baseURL}}welcome">Return to Home Page</a>
-	{% endif %}
+		{% else %}
+			<a href="{{baseURL}}welcome" class="return-home-button btn" >Return to Home Page</a>
+		{% endif %}
+	</div>
 	
 	{{game.winnerFlag}}
 	
