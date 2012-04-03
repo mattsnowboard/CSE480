@@ -127,7 +127,7 @@ class GameControllerProvider implements ControllerProviderInterface
                     if ($correct) {
                         $app['session']->setFlash('gamemsg', 'The Word "' . $word . '" is correct!');
                     } else {
-                        $app['session']->setFlash('gamemsg', 'The Word "' . $word . '" is NOT the word!');
+                        $app['session']->setFlash('gamemsg', 'The Word "' . $word . '" is NOT the word! YOU LOSE!');
                     }
 
                 }
