@@ -127,7 +127,7 @@ a:hover {
     display: inline-block;
     *display: inline;
     /* IE7 inline-block hack */
-
+	text-decoration: none;
     *zoom: 1;
     padding: 4px 10px 4px;
     margin-bottom: 0;

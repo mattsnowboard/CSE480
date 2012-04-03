@@ -18,7 +18,7 @@
 		<h2>Challenges</h2>
 		<ul>
 			{% for challenge in recievedChallenges %}
-				<li>Challenge from {{challenge.challengerId}} <a href="#">Accept</a> <a href="#">Deny</a> </li>
+				<li>Challenge from {{challenge.challengerId}} <a href="#" class="start-1player-game-button btn btn-small">Accept</a> <a href="#" class="start-1player-game-button btn btn-small">Deny</a> </li>
 				{% else %}
 					<li> No challenges </li>
 			{% endfor %}
