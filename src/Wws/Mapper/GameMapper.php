@@ -153,11 +153,12 @@ class GameMapper
     public function UpdateGame(\Wws\Model\Game $game)
     {
         $count = $this->db->executeUpdate("UPDATE game "
-                . "SET player_turn = :turn, current_state = :state, score1 = :s1, score2 = :s2 "
+                . "SET player_turn = :turn, current_state = :state, winner_flag = :flag, score1 = :s1, score2 = :s2 "
                 . "WHERE id = :id",
             array(
                 'turn' => $game->getPlayerTurn(),
                 'state' => $game->getCurrentState(),
+                'flag' => $game->getWinnerFlag(),
                 's1' => $game->getScore1(),
                 's2' => $game->getScore2(),
                 'id' => $game->getId()
