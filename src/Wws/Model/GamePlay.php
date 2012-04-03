@@ -112,6 +112,10 @@ class GamePlay
             // already exists
             $this->conn->rollback();
         }
+		if ($game->isOver())
+		{
+			$game->endGame();
+		}
         
         return $correct;
     }
@@ -173,6 +177,11 @@ class GamePlay
             // already exists
             $this->conn->rollback();
         }
+		
+		if ($game->isOver())
+		{
+			$game->endGame();
+		}
         
         return $correct;
     }
@@ -202,7 +211,7 @@ class GamePlay
             if (is_null($guesses)) {
                 throw new \Exception('The guesses were not retrieved from the database');
             }
-            return count($guesses) < 10;
+            return count($guesses) < 3;
         }
         return false;
     }
@@ -214,7 +223,7 @@ class GamePlay
             if (is_null($guesses)) {
                 throw new \Exception('The guesses were not retrieved from the database');
             }
-            return count($guesses) < 10;
+            return count($guesses) < 4;
         }
         return false;
     }
