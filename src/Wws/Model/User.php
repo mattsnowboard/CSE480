@@ -39,6 +39,11 @@ class User
     private $lastActive;
     
     /**
+     * @var bool $inGame Determine if player is in a game (if active)
+     */
+    private $inGame;
+    
+    /**
      * @var int $totalScore
      */
     private $totalScore;
@@ -102,6 +107,7 @@ class User
             $this->password = $u['password'];
             $this->origPassword = $u['password'];
             $this->lastActive = $u['last_active'];
+            $this->inGame = $u['in_game'];
             $this->totalScore = $u['total_score'];
             $this->birthDate = $u['birthdate'];
             $this->joinDate = $u['join_date'];
@@ -166,6 +172,17 @@ class User
     {
         $this->lastActive = $lastActive;
     }
+    
+    public function getInGame()
+    {
+        return $this->inGame;
+    }
+
+    public function setInGame($inGame)
+    {
+        $this->inGame = $inGame;
+    }
+
     
     public function getTotalScore()
     {

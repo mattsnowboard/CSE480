@@ -6,6 +6,7 @@ use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Silex\ControllerCollection;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * This provides controllers under the '/' path
@@ -102,7 +103,15 @@ class DefaultControllerProvider implements ControllerProviderInterface
          * 
          * This page can be pinged to update the user activity timestamp
          */
-        $controllers->get('/ping', function(Application $app) {
+        $controllers->match('/ping', function(Application $app, Request $request) {
+            if (!is_null($app['wws.user'])) {
+                if ($request->get('action') == 'game') {
+                    $app['wws.auth.user_provider']->UpdateInGameStatus($app['wws.user'], true);
+                } else {
+                    $app['wws.auth.user_provider']->UpdateInGameStatus($app['wws.user'], false);
+                }
+                return new Response(json_encode($request->get('action')), 200);
+            }
             return new Response('OK', 200);
         })
         ->bind('ping');

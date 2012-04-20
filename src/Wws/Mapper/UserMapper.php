@@ -68,7 +68,20 @@ class UserMapper
             'id' => $id
         ));
     }
-        
+
+    /**
+     * Update the in game status of a user
+     * @param int $id Which user
+     * @param bool $in Whether in game or not
+     */
+    public function UpdateInGameStatus($id, $in)
+    {
+        $this->db->executeUpdate("UPDATE player SET in_game = :g WHERE id = :id", array(
+            'g' => (boolean)$in,
+            'id' => (int)$id
+        ));
+    }
+
     
     /**
      * Return a User object for an associative array result set

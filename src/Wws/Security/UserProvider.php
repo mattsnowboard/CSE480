@@ -51,10 +51,25 @@ class UserProvider
         return null;
     }
     
+    /**
+     * Update the last active time
+     * @param \Wws\Model\User $user 
+     */
     public function UpdateActivity(\Wws\Model\User $user)
     {
         $id = $user->GetId();
         $this->mapper->UpdateActivity($id);
+    }
+    
+    /**
+     * Update the status to in game or not
+     * @param \Wws\Model\User $user
+     * @param boolean $in 
+     */
+    public function UpdateInGameStatus(\Wws\Model\User $user, $in)
+    {
+        $id = $user->GetId();
+        $this->mapper->UpdateInGameStatus($id, $in);
     }
     
     /**
