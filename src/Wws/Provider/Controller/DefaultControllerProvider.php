@@ -127,6 +127,24 @@ class DefaultControllerProvider implements ControllerProviderInterface
         })
         ->middleware($app['wws.auth.must_be_logged_in'])
         ->bind('welcome');
+		
+		 /**
+         * @route '/leaderboard'
+         * @name leaderboard
+         * @pre User is logged in
+         * 
+         * This page is shown when the user clicks the Leaderboard link
+         */
+        $controllers->get('/leaderboard', function(Application $app) {
+            
+            $leaders = $app['wws.mapper.user']->GetLeaderboard();
+
+            return $app['twig']->render('leaderboard-template.html.twig', array(
+                'leaders' => $leaders
+            ));
+        })
+        ->middleware($app['wws.auth.must_be_logged_in'])
+        ->bind('leaderboard');
         
 		
 		 /**
