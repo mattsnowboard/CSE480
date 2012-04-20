@@ -200,6 +200,26 @@ class GameControllerProvider implements ControllerProviderInterface
         ->middleware($app['wws.auth.must_be_logged_in'])
         ->bind('exit_single_player');
         
+        /**
+         * @route '/send-challenge/{recipient}'
+         * @name send_challenge
+         * @pre User is logged in
+         * 
+         * Send a challenge to a player
+         */
+        $controllers->match('/send-challenge/{recipient}', function(Application $app, $recipient) {
+            $challenge = $app['wws.factory.challenge']->CreateChallenge($app['wws.user'], $recipient);
+            
+            /** @todo Check for failure (null game or exception?) **/
+            
+            // show a page 
+            return $app['twig']->render('challenge-sent-template.html.twig', array(
+                'challenge' => $challenge
+            ));
+        })
+        ->middleware($app['wws.auth.must_be_logged_in'])
+        ->bind('send_challenge');
+        
         return $controllers;
     }
 }

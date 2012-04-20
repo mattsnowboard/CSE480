@@ -72,8 +72,17 @@
         <script>
             $(document).ready(function(){
                 setInterval(function() {
-                    $.ajax('{{path('ping')}}');
-                }, 20000);
+                    $.ajax({
+                        url: '{{path('ping')}}',
+                        type: 'POST',
+                        data: {
+                            {% block js_pingaction %}action: 'other'{% endblock %}
+                        },
+                        success: function(data) {
+                            console.log(data);
+                        }
+                    });
+                }, 10000);
             });  
         </script>
         {% endif %}

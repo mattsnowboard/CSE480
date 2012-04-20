@@ -1,0 +1,17 @@
+{% extends "base-template.html.twig" %}
+
+{% block stylesheets %}
+	{{ parent() }}
+{% endblock %}
+
+
+{% block main %}
+	
+<div>
+You've sent a challenge! (I think)
+{{ dump(challenge) }}
+</div>
+
+{% endblock %}
+
+{% block js_pingaction %}action: 'sentchallenge'{% endblock %}
