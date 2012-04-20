@@ -287,7 +287,8 @@ class User
     
     public function getIsActive()
     {
-        return now() - $this->lastActive < $this->activeTime;
+		$dateTime = new \DateTime($this->lastActive);
+        return \time() - $dateTime->getTimestamp() < $this->activeTime;
     }
     
     public function getIsActiveNotInGame()

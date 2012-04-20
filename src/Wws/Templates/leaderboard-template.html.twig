@@ -6,7 +6,7 @@
         <h1>Words with Strangers Leaderboard</h1>
         <ul>
             {% for leader in leaders %}
-			<li>{{leader.username}}, {{leader.totalScore}}</li>
+			<li>{{leader.username}}, {{leader.totalScore}} {% if leader.isActive %} Online {% else %} Offline {% endif %}, {{leader.lastActive}}
 			{% endfor %}
         </ul>
     </section>
