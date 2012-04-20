@@ -44,6 +44,11 @@ class User
     private $inGame;
     
     /**
+     * @var integer $activeTime The time to consider users active
+     */
+    private $activeTime = 20;
+    
+    /**
      * @var int $totalScore
      */
     private $totalScore;
@@ -278,5 +283,20 @@ class User
     public function setIsAdmin($isAdmin)
     {
         $this->isAdmin = $isAdmin;
+    }
+    
+    public function getIsActive()
+    {
+        return now() - $this->lastActive < $this->activeTime;
+    }
+    
+    public function getIsActiveNotInGame()
+    {
+        return $this->getIsActive() && !$this->getInGame();
+    }
+    
+    public function getNotInGame()
+    {
+        return $this->getIsActive() && $this->getInGame();
     }
 }
