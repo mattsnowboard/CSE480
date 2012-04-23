@@ -68,7 +68,20 @@ class UserMapper
             'id' => $id
         ));
     }
-        
+
+    /**
+     * Update the in game status of a user
+     * @param int $id Which user
+     * @param bool $in Whether in game or not
+     */
+    public function UpdateInGameStatus($id, $in)
+    {
+        $this->db->executeUpdate("UPDATE player SET in_game = :g WHERE id = :id", array(
+            'g' => (boolean)$in,
+            'id' => (int)$id
+        ));
+    }
+
     
     /**
      * Return a User object for an associative array result set
@@ -175,4 +188,24 @@ class UserMapper
         
         return $count == 1;
     }
+	
+	/**
+	* Generate leaderboard
+	*/
+	public function GetLeaderboard()
+	{
+		$sqlResult = $this->db->fetchAll('SELECT username, total_score, last_active FROM player ORDER BY total_score DESC');
+		$leaderResults = array();
+        if (!is_null($sqlResult) && $sqlResult !== false && !empty($sqlResult)) {
+            foreach ($sqlResult as $leader) {
+				$newLead = new User();
+				$newLead->setUsername($leader['username']);
+				$newLead->setTotalScore($leader['total_score']);
+				$newLead->setLastActive($leader['last_active']);
+				$leaderResults[] = $newLead;
+			}
+        }
+        return $leaderResults;
+		
+	}
 }
