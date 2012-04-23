@@ -54,6 +54,35 @@ class GameFactory
         
         return $game;
     }
+	
+	    /**
+     * Create a multi player game for 2 users and random word
+     * This will also persist the Game in the database
+     * 
+     * @param \Wws\Model\User $user1
+	 * @param \Wws\Model\User $user2
+     * @return \Wws\Model\Game 
+     */
+    public function CreateSinglePlayerGame(\Wws\Model\User $user1, \Wws\Model\User $user2)
+    {
+        // get the word to start
+        $wordStart = $this->CreateRandomWordStart();
+        
+        $game = new Game();
+        $game->setDictionary($wordStart['word']);
+        $game->setWordStartState($wordStart['start']);
+        $game->setNumPlayers(2);
+        $game->setTimestamp(time());
+        $game->setPlayer1Id($user1->getId());
+		$game->setPlayer2Id($user2->getId());
+        /** @todo Query database for this */
+        $game->setIsBonus(false);
+        
+        // Now persist in DB
+        $this->gameMapper->CreateGame($game);
+        
+        return $game;
+    }
     
     /**
      * Creates a set of a random dictionary word and a starting game state

@@ -231,6 +231,9 @@ class GamePlay
             }
             return count($guesses) < 4;
         }
+		else if ($game->getNumPlayers() == 2) {
+			return count($guesses) < 10;
+		}
         return false;
     }
     

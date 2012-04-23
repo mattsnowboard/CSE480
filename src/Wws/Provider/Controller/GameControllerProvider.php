@@ -99,7 +99,7 @@ class GameControllerProvider implements ControllerProviderInterface
          * @name create_single_player
          * @pre User is logged in
          * 
-         * Creates a single player game
+         * Creates a multi player game
          */
         $controllers->get('/create/multi-player', function(Application $app) {
             $game = $app['wws.factory.game']->CreateMultiPlayerGame($app['wws.user']);
@@ -205,7 +205,7 @@ class GameControllerProvider implements ControllerProviderInterface
         ->bind('guess_single_player');
         
 		/**
-         * @route '/guess/single-player/{id}'
+         * @route '/guess/multi-player/{id}'
          * @name guess_single_player
          * @pre User is logged in
          * 
