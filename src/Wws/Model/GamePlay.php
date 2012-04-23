@@ -212,6 +212,13 @@ class GamePlay
             }
             return count($guesses) < 3;
         }
+		else {
+			$guesses = $game->getGuesses();
+			if (is_null($guesses)) {
+                throw new \Exception('The guesses were not retrieved from the database');
+            }
+            return count($guesses) < 3;
+		}
         return false;
     }
 
