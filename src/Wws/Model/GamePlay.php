@@ -114,7 +114,7 @@ class GamePlay
         }
 		if ($game->isOver())
 		{
-			$game->endGame();
+			$game->endGame(false, $user);
 		}
         
         return $correct;
@@ -161,14 +161,14 @@ class GamePlay
             if ($game->getNumPlayers() == 1 || $game->isGuessed()) {
 
                 // they guessed it, end the game
-                $game->endGame();
+                $game->endGame($false, $user);
                 // update scores
                 $this->userMapper->UpdateScore($game->getPlayer1Id(), $game->getScore1());
                 if ($game->getNumPlayers() > 1 && !is_null($game->getPlayer2Id())) {
                     $this->userMapper->UpdateScore($game->getPlayer2Id(), $game->getScore2());
                 }
             }
-			if ($game->getNumPlayers() == 2 || $game->isGuessed()) {
+			else if ($game->getNumPlayers() == 2 || $game->isGuessed()) {
 
                 // they guessed it, end the game
                 $game->endGame(false,$user);
@@ -189,7 +189,7 @@ class GamePlay
 		
 		if ($game->isOver())
 		{
-			$game->endGame();
+			$game->endGame(false, $user);
 		}
         
         return $correct;
