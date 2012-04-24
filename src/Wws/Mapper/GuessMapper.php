@@ -44,7 +44,7 @@ class GuessMapper
      */
     public function FindByGame($gid)
     {
-        $guessArr = $this->db->fetchAll('SELECT * FROM guess WHERE game_id = :game', array(
+        $guessArr = $this->db->fetchAll('SELECT * FROM guess WHERE game_id = :game ORDER BY timestamp', array(
             'game' => (int) $gid));
         return $this->returnGuesses($guessArr);
     }
