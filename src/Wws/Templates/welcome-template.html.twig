@@ -18,12 +18,23 @@
 		<h2>Challenges</h2>
 		<ul id="challenge-list">
 			{% for challenge in recievedChallenges %}
-				{% include 'ajax/challenge-sent-list-item.html.twig' with { 'id' : challenge.challengerId }%}
+				{% include 'ajax/challenge-rcv-list-item.html.twig' with { 'id' : challenge.challengerId }%}
             {% else %}
                 <li> No challenges </li>
 			{% endfor %}
 	</section>
-	
+    
+    <section id="sent-challenges">
+		<h2>Sent Challenges</h2>
+		<ul id="sent-challenge-list">
+			{% for challenge in sentChallenges %}
+				{% include 'ajax/challenge-sent-list-item.html.twig' with
+                    { 'id' : challenge.recipientId, 'game' : challenge.gameId, 'status' : challenge.status }%}
+            {% else %}
+                <li> No challenges </li>
+			{% endfor %}
+	</section>
+
 	<section id="gamelist">
 		<h2>Games in Progress</h2>
 		<ul>

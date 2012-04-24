@@ -1,5 +1,8 @@
-<li id="from-{{id}}">
-    Challenge from {{id}}
-    <a href="#" class="start-1player-game-button btn btn-small">Accept</a>
-    <a href="#" class="start-1player-game-button btn btn-small">Deny</a>
+<li id="to-{{id}}">
+    Challenge to {{id}}
+    {% if game %}
+    <a href="#" class="start-1player-game-button btn btn-small">Go to game</a>
+    {% else %}
+    {{ status }}
+    {% endif %}
 </li>
