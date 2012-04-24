@@ -16,14 +16,25 @@
 	
 	<section id="challenges">
 		<h2>Challenges</h2>
-		<ul>
+		<ul id="challenge-list">
 			{% for challenge in recievedChallenges %}
-				<li>Challenge from {{challenge.challengerId}} <a href="#" class="start-1player-game-button btn btn-small">Accept</a> <a href="#" class="start-1player-game-button btn btn-small">Deny</a> </li>
-				{% else %}
-					<li> No challenges </li>
+				{% include 'ajax/challenge-rcv-list-item.html.twig' with { 'id' : challenge.challengerId }%}
+            {% else %}
+                <li> No challenges </li>
 			{% endfor %}
 	</section>
-	
+    
+    <section id="sent-challenges">
+		<h2>Sent Challenges</h2>
+		<ul id="sent-challenge-list">
+			{% for challenge in sentChallenges %}
+				{% include 'ajax/challenge-sent-list-item.html.twig' with
+                    { 'id' : challenge.recipientId, 'game' : challenge.gameId, 'status' : challenge.status }%}
+            {% else %}
+                <li> No challenges </li>
+			{% endfor %}
+	</section>
+
 	<section id="gamelist">
 		<h2>Games in Progress</h2>
 		<ul>
@@ -37,7 +48,64 @@
 	</section>
 	
 	<section id="leaderboard">
-		<h2><a href="{{path("leaderboard")}}">Words with Strangers Leaderboard</a></h2>
+		<h3><a href="{{path("leaderboard")}}">Words with Strangers Leaderboard</a></h3>
+	</section>
+	
+	<section id="history">
+		<h3><a href="{{path("history")}}">Player History</a></h3>
 	</section>
 
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+	<script>
+        $(document).ready(function(){
+            // poll for new challenges, update page
+            setInterval(function() {
+                    $.ajax({
+                        url: '{{path('my_challenges')}}',
+                        type: 'GET',
+                        success: function(data) {
+                            console.log('Got challenges', data);
+                            var existing = new Array();
+                            var newchal = new Array();
+                            for (challenge in data) {
+                                if ($('#from-' + data[challenge].challengerId).length) {
+                                    existing.push(data[challenge].challengerId);
+                                    console.log('exist');
+                                } else {
+                                    newchal.push(data[challenge].challengerId);
+                                    console.log('new');
+                                }
+                            }
+                            $('#challenge-list').empty();
+                            for (challenge in data) {
+                                console.log(data[challenge]);
+                                var newLi = $(
+                                    '<li id="from-' + data[challenge].challengerId
+                                    + '">Challenge from ' + data[challenge].challengerId
+                                    + '<a href="#" class="start-1player-game-button btn btn-small">Accept</a>'
+                                    + '<a href="#" class="start-1player-game-button btn btn-small">Deny</a></li>'
+                                );
+                                $('#challenge-list').append(newLi);
+                                if ($.inArray(data[challenge].challengerId, newchal) != -1) {
+                                    console.log('exists check');
+                                    $(newLi).effect("highlight", {}, 5000);
+                                }
+                            }
+                        },
+                        statusCode: {
+                            404: function(data) {
+                                $('#challenge-list').empty();
+                                $('#challenge-list').append(
+                                    '<li>' + data.responseText
+                                    + '</li>'
+                                );
+                            },
+                        }
+                    });
+                }, 10000);
+        });  
+	</script>
 {% endblock %}

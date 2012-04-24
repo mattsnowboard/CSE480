@@ -50,7 +50,15 @@ class TestControllerProvider implements ControllerProviderInterface
         })
         ->value('result', 'playing');;
         
-		
+		/**
+         * @route '/game-history/{id}'
+         * 
+         * This is a temporary way to test the game mapper for displaying game history
+         */
+        $controllers->get('/game-history/{id}', function(Application $app, $id) {
+            $test = $app['wws.mapper.game']->FindByID($id);
+            return var_dump($test);
+        });
 		
         /**
          * @route '/guess/{id}'
@@ -61,8 +69,6 @@ class TestControllerProvider implements ControllerProviderInterface
             $test = $app['wws.mapper.guess']->FindByGame($id);
             return var_dump($test);
         });
-		
-		
 		
         
         /**

@@ -74,5 +74,24 @@ class Challenge
     {
         $this->recipientId = (int) $id;
     }
+    
+    public function getGameId()
+    {
+        return $this->gameId;
+    }
 
+    public function setGameId($gameId)
+    {
+        $this->gameId = $gameId;
+    }
+
+        public function toArray() 
+    {
+        $properties = get_object_vars($this);
+        $array = array();
+        foreach ($properties as $name => $value) {
+            $array[$name] = $value;
+        }
+        return $array;
+    }
 }
