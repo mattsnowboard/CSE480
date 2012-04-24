@@ -66,6 +66,8 @@ class Game
      */
     private $player2Id = NULL;
     
+	private $player1Name;
+	private $player2Name = NULL;
     /**
      * @var bool
      */
@@ -220,6 +222,27 @@ class Game
     public function setPlayer2Id($player2Id)
     {
         $this->player2Id = $player2Id;
+    }
+	
+	// names for players
+	public function getPlayer1Name()
+    {
+        return $this->player1Name;
+    }
+
+    public function setPlayer1Name($player1Name)
+    {
+        $this->player1Name = $player1Name;
+    }
+    
+    public function getPlayer2Name()
+    {
+        return $this->player2Name;
+    }
+
+    public function setPlayer2Name($player2Name)
+    {
+        $this->player2Name = $player2Name;
     }
 
     public function getIsBonus()

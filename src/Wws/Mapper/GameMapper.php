@@ -84,15 +84,16 @@ class GameMapper
     }
 	
 	/**
-     * Get details for a specific game to be displayed from the History page
+     * Get details for a specific game to be displayed from the History pa
      * 
      * @param int $id
      * @return type 
-     */
+     */ 
 	public function GetGameDetails($id)
 	{
-		$gameArr = $this->db->fetchAssoc('SELECT *,  game.id AS id FROM game, dictionary '
-                . 'WHERE game.word_id = dictionary.id', array((int)$id));
+		$sqlResult = $this->db->fetchAssoc('SELECT game.*, p1.username as P1username, p2.username as P2username FROM game, player p1, player p2 ' 			. 'WHERE game.id = :id AND  game.player1_id = p1.id AND game.player2_id = p2.id', array('id' => $id);
+		$game = new Game($sqlResult);
+		$game->setPlayer1Name($sqlResult['
 	}
 	
 	
