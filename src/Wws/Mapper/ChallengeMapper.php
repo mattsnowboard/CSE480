@@ -42,7 +42,7 @@ class ChallengeMapper
      */
     public function FindSentChallengesByUserId($id, $status)
     {
-        $challengeArr = $this->db->fetchAll('SELECT * FROM challenge, player WHERE challenger_id=:id AND recipient_id = player.id AND status = :status',
+        $challengeArr = $this->db->fetchAll('SELECT * FROM challenge WHERE challenger_id=:id AND status = :status',
                 array('id' => (int) $id, 'status' => $status));
 
         return $this->returnChallenges($challengeArr);
@@ -56,7 +56,7 @@ class ChallengeMapper
      */
     public function FindRecievedChallengesByUserId($id, $status)
     {
-        $challengeArr = $this->db->fetchAll('SELECT * FROM challenge, player WHERE challenger_id=player.id AND recipient_id = :id AND status = :status',
+        $challengeArr = $this->db->fetchAll('SELECT * FROM challenge WHERE recipient_id = :id AND status = :status',
                 array('id' => (int) $id, 'status' => $status));
 
         return $this->returnChallenges($challengeArr);
@@ -82,7 +82,7 @@ class ChallengeMapper
         $challenges = array();
         if (!is_null($sqlResult) && $sqlResult !== false && !empty($sqlResult)) {
             foreach ($sqlResult as $challenge) {
-                $challenges[] = $this->returnChallenge($challenge);
+                $challenges[] = new Challenge($challenge);
             }
         }
         return $challenges;
@@ -102,6 +102,24 @@ class ChallengeMapper
         
         $challenge->SetId($this->db->lastInsertId());
 
+        return $count == 1;
+
+    }
+    
+    public function addGame(\Wws\Model\Challenge $challenge, \Wws\Model\Game $game)
+    {
+        $count = $this->db->executeUpdate("UPDATE challenge "
+                . "SET game_id = :gid, status = 'accepted' "
+                . "WHERE id = :cid",
+            array(
+                'gid' => $game->getId(),
+                'cid' => $challenge->getId()
+            )
+        );
+        
+        $challenge->setGameId($game->getId());
+        $challenge->SetStatus('accepted');
+        
         return $count == 1;
 
     }

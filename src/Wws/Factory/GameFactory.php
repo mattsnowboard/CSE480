@@ -22,11 +22,18 @@ class GameFactory
      */
     protected $gameMapper;
     
+    /**
+     * @var Wws\Mapper\ChallengeMapper
+     */
+    protected $challengeMapper;
+    
     public function __construct(\Wws\Mapper\DictionaryMapper $dmap,
-         \Wws\Mapper\GameMapper $gmap)
+         \Wws\Mapper\GameMapper $gmap,
+        \Wws\Mapper\ChallengeMapper $cmap)
     {
         $this->dictionaryMapper = $dmap;
         $this->gameMapper = $gmap;
+        $this->challengeMapper = $cmap;
     }
     
     /**
@@ -56,7 +63,7 @@ class GameFactory
         return $game;
     }
 	
-	    /**
+    /**
      * Create a multi player game for 2 users and random word
      * This will also persist the Game in the database
      * 
@@ -76,11 +83,11 @@ class GameFactory
         $game->setTimestamp(time());
         $game->setPlayer1Id($challenge->getChallengerId());
 		$game->setPlayer2Id($challenge->getRecipientId());
-        /** @todo Query database for this */
         $game->setIsBonus(false);
         
         // Now persist in DB
         $this->gameMapper->CreateGame($game);
+        $this->challengeMapper->addGame($challenge, $game);
         
         return $game;
     }

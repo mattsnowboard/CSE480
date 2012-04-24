@@ -429,13 +429,47 @@ class GameControllerProvider implements ControllerProviderInterface
             }
             
             // show a page
-            $challengeArray = array_map(function(\Wws\Model\Challenge $c) {
-                return $c->toArray();
+            $challengeArray = array_map(function(\Wws\Model\Challenge $c) use($app){
+                $arr =  $c->toArray();
+                // hack to get accept link working
+                $arr['acceptLink'] = $app['url_generator']->generate('accept_challenge', array(
+                    'id' => $c->getId()
+                ));
+                return $arr;
             }, $receivedChallenges);
             return $app->json($challengeArray);
         })
         ->middleware($app['wws.auth.must_be_logged_in'])
         ->bind('my_challenges');
+        
+        /**
+         * @route '/accept-challenge/{id}'
+         * @name accept_challenge
+         * @pre User is logged in
+         * 
+         * Accept a challenge
+         */
+        $controllers->match('/accept-challenge/{id}', function(Application $app, $id) {
+            $challenge = $app['wws.mapper.challenge']->FindById($id);
+            
+            if (is_null($challenge)) {
+                throw new HttpException(404, 'We couldn\'t find that challenge!');
+            }
+            
+            // make sure this user is recipient
+            if ($challenge->GetRecipientId() != $app['wws.user']->getId()) {
+                throw new HttpException(403, 'That\'s not your challenge!');
+            }
+            
+            $game = $app['wws.factory.game']->CreateMultiPlayerGame($challenge);
+            
+            // redirect
+            return $app->redirect($app['url_generator']->generate('multi_player', array(
+                'id' => $game->getId()
+            )));
+        })
+        ->middleware($app['wws.auth.must_be_logged_in'])
+        ->bind('accept_challenge');
         
         return $controllers;
     }
