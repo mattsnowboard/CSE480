@@ -56,7 +56,7 @@ class ChallengeFactory
         $challenge->SetStatus('pending');
 
         // Now persist in DB
-        //$this->challengeMapper->
+        $this->challengeMapper->createChallenge($challenge);
         
         return $challenge;
     }
