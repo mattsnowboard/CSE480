@@ -1,13 +1,76 @@
 {% extends "base-template.html.twig" %}
 
+{% block stylesheets %}
+	{{ parent() }}
+	 <link rel="stylesheet" type="text/css" href="{{baseURL}}css/game-style.css" />
+{% endblock %}
+
 {% block main %}
+
+	 {% if app.session.hasFlash('gamemsg') %}
+		<div id="flash-game-msg">
+		{{ app.session.flash('gamemsg') }}
+		</div>
+    {% endif %}
+	
+	<div id="game-nav-buttons"> 
+		{% if game.isOver == false %}
+    		<a href="{{ path('exit_multi_player', {'id': game.id, } ) }}" class="btn-danger btn" title="Forfeit">Forfeit</a>
+	
+
+		{% else %}
+			<a href="{{ path('welcome') }}" class="return-home-button btn" >Return to Home Page</a>
+		{% endif %}
+	</div>
 
 	<section id="player1-stats">
 	
 	</section>
 	
 	<section id="game-display">
+		<div id="game-state">
+            {% for letter in game.lettersArray %}
+            {% if letter !='_' %}
+            <div class="letter">
+            {% else %}
+            <div class="letter blank">
+            {% endif %}
+                {{ letter }}
+            </div>
+            {% endfor %}
+        </div>
+		<div id="definition"><p>Definition: {{game.dictionary.definition}} </p></div>
+		<div id="play">
+			<form id="guess-form" method="post" action="{{ path('guess_multi_player', {'id': game.id} ) }}">
+				{% if game.IsOver == false %}
+					{% if (game.guesses | length) < 10 and player.IsTurn() == player.id %}
+						<div id="char-guess">Guess a
+						character: <input type="text"
+						name="letter" size="3" maxlength="1"
+						/></div>
+					
+						<div id="word-guess">Guess a word:
+						<input type="text" name="word"
+						size="40" /></div>
+					{% endif %}
 	
+					{% if (game.guesses | length) < 10 %}
+					<input type="submit" value="Submit" />
+					{% endif %}
+				{% endif %}
+			</form>
+			<div id="guessed-chars">
+				<p>Characters guessed:
+					{% for guess in game.guesses %}
+						{{guess.letter}}
+						{% else %}
+							none
+					{% endfor %}
+				</p>
+			</div>
+			<div id="p1-points">Player 1 points: {{ game.score1 }}</div>
+			<div id="p1-points">Player 2 points: {{ game.score1 }}</div>
+		</div>
 	</section>
 	
 	<section id="player2-stats">
