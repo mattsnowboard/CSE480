@@ -413,6 +413,30 @@ class GameControllerProvider implements ControllerProviderInterface
         ->middleware($app['wws.auth.must_be_logged_in'])
         ->bind('challenge_list');
         
+        /**
+         * @route '/my-challenges'
+         * @name my_challenges
+         * @pre User is logged in
+         * 
+         * Returns JSON with all of the player's challenges so we can dynamically update
+         * the welcome page
+         */
+        $controllers->get('/my-challenges', function(Application $app) {
+            $receivedChallenges = $app['wws.mapper.challenge']->FindRecievedChallengesByUserId($app['wws.user']->GetID(), 'pending');
+            //$receivedChallenges = array(); // for testing
+            if (empty($receivedChallenges)) {
+                return $app->json('No challenges', 404);
+            }
+            
+            // show a page
+            $challengeArray = array_map(function(\Wws\Model\Challenge $c) {
+                return $c->toArray();
+            }, $receivedChallenges);
+            return $app->json($challengeArray);
+        })
+        ->middleware($app['wws.auth.must_be_logged_in'])
+        ->bind('my_challenges');
+        
         return $controllers;
     }
 }

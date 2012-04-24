@@ -75,4 +75,13 @@ class Challenge
         $this->recipientId = (int) $id;
     }
 
+    public function toArray() 
+    {
+        $properties = get_object_vars($this);
+        $array = array();
+        foreach ($properties as $name => $value) {
+            $array[$name] = $value;
+        }
+        return $array;
+    }
 }
