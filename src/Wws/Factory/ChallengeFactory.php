@@ -40,7 +40,7 @@ class ChallengeFactory
      */
     public function CreateChallenge(User $user, $recipient)
     {
-        $userRecipient = $this->userMapperr->FindById($recipient);
+        $userRecipient = $this->userMapper->FindById($recipient);
         // check that user exists and is active/not in game
         if (is_null($userRecipient)) {
             // user does not exist

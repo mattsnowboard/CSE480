@@ -97,7 +97,18 @@ class UserMapper
         }
         return null;
     }
-    
+
+    protected function returnUsers($sqlResult)
+    {
+        $users = array();
+        if (!is_null($sqlResult) && $sqlResult !== false && !empty($sqlResult)) {
+            foreach ($sqlResult as $user) {
+                $users[] = new User($user);
+            }
+        }
+        return $users;
+    }
+
     /**
      * Creates a User and adds them to the database
      * 
@@ -207,5 +218,23 @@ class UserMapper
         }
         return $leaderResults;
 		
+	}
+    
+    /**
+     * Get all players online but not in game (eligible for a challenge
+     * @param integer $activeTime time to consider active
+     * @param integer $exclude ID to exclude (current user)
+     * @return array of Users
+     */
+	public function GetChallengeEligible($activeTime, $exclude)
+	{
+		$sqlResult = $this->db->fetchAll('SELECT * FROM player '
+                . 'WHERE NOW() - last_active < :time AND in_game = 0 AND id <> :exclude '
+                . 'ORDER BY total_score DESC',
+            array(
+                'time' => (int)$activeTime,
+                'exclude' => (int)$exclude
+            ));
+		return $this->returnUsers($sqlResult);
 	}
 }

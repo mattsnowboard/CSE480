@@ -393,6 +393,26 @@ class GameControllerProvider implements ControllerProviderInterface
         ->middleware($app['wws.auth.must_be_logged_in'])
         ->bind('send_challenge');
         
+        /**
+         * @route '/challenge-list'
+         * @name challenge_list
+         * @pre User is logged in
+         * 
+         * Get links to challenge players
+         */
+        $controllers->match('/challenge-list', function(Application $app) {
+            $users = $app['wws.mapper.user']->GetChallengeEligible(
+                    \Wws\Model\User::GetActiveTimeConstant(),
+                    $app['wws.user']->getId());
+            
+            // show a page 
+            return $app['twig']->render('challenge-list-template.html.twig', array(
+                'users' => $users
+            ));
+        })
+        ->middleware($app['wws.auth.must_be_logged_in'])
+        ->bind('challenge_list');
+        
         return $controllers;
     }
 }
