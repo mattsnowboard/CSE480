@@ -102,7 +102,7 @@ class GameControllerProvider implements ControllerProviderInterface
          * Creates a multi player game
          */
         $controllers->get('/create/multi-player', function(Application $app) {
-            $game = $app['wws.factory.game']->CreateMultiPlayerGame($app['wws.user']);
+            $game = $app['wws.factory.game']->CreateMultiPlayerGame($app['wws.challenge']);
             
             /** @todo Check for failure (null game or exception?) **/
             

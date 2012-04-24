@@ -3,6 +3,7 @@
 namespace Wws\Factory;
 
 use Wws\Model\Game;
+use Wws\Model\Challenge;
 
 /**
  * Game Factory can be used to create a new game with a random word
@@ -63,7 +64,7 @@ class GameFactory
 	 * @param \Wws\Model\User $user2
      * @return \Wws\Model\Game 
      */
-    public function CreateSinglePlayerGame(\Wws\Model\User $user1, \Wws\Model\User $user2)
+    public function CreateMultiPlayerGame(\Wws\Model\Challenge $challenge)
     {
         // get the word to start
         $wordStart = $this->CreateRandomWordStart();
@@ -73,8 +74,8 @@ class GameFactory
         $game->setWordStartState($wordStart['start']);
         $game->setNumPlayers(2);
         $game->setTimestamp(time());
-        $game->setPlayer1Id($user1->getId());
-		$game->setPlayer2Id($user2->getId());
+        $game->setPlayer1Id($challenge->getChallengerId());
+		$game->setPlayer2Id($challenge->getRecipientId());
         /** @todo Query database for this */
         $game->setIsBonus(false);
         
