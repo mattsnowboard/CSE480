@@ -19,7 +19,7 @@ class FactoryServiceProvider implements ServiceProviderInterface
          * @var closure 
          */
         $app['wws.factory.game'] = $app->share(function($app) {
-            return new \Wws\Factory\GameFactory($app['wws.mapper.dictionary'], $app['wws.mapper.game']);
+            return new \Wws\Factory\GameFactory($app['wws.mapper.dictionary'], $app['wws.mapper.game'], $app['wws.mapper.challenge']);
         });
         
         /**
