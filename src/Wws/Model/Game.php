@@ -337,7 +337,7 @@ class Game
      * 
      * @param bool $isExit True if the player chose to quit and they will lose points
      */
-    public function endGame($isExit = false)
+    public function endGame($isExit = false, User $user = NULL)
     {
         if ($this->numPlayers == 1) {
             if ($isExit) {
@@ -352,8 +352,15 @@ class Game
                 // update state to lose
                 $this->winnerFlag = 'lose';
             }
-        } else {
-            /** @todo End multi-player game */
+        }
+		else {
+            if ($isExit) {
+                $this->score1 -= 1;
+            }
+            if ($this->isGuessed()) {
+                // update state to Player 1 wins
+                $this->winnerFlag = ($this->player1Id == $user->getId()) ? '1' : '2';
+            } 
         }
     }
     

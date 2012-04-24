@@ -96,7 +96,7 @@ class GamePlay
             if ($game->isGuessed()) {
 
                 // they guessed it, end the game
-                $game->endGame();
+                $game->endGame(false, $user);
                 $game->isOver();
                 // update scores
                 $this->userMapper->UpdateScore($game->getPlayer1Id(), $game->getScore1());
@@ -168,6 +168,16 @@ class GamePlay
                     $this->userMapper->UpdateScore($game->getPlayer2Id(), $game->getScore2());
                 }
             }
+			if ($game->getNumPlayers() == 2 || $game->isGuessed()) {
+
+                // they guessed it, end the game
+                $game->endGame(false,$user);
+                // update scores
+                $this->userMapper->UpdateScore($game->getPlayer1Id(), $game->getScore1());
+                if ($game->getNumPlayers() > 1 && !is_null($game->getPlayer2Id())) {
+                    $this->userMapper->UpdateScore($game->getPlayer2Id(), $game->getScore2());
+                }
+            }
 
             $this->gameMapper->UpdateGame($game);
             
@@ -217,7 +227,7 @@ class GamePlay
 			if (is_null($guesses)) {
                 throw new \Exception('The guesses were not retrieved from the database');
             }
-            return count($guesses) < 10;
+            return count($guesses) < 20;
 		}
         return false;
     }
@@ -251,6 +261,12 @@ class GamePlay
         if ($game->getNumPlayers() == 1 && is_null($game->getPlayer2Id())) {
             $game->endGame(true);
             $this->userMapper->UpdateScore($game->getPlayer1Id(), $game->getScore1());
+            $this->gameMapper->UpdateGame($game);
+        }
+		else {
+            $game->endGame(true);
+            $this->userMapper->UpdateScore($game->getPlayer1Id(), $game->getScore1());
+			$this->userMapper->UpdateScore($game->getPlayer2Id(), $game->getScore2());
             $this->gameMapper->UpdateGame($game);
         }
     }
