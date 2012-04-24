@@ -1,0 +1,26 @@
+{% extends "base-template.html.twig" %}
+
+{% block stylesheets %}
+	{{ parent() }}
+{% endblock %}
+
+
+{% block main %}
+
+<h2>Choose your opponent</h2>
+
+<ul>
+{% for u in users %}
+    <li>
+        <a href="{{ path('send_challenge', {'recipient': u.id}) }}" class="send-challenge-button btn btn-large" title="Challenge {{ u.username }}">
+            Challenge {{ u.username }} (Total score: {{ u.totalScore }})
+        </a>
+    </li>
+{% else %}
+    <li>There are no other users online (not currently playing a game)</li>
+{% endfor %}
+</ul>
+
+{% endblock %}
+
+{% block js_pingaction %}action: 'sentchallenge'{% endblock %}

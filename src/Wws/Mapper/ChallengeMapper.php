@@ -74,4 +74,21 @@ class ChallengeMapper
         return $challenges;
     }
 
+    public function createChallenge(\Wws\Model\Challenge $challenge)
+    {
+        $count = $this->db->executeUpdate("INSERT INTO challenge "
+                . "(status, challenger_id, recipient_id) "
+                . "VALUES (:status, :challenger, :recipient)",
+            array(
+                'status' => $challenge->GetStatus(),
+                'challenger' => $challenge->GetChallengerId(),
+                'recipient' => $challenge->GetRecipientId()
+            )
+        );
+        
+        $challenge->SetId($this->db->lastInsertId());
+
+        return $count == 1;
+
+    }
 }

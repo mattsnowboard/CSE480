@@ -196,7 +196,7 @@ class GamePlay
         $turn = $game->getPlayerTurn();
         if ($turn == 1 && $game->getPlayer1Id() == $user->GetId()) {
             return true;
-        } else if ($turn == 2 && $game->getPlayer1Id() == $user->GetId()) {
+        } else if ($turn == 2 && $game->getPlayer2Id() == $user->GetId()) {
             return true;
         }
         return false;
@@ -217,7 +217,7 @@ class GamePlay
 			if (is_null($guesses)) {
                 throw new \Exception('The guesses were not retrieved from the database');
             }
-            return count($guesses) < 3;
+            return count($guesses) < 10;
 		}
         return false;
     }
@@ -232,7 +232,7 @@ class GamePlay
             return count($guesses) < 4;
         }
 		else if ($game->getNumPlayers() == 2) {
-			return count($guesses) < 10;
+			return count($guesses) < 20;
 		}
         return false;
     }

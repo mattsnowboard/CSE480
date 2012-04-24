@@ -46,7 +46,7 @@ class User
     /**
      * @var integer $activeTime The time to consider users active
      */
-    private $activeTime = 20;
+    private static $activeTime = 60;
     
     /**
      * @var int $totalScore
@@ -288,7 +288,7 @@ class User
     public function getIsActive()
     {
 		$dateTime = new \DateTime($this->lastActive);
-        return \time() - $dateTime->getTimestamp() < $this->activeTime;
+        return \time() - $dateTime->getTimestamp() < self::$activeTime;
     }
     
     public function getIsActiveNotInGame()
@@ -299,5 +299,10 @@ class User
     public function getNotInGame()
     {
         return $this->getIsActive() && $this->getInGame();
+    }
+    
+    public static function GetActiveTimeConstant()
+    {
+        return self::$activeTime;
     }
 }
