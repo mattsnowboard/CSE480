@@ -74,8 +74,18 @@ class Challenge
     {
         $this->recipientId = (int) $id;
     }
+    
+    public function getGameId()
+    {
+        return $this->gameId;
+    }
 
-    public function toArray() 
+    public function setGameId($gameId)
+    {
+        $this->gameId = $gameId;
+    }
+
+        public function toArray() 
     {
         $properties = get_object_vars($this);
         $array = array();

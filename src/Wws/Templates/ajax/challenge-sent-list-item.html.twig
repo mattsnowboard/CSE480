@@ -1,0 +1,8 @@
+<li id="to-{{id}}">
+    Challenge to {{id}}
+    {% if game %}
+    <a href="#" class="start-1player-game-button btn btn-small">Go to game</a>
+    {% else %}
+    {{ status }}
+    {% endif %}
+</li>

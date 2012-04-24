@@ -40,6 +40,20 @@ class ChallengeMapper
      * @param int $id
      * @return \Wws\Model\Challenge|null
      */
+    public function FindSentChallengesByUserId($id, $status)
+    {
+        $challengeArr = $this->db->fetchAll('SELECT * FROM challenge, player WHERE challenger_id=:id AND recipient_id = player.id AND status = :status',
+                array('id' => (int) $id, 'status' => $status));
+
+        return $this->returnChallenges($challengeArr);
+    }
+    
+    /**
+     * Find Challenges sent to userID
+     * 
+     * @param int $id
+     * @return \Wws\Model\Challenge|null
+     */
     public function FindRecievedChallengesByUserId($id, $status)
     {
         $challengeArr = $this->db->fetchAll('SELECT * FROM challenge, player WHERE challenger_id=player.id AND recipient_id = :id AND status = :status',

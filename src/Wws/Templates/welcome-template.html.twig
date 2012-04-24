@@ -18,16 +18,23 @@
 		<h2>Challenges</h2>
 		<ul id="challenge-list">
 			{% for challenge in recievedChallenges %}
-				<li id="from-{{challenge.challengerId}}">
-                    Challenge from {{challenge.challengerId}}
-                    <a href="#" class="start-1player-game-button btn btn-small">Accept</a>
-                    <a href="#" class="start-1player-game-button btn btn-small">Deny</a>
-                </li>
-				{% else %}
-					<li> No challenges </li>
+				{% include 'ajax/challenge-rcv-list-item.html.twig' with { 'id' : challenge.challengerId }%}
+            {% else %}
+                <li> No challenges </li>
 			{% endfor %}
 	</section>
-	
+    
+    <section id="sent-challenges">
+		<h2>Sent Challenges</h2>
+		<ul id="sent-challenge-list">
+			{% for challenge in sentChallenges %}
+				{% include 'ajax/challenge-sent-list-item.html.twig' with
+                    { 'id' : challenge.recipientId, 'game' : challenge.gameId, 'status' : challenge.status }%}
+            {% else %}
+                <li> No challenges </li>
+			{% endfor %}
+	</section>
+
 	<section id="gamelist">
 		<h2>Games in Progress</h2>
 		<ul>

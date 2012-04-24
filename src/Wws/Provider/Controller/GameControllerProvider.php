@@ -59,8 +59,8 @@ class GameControllerProvider implements ControllerProviderInterface
             try {
                 $game = $app['wws.mapper.game']->FindById($id, $app['wws.user']);
 
-                //$guesses = $app['wws.mapper.guess']->FindByGame($game->getId());
-                //$game->setGuesses($guesses);
+                $guesses = $app['wws.mapper.guess']->FindByGame($game->getId());
+                $game->setGuesses($guesses);
             } catch (\Wws\Exception\NotAuthorizedException $e) {
                 throw new HttpException(403, $e->getMessage());
             }
@@ -251,8 +251,8 @@ class GameControllerProvider implements ControllerProviderInterface
                 $app['session']->setFlash('gamemsg', 'The word "' . $word . '"');
 
                 if (!$app['wws.gameplay']->userCanGuessWord($game, $app['wws.user'])) {
-                    // trying to make a 4th letter guess
-                    $app['session']->setFlash('gamemsg', 'You cannot guess the letter 4 times');
+                    // trying to make a 20th letter guess
+                    $app['session']->setFlash('gamemsg', 'You cannot guess anymore letters');
                 } else {
                     $correct = $app['wws.gameplay']->makeWordGuess($game, $app['wws.user'], $word);
                     if ($correct) {
@@ -366,7 +366,7 @@ class GameControllerProvider implements ControllerProviderInterface
                 $app['monolog']->addDebug('The user quit game "' . $game->getId() . '", final score is: ' . $game->getScore1());
             }
             
-            return $app->redirect($app['url_generator']->generate('single_player', array(
+            return $app->redirect($app['url_generator']->generate('multi_player', array(
                 'id' => $game->getId()
             )));
         })
