@@ -75,18 +75,26 @@ class GameMapper
 		}
 		else
 		{
-			if ((int)$numPlayers == 1)
-			{
-				// returns all single-player games involving given userID
-			}
-			else
-			{
-				// returns all multi-player games involving given userID
-			}
+			// returns all finished games associated with a given userID
+			$gameArr = $this->db->fetchAll('SELECT *, game.id AS id FROM game, dictionary WHERE game.word_id = dictionary.id '
+				. 'AND winner_flag <> "playing" and (player1_id = :uid OR player2_id = :uid) ORDER BY timestamp DESC', array( 'uid' => $uid));
 		}
 		
         return $this->returnGames($gameArr);
     }
+	
+	/**
+     * Get details for a specific game to be displayed from the History page
+     * 
+     * @param int $id
+     * @return type 
+     */
+	public function GetGameDetails($id)
+	{
+		$gameArr = $this->db->fetchAssoc('SELECT *,  game.id AS id FROM game, dictionary '
+                . 'WHERE game.word_id = dictionary.id', array((int)$id));
+	}
+	
 	
 	/**
      * Return a Game object for an associative array result set

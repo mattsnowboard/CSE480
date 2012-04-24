@@ -1,0 +1,17 @@
+{% extends "base-template.html.twig" %}
+
+{% block main %}
+	
+    <section id="history">
+        <h1>Player History</h1>
+            {% for game in games %}
+			<ul>
+			<li>Game began: {{game.timestamp}}</li>
+			<li>{{game.numPlayers}}-player game {% if game.numPlayers == 2 %} {{game.player1Id}} vs {{game.player2Id}} {% endif %}
+			<a href="{{path("history_details", {"id":game.id})}}">View Details</a>
+			</ul>
+			{% endfor %}
+        </ul>
+    </section>
+
+{% endblock %}

@@ -154,6 +154,45 @@ class DefaultControllerProvider implements ControllerProviderInterface
         })
         ->middleware($app['wws.auth.must_be_logged_in'])
         ->bind('leaderboard');
+		
+		/**
+         * @route '/history'
+         * @name history
+         * @pre User is logged in
+         * 
+         * This page is shown when the user clicks the History link
+         */
+        $controllers->get('/history', function(Application $app) {
+            
+            $games = $app['wws.mapper.game']->FindGamesByUserID($app['wws.user']->GetID(), 0, 'any');
+
+            return $app['twig']->render('history-template.html.twig', array(
+                'games' => $games
+            ));
+        })
+        ->middleware($app['wws.auth.must_be_logged_in'])
+        ->bind('history');
+        
+		/**
+         * @route '/history-details/{id}'
+         * @name history-details
+         * @pre User is logged in
+         * 
+         * This page is shown when the user clicks the "View Details" link from History page
+         */
+        $controllers->get('/history-details/{id}', function(Application $app, $id) {
+            
+            $game = $app['wws.mapper.game']->FindByID($id);
+			
+			$guesses = $app['wws.mapper.guess']->FindByGame($id);
+
+            return $app['twig']->render('history-details-template.html.twig', array(
+                'game' => $game,
+				'guesses' => $guesses
+            ));
+        })
+        ->middleware($app['wws.auth.must_be_logged_in'])
+        ->bind('history_details');
         
 		
 		 /**
