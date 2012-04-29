@@ -200,6 +200,23 @@ class DefaultControllerProvider implements ControllerProviderInterface
         ->middleware($app['wws.auth.must_be_logged_in'])
         ->bind('history_details');
         
+		/**
+         * @route '/view-players'
+         * @name view-players
+         * @pre User is logged in
+         * 
+         * This page is shown when the user clicks the Leaderboard link
+         */
+        $controllers->get('/view_players', function(Application $app) {
+            
+            $players = $app['wws.mapper.user']->GetLeaderboard();
+
+            return $app['twig']->render('view-players-template.html.twig', array(
+                'players' => $players
+            ));
+        })
+        ->middleware($app['wws.auth.must_be_logged_in'])
+        ->bind('view_players');
 		
 		 /**
          * @route '/edit_profile'

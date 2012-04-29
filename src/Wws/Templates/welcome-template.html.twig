@@ -66,7 +66,13 @@
 	<section id="history">
 		<h3><a href="{{path("history")}}">Player History</a></h3>
 	</section>
-
+	
+	{% if user.getIsAdmin() %}
+		<section id="players">
+			<h3><a href="{{path("view_players")}}">View Players</a></h3>
+		</section>
+	{% endif %}
+	
 {% endblock %}
 
 {% block scripts %}
