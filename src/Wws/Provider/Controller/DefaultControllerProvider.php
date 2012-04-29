@@ -209,7 +209,7 @@ class DefaultControllerProvider implements ControllerProviderInterface
          */
         $controllers->get('/view_players', function(Application $app) {
             
-            $players = $app['wws.mapper.user']->GetLeaderboard();
+            $players = $app['wws.mapper.user']->GetAllPlayers();
 
             return $app['twig']->render('view-players-template.html.twig', array(
                 'players' => $players
