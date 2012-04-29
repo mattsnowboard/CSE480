@@ -36,6 +36,17 @@
 			{% endfor %}
 	</section>
 
+    <section id="accepted-challenges">
+		<h2>Accepted Challenges</h2>
+		<ul id="accepted-challenge-list">
+			{% for challenge in acceptedChallenges %}
+				{% include 'ajax/challenge-sent-list-item.html.twig' with
+                    { 'id' : challenge.recipientId, 'game' : challenge.gameId, 'status' : challenge.status }%}
+            {% else %}
+                <li> No challenges </li>
+			{% endfor %}
+	</section>
+
 	<section id="gamelist">
 		<h2>Games in Progress</h2>
 		<ul>
@@ -84,7 +95,8 @@
                                     + '">Challenge from ' + data[challenge].challengerId
                                     + '<a href="' + data[challenge].acceptLink
                                     + '" class="start-1player-game-button btn btn-small">Accept</a>'
-                                    + '<a href="#" class="start-1player-game-button btn btn-small">Deny</a></li>'
+                                    + '<a href="' + data[challenge].declineLink
+                                    + '" class="start-1player-game-button btn btn-small">Deny</a></li>'
                                 );
                                 $('#challenge-list').append(newLi);
                                 if ($.inArray(data[challenge].challengerId, newchal) != -1) {
