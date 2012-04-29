@@ -1,0 +1,8 @@
+<form action="{{ path('edit_admin_profile') }}" method="post" {{ form_enctype(form) }}>
+
+	<p>Username: 	{{ user.username }} </p>
+
+    {{ form_widget(form) }}
+	
+    <input type="submit" class="login-button" value="Save changes" />
+</form>

@@ -23,7 +23,11 @@
             {% if user %}
 			<div class="left">Logged in as: {{ user.username }}</div>
             <ul id="infobar-nav">
-                <li><a href="{{ path('edit_profile') }}">Edit Profile</a></li>
+				{% if user.getIsAdmin() %}
+					<li><a href="{{ path('edit_admin_profile') }}">Edit Profile</a></li>
+				{% else %}
+                	<li><a href="{{ path('edit_profile') }}">Edit Profile</a></li>
+				{% endif %}
                 <li><a href="{{ path('logout') }}">Logout</a></li>
             </ul>
             {% else %}
