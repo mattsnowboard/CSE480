@@ -36,6 +36,7 @@ class Challenge
             $this->status = $c['status'];
             $this->challengerId = $c['challenger_id'];
             $this->recipientId = $c['recipient_id'];
+            $this->gameId = $c['game_id'];
         }
     }
 

@@ -121,6 +121,20 @@ class ChallengeMapper
         $challenge->SetStatus('accepted');
         
         return $count == 1;
-
+    }
+    
+    public function declineChallenge(\Wws\Model\Challenge $challenge)
+    {
+        $count = $this->db->executeUpdate("UPDATE challenge "
+                . "SET status = 'declined' "
+                . "WHERE id = :cid",
+            array(
+                'cid' => $challenge->getId()
+            )
+        );
+        
+        $challenge->SetStatus('declined');
+        
+        return $count == 1;
     }
 }

@@ -129,11 +129,15 @@ class DefaultControllerProvider implements ControllerProviderInterface
 
             $recievedChallenges = $app['wws.mapper.challenge']->FindRecievedChallengesByUserId($app['wws.user']->GetID(), 'pending');
             $sentChallenges = $app['wws.mapper.challenge']->FindSentChallengesByUserId($app['wws.user']->GetID(), 'pending');
+            $acceptedChallenges = $app['wws.mapper.challenge']->FindSentChallengesByUserId($app['wws.user']->GetID(), 'accepted');
+            //$declinedChallenges = $app['wws.mapper.challenge']->FindSentChallengesByUserId($app['wws.user']->GetID(), 'declined');
+
 
             return $app['twig']->render('welcome-template.html.twig', array(
                 'games' => $games,
                 'recievedChallenges' => $recievedChallenges,
-                'sentChallenges' => $sentChallenges
+                'sentChallenges' => $sentChallenges,
+                'acceptedChallenges' => $acceptedChallenges
             ));
         })
         ->middleware($app['wws.auth.must_be_logged_in'])

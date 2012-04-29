@@ -385,10 +385,13 @@ class GameControllerProvider implements ControllerProviderInterface
             
             /** @todo Check for failure (null game or exception?) **/
             
+            // redirect
+            return $app->redirect($app['url_generator']->generate('welcome'));
+            
             // show a page 
-            return $app['twig']->render('challenge-sent-template.html.twig', array(
+            /*return $app['twig']->render('challenge-sent-template.html.twig', array(
                 'challenge' => $challenge
-            ));
+            ));*/
         })
         ->middleware($app['wws.auth.must_be_logged_in'])
         ->bind('send_challenge');
@@ -419,7 +422,7 @@ class GameControllerProvider implements ControllerProviderInterface
          * @pre User is logged in
          * 
          * Returns JSON with all of the player's challenges so we can dynamically update
-         * the welcome page
+         * the welcome page (ajax)
          */
         $controllers->get('/my-challenges', function(Application $app) {
             $receivedChallenges = $app['wws.mapper.challenge']->FindRecievedChallengesByUserId($app['wws.user']->GetID(), 'pending');
@@ -433,6 +436,44 @@ class GameControllerProvider implements ControllerProviderInterface
                 $arr =  $c->toArray();
                 // hack to get accept link working
                 $arr['acceptLink'] = $app['url_generator']->generate('accept_challenge', array(
+                    'id' => $c->getId()
+                ));
+                $arr['declineLink'] = $app['url_generator']->generate('decline_challenge', array(
+                    'id' => $c->getId()
+                ));
+                return $arr;
+            }, $receivedChallenges);
+            return $app->json($challengeArray);
+        })
+        ->middleware($app['wws.auth.must_be_logged_in'])
+        ->bind('my_challenges');
+        
+        /**
+         * @route '/sent-challenges'
+         * @name sent_challenges
+         * @pre User is logged in
+         * 
+         * Returns JSON with all of the player's SENT challenges so we can dynamically update
+         * the welcome page (ajax)
+         */
+        $controllers->get('/sent-challenges', function(Application $app) {
+            $sentChallenges = $app['wws.mapper.challenge']->FindSentChallengesByUserId($app['wws.user']->GetID(), 'pending');
+            $acceptedChallenges = $app['wws.mapper.challenge']->FindSentChallengesByUserId($app['wws.user']->GetID(), 'accepted');
+            $declinedChallenges = $app['wws.mapper.challenge']->FindSentChallengesByUserId($app['wws.user']->GetID(), 'declined');
+            
+            //$receivedChallenges = array(); // for testing
+            if (empty($receivedChallenges)) {
+                return $app->json('No challenges', 404);
+            }
+            
+            // show a page
+            $challengeArray = array_map(function(\Wws\Model\Challenge $c) use($app){
+                $arr =  $c->toArray();
+                // hack to get accept link working
+                $arr['acceptLink'] = $app['url_generator']->generate('accept_challenge', array(
+                    'id' => $c->getId()
+                ));
+                $arr['declineLink'] = $app['url_generator']->generate('decline_challenge', array(
                     'id' => $c->getId()
                 ));
                 return $arr;
@@ -470,6 +511,34 @@ class GameControllerProvider implements ControllerProviderInterface
         })
         ->middleware($app['wws.auth.must_be_logged_in'])
         ->bind('accept_challenge');
+
+        /**
+         * @route '/decline-challenge/{id}'
+         * @name decline_challenge
+         * @pre User is logged in
+         * 
+         * Decline a challenge
+         */
+        $controllers->match('/decline-challenge/{id}', function(Application $app, $id) {
+            $challenge = $app['wws.mapper.challenge']->FindById($id);
+            
+            if (is_null($challenge)) {
+                throw new HttpException(404, 'We couldn\'t find that challenge!');
+            }
+            
+            // make sure this user is recipient
+            if ($challenge->GetRecipientId() != $app['wws.user']->getId()) {
+                throw new HttpException(403, 'That\'s not your challenge!');
+            }
+            
+            $app['wws.mapper.challenge']->declineChallenge($challenge);
+            
+            // redirect
+            return $app->redirect($app['url_generator']->generate('welcome'));
+        })
+        ->middleware($app['wws.auth.must_be_logged_in'])
+        ->bind('decline_challenge');
+
         
         return $controllers;
     }
