@@ -231,7 +231,43 @@ class DefaultControllerProvider implements ControllerProviderInterface
             ));
         })
         ->bind('edit_profile');
+		
+		 /**
+         * @route '/edit_admin_profile'
+         * @name edit_admin_profile
+         * 
+         * This page allows the admin to edit their profile information, it displays the edit profile forms
+         */
+        $controllers->match('/edit_admin_profile', function(Application $app) {
+            $editForm = $app['form.factory']->create(new \Wws\Form\EditAdminProfileType());
+            
+            $editForm->setData($app['wws.user']);
+            
+            if ('POST' === $app['request']->getMethod()) {
+                $editForm->bindRequest($app['request']);
+                //Register
+                if ($editForm->isValid()) {
+                    $data = $editForm->getData();
+                    // validate and optionally redirect
+                    try {
+                        $success = $app['wws.auth.user_provider']->UpdateUserProfile($data);
+                        if (!$success) {
+                            $app['session']->setFlash('edit', 'Error message goes here.');
+                        }
+                    } catch (Exception $e) {
+                        // password is too long?
+                        $app['session']->setFlash('edit', 'FAIL');
+                    }
+                }
+            }
+            
+            return $app['twig']->render('edit-admin-profile-template.html.twig', array(
+                'editform' => $editForm->createView()
+            ));
+        })
+        ->bind('edit_admin_profile');
 
+		
         /**
          * @route '/logout'
          * @name logout
