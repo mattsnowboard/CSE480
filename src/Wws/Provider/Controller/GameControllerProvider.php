@@ -461,27 +461,26 @@ class GameControllerProvider implements ControllerProviderInterface
             $acceptedChallenges = $app['wws.mapper.challenge']->FindSentChallengesByUserId($app['wws.user']->GetID(), 'accepted');
             $declinedChallenges = $app['wws.mapper.challenge']->FindSentChallengesByUserId($app['wws.user']->GetID(), 'declined');
             
-            //$receivedChallenges = array(); // for testing
-            if (empty($receivedChallenges)) {
-                return $app->json('No challenges', 404);
-            }
+            $jsonResults = array();
             
-            // show a page
-            $challengeArray = array_map(function(\Wws\Model\Challenge $c) use($app){
-                $arr =  $c->toArray();
-                // hack to get accept link working
-                $arr['acceptLink'] = $app['url_generator']->generate('accept_challenge', array(
-                    'id' => $c->getId()
-                ));
-                $arr['declineLink'] = $app['url_generator']->generate('decline_challenge', array(
-                    'id' => $c->getId()
+            $jsonResults['pending'] = array_map(function(\Wws\Model\Challenge $c) use($app){
+                return $c->toArray();
+            }, $sentChallenges);
+            $jsonResults['declined'] = array_map(function(\Wws\Model\Challenge $c) use($app){
+                return $c->toArray();
+            }, $declinedChallenges);
+            $jsonResults['accepted'] = array_map(function(\Wws\Model\Challenge $c) use($app){
+                $arr = $c->toArray();
+                $arr['gameLink'] = $app['url_generator']->generate('multi_player', array(
+                    'id' => $c->getGameId()
                 ));
                 return $arr;
-            }, $receivedChallenges);
-            return $app->json($challengeArray);
+            }, $acceptedChallenges);
+                        
+            return $app->json($jsonResults);
         })
         ->middleware($app['wws.auth.must_be_logged_in'])
-        ->bind('my_challenges');
+        ->bind('sent_challenges');
         
         /**
          * @route '/accept-challenge/{id}'
