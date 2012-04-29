@@ -283,6 +283,7 @@ class GameControllerProvider implements ControllerProviderInterface
             
             $app['monolog']->addDebug('After guessing the Game score is: ' . $game->getScore1() . ' to ' . $game->getScore2());
             
+            //return new Response('no redirect');
             return $app->redirect($app['url_generator']->generate('multi_player', array(
                 'id' => $game->getId()
             )));
@@ -556,7 +557,7 @@ class GameControllerProvider implements ControllerProviderInterface
                 throw new HttpException(403, $e->getMessage());
             }
             
-            if ($app['wws.gameplay']->isUserTurn($game, $app['wws.user'])) {
+            if ($app['wws.gameplay']->isUserTurn($game, $app['wws.user']) || $game->isOver()) {
                 return new Response('YES');
             } else {
                 return new Response('NO');

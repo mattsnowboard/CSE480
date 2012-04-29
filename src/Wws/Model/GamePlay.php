@@ -215,18 +215,14 @@ class GamePlay
     
     public function userCanGuessLetter(Game $game, User $user)
     {
+        $guesses = $game->getGuesses();
+        if (is_null($guesses)) {
+            throw new \Exception('The guesses were not retrieved from the database');
+        }
         if ($game->getNumPlayers() == 1) {
-            $guesses = $game->getGuesses();
-            if (is_null($guesses)) {
-                throw new \Exception('The guesses were not retrieved from the database');
-            }
             return count($guesses) < 3;
         }
 		else {
-			$guesses = $game->getGuesses();
-			if (is_null($guesses)) {
-                throw new \Exception('The guesses were not retrieved from the database');
-            }
             return count($guesses) < 20;
 		}
         return false;
@@ -234,11 +230,11 @@ class GamePlay
 
     public function userCanGuessWord(Game $game, User $user)
     {
+        $guesses = $game->getGuesses();
+        if (is_null($guesses)) {
+            throw new \Exception('The guesses were not retrieved from the database');
+        }
         if ($game->getNumPlayers() == 1) {
-            $guesses = $game->getGuesses();
-            if (is_null($guesses)) {
-                throw new \Exception('The guesses were not retrieved from the database');
-            }
             return count($guesses) < 4;
         }
 		else if ($game->getNumPlayers() == 2) {
