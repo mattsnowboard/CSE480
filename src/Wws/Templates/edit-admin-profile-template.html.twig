@@ -1,0 +1,21 @@
+{% extends "base-template.html.twig" %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	 <link rel="stylesheet" type="text/css" href="{{baseURL}}css/login-template-style.css" />
+{% endblock %}
+
+{% block main %}
+	<a href="{{ path('welcome') }}" class="return-home-button btn" >Return to Home Page</a>	
+	<section id="edit">
+        
+		<h2>Edit Profile</h2>
+        {% if app.session.hasFlash('edit') %}
+        <div id="flash-edit">
+            {{ app.session.flash('edit') }}
+        </div>
+        {% endif %}
+		{% include "edit-admin-profile-form.html.twig" with {"form" : editform} %}
+	</section>
+	
+{% endblock %}

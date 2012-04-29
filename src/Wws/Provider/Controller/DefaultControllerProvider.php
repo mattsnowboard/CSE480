@@ -200,6 +200,23 @@ class DefaultControllerProvider implements ControllerProviderInterface
         ->middleware($app['wws.auth.must_be_logged_in'])
         ->bind('history_details');
         
+		/**
+         * @route '/view-players'
+         * @name view-players
+         * @pre User is logged in
+         * 
+         * This page is shown when the user clicks the Leaderboard link
+         */
+        $controllers->get('/view_players', function(Application $app) {
+            
+            $players = $app['wws.mapper.user']->GetLeaderboard();
+
+            return $app['twig']->render('view-players-template.html.twig', array(
+                'players' => $players
+            ));
+        })
+        ->middleware($app['wws.auth.must_be_logged_in'])
+        ->bind('view_players');
 		
 		 /**
          * @route '/edit_profile'
@@ -235,7 +252,43 @@ class DefaultControllerProvider implements ControllerProviderInterface
             ));
         })
         ->bind('edit_profile');
+		
+		 /**
+         * @route '/edit_admin_profile'
+         * @name edit_admin_profile
+         * 
+         * This page allows the admin to edit their profile information, it displays the edit profile forms
+         */
+        $controllers->match('/edit_admin_profile', function(Application $app) {
+            $editForm = $app['form.factory']->create(new \Wws\Form\EditAdminProfileType());
+            
+            $editForm->setData($app['wws.user']);
+            
+            if ('POST' === $app['request']->getMethod()) {
+                $editForm->bindRequest($app['request']);
+                //Register
+                if ($editForm->isValid()) {
+                    $data = $editForm->getData();
+                    // validate and optionally redirect
+                    try {
+                        $success = $app['wws.auth.user_provider']->UpdateUserProfile($data);
+                        if (!$success) {
+                            $app['session']->setFlash('edit', 'Error message goes here.');
+                        }
+                    } catch (Exception $e) {
+                        // password is too long?
+                        $app['session']->setFlash('edit', 'FAIL');
+                    }
+                }
+            }
+            
+            return $app['twig']->render('edit-admin-profile-template.html.twig', array(
+                'editform' => $editForm->createView()
+            ));
+        })
+        ->bind('edit_admin_profile');
 
+		
         /**
          * @route '/logout'
          * @name logout
