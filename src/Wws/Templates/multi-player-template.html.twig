@@ -6,7 +6,6 @@
 {% endblock %}
 
 {% block main %}
-
 	 {% if app.session.hasFlash('gamemsg') %}
 		<div id="flash-game-msg">
 		{{ app.session.flash('gamemsg') }}
@@ -28,6 +27,11 @@
 	</section>
 	
 	<section id="game-display">
+		{% if (game.player1Id == user.id) %}
+			<br/>&nbsp;&nbsp;&nbsp;<strong>You are Player 1</strong><br/><br/>
+			{% elseif (game.player2Id == user.id) %}
+				<br/>&nbsp;&nbsp;&nbsp;<strong>You are Player 2</strong><br/><br/>
+		{% endif %}
 		<div id="game-state">
             {% for letter in game.lettersArray %}
             {% if letter !='_' %}

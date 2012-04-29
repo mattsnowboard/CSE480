@@ -18,7 +18,8 @@
 		<h2>Challenges</h2>
 		<ul id="challenge-list">
 			{% for challenge in recievedChallenges %}
-				{% include 'ajax/challenge-rcv-list-item.html.twig' with { 'id' : challenge.challengerId }%}
+				{% include 'ajax/challenge-rcv-list-item.html.twig'
+                    with { 'id' : challenge.challengerId, 'cid' : challenge.id }%}
             {% else %}
                 <li> No challenges </li>
 			{% endfor %}
@@ -67,30 +68,26 @@
                         url: '{{path('my_challenges')}}',
                         type: 'GET',
                         success: function(data) {
-                            console.log('Got challenges', data);
                             var existing = new Array();
                             var newchal = new Array();
                             for (challenge in data) {
                                 if ($('#from-' + data[challenge].challengerId).length) {
                                     existing.push(data[challenge].challengerId);
-                                    console.log('exist');
                                 } else {
                                     newchal.push(data[challenge].challengerId);
-                                    console.log('new');
                                 }
                             }
                             $('#challenge-list').empty();
                             for (challenge in data) {
-                                console.log(data[challenge]);
                                 var newLi = $(
                                     '<li id="from-' + data[challenge].challengerId
                                     + '">Challenge from ' + data[challenge].challengerId
-                                    + '<a href="#" class="start-1player-game-button btn btn-small">Accept</a>'
+                                    + '<a href="' + data[challenge].acceptLink
+                                    + '" class="start-1player-game-button btn btn-small">Accept</a>'
                                     + '<a href="#" class="start-1player-game-button btn btn-small">Deny</a></li>'
                                 );
                                 $('#challenge-list').append(newLi);
                                 if ($.inArray(data[challenge].challengerId, newchal) != -1) {
-                                    console.log('exists check');
                                     $(newLi).effect("highlight", {}, 5000);
                                 }
                             }
