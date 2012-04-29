@@ -75,26 +75,62 @@ class GameMapper
 		}
 		else
 		{
-			// returns all finished games associated with a given userID
-			$gameArr = $this->db->fetchAll('SELECT *, game.id AS id FROM game, dictionary WHERE game.word_id = dictionary.id '
-				. 'AND winner_flag <> "playing" and (player1_id = :uid OR player2_id = :uid) ORDER BY timestamp DESC', array( 'uid' => $uid));
+			
 		}
 		
         return $this->returnGames($gameArr);
     }
 	
+	public function GetGamesForHistory($uid)
+	{
+		// returns all finished games associated with a given userID 
+		//  to be displayed on the History page
+		$sqlResult = $this->db->fetchAll('SELECT dictionary.*, game.id AS gameId, game.num_players, game.timestamp as gameTimestamp, '
+				. 'p1.username as P1username, p2.username as P2username FROM game JOIN dictionary ON game.word_id = dictionary.id '
+				. 'LEFT JOIN player p1 ON game.player1_id = p1.id LEFT JOIN player p2 ON game.player2_id = p2.id WHERE winner_flag <> "playing" '
+				. 'AND (player1_id = :uid OR player2_id = :uid) ORDER BY timestamp DESC', array( 'uid' => $uid));
+		
+		$games = array();
+		if (!is_null($sqlResult) && $sqlResult !== false && !empty($sqlResult)) 
+		{
+            foreach ($sqlResult as $result)
+			{
+				// create new Word object
+				$dict = new Dictionary();
+				$dict->setID($result['id']);
+				$dict->setWord($result['word']);
+				$dict->setDefinition($result['definition']);
+
+				$game = new Game();
+				$game->setDictionary($dict);
+				$game->setPlayer1Name($result['P1username']);
+				$game->setPlayer2Name($result['P2username']);
+				$game->setNumPlayers($result['num_players']);
+				$game->setTimestamp($result['gameTimestamp']);
+				$game->setId($result['gameId']);
+			
+				$games[] = $game;
+			}
+		}
+		return $games;
+	}
 	/**
-     * Get details for a specific game to be displayed from the History pa
+     * Get details for a specific game to be displayed from the History page
      * 
      * @param int $id
      * @return type 
      */ 
 	public function GetGameDetails($id)
-	{
-		$sqlResult = $this->db->fetchAssoc('SELECT game.*, p1.username as P1username, p2.username as P2username FROM game, player p1, player p2 ' 			. 'WHERE game.id = :id AND  game.player1_id = p1.id AND game.player2_id = p2.id', array('id' => $id);
+	{	
+		$sqlResult = $this->db->fetchAssoc('SELECT game.*, p1.username as P1username, p2.username as P2username FROM game LEFT JOIN player p1 ON game.player1_id = p1.id '
+			. 'LEFT JOIN player p2 ON game.player2_id = p2.id WHERE game.id = :id ', array('id' => $id));
 		$game = new Game($sqlResult);
-		$game->setPlayer1Name($sqlResult['
+		$game->setPlayer1Name($sqlResult['P1username']);
+		$game->setPlayer2Name($sqlResult['P2username']);
+		
+		return $game;
 	}
+	
 	
 	
 	/**
@@ -103,6 +139,7 @@ class GameMapper
      * @param mixed $sqlResult
      * @return \Wws\Model\Game|null
      */
+	 
     protected function returnGame($sqlResult)
     {
         if (!is_null($sqlResult) && $sqlResult !== false && !empty($sqlResult)) {

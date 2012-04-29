@@ -166,7 +166,7 @@ class DefaultControllerProvider implements ControllerProviderInterface
          */
         $controllers->get('/history', function(Application $app) {
             
-            $games = $app['wws.mapper.game']->FindGamesByUserID($app['wws.user']->GetID(), 0, 'any');
+            $games = $app['wws.mapper.game']->GetGamesForHistory($app['wws.user']->GetID());
 
             return $app['twig']->render('history-template.html.twig', array(
                 'games' => $games
@@ -184,7 +184,8 @@ class DefaultControllerProvider implements ControllerProviderInterface
          */
         $controllers->get('/history-details/{id}', function(Application $app, $id) {
             
-            $game = $app['wws.mapper.game']->FindByID($id);
+            //$game = $app['wws.mapper.game']->FindByID($id);
+			$game = $app['wws.mapper.game']->GetGameDetails($id);
 			
 			$guesses = $app['wws.mapper.guess']->FindByGame($id);
 

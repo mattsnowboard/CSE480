@@ -7,8 +7,8 @@
             {% for game in games %}
 			<ul>
 			<li>Game began: {{game.timestamp}}</li>
-			<li>{{game.numPlayers}}-player game {% if game.numPlayers == 2 %} {{game.player1Id}} vs {{game.player2Id}} {% endif %}
-			<a href="{{path("history_details", {"id":game.id})}}">View Details</a>
+			<li>{{game.numPlayers}}-player game{% if game.numPlayers == 2 %}: {{game.player1Name}} vs {{game.player2Name}}  {% endif %}</li>
+			<li><a href="{{path("history_details", {"id":game.id})}}">View Details</a></li>
 			</ul>
 			{% endfor %}
         </ul>
