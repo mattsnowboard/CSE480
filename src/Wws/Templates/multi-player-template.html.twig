@@ -93,3 +93,27 @@
 	</section>
 
 {% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+     
+    {% if (game.guesses | length) < 20 and not ((game.playerTurn == '1' and game.player1Id == user.id) or (game.playerTurn == '2' and game.player2Id == user.id)) %}
+	<script>
+        $(document).ready(function(){
+            // poll for new challenges, update page
+            setInterval(function() {
+                $.ajax({
+                    url: '{{path('check_if_turn', {'id' : game.id})}}',
+                    type: 'GET',
+                    success: function(data) {
+                        console.log(data);
+                        if (data == "YES") {
+                            window.location.reload();
+                        }
+                    }
+                });
+            }, 10000);
+        });
+	</script>
+    {% endif %}
+{% endblock %}
