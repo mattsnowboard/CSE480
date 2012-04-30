@@ -260,7 +260,7 @@ class GamePlay
             $this->gameMapper->UpdateGame($game);
         }
 		else {
-            $game->endGame(true);
+            $game->endGame(true, $user);
             $this->userMapper->UpdateScore($game->getPlayer1Id(), $game->getScore1());
 			$this->userMapper->UpdateScore($game->getPlayer2Id(), $game->getScore2());
             $this->gameMapper->UpdateGame($game);

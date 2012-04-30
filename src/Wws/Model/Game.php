@@ -357,16 +357,16 @@ class Game
             if ($isExit) {
                 $this->score1 -= 1;
             }
-            if ($this->isGuessed()) {
+            if ($this->getWinnerFlag() == 'playing') {
                 // update state to Player 1 wins
                 $this->winnerFlag = ($this->player1Id == $user->getId()) ? '1' : '2';
 				
 				if ($this->winnerFlag == '1') {
-					$this->score1 += 10;
+					$this->score1 += 11;
 					$this->score2 -= 5;
 				}
 				else {
-					$this->score2 += 10;
+					$this->score2 += 11;
 					$this->score1 -= 5;
 				}
 				

@@ -11,7 +11,7 @@
 						<td><strong>{{player.username}}</strong></td><td>&nbsp;&nbsp;</td>
 						<td><a href="#" class="start-1player-game-button btn btn-small">View History</a></td><td>&nbsp;&nbsp;</td>
 						<td><a href="#" class="start-1player-game-button btn btn-small">View Stats</a></td><td>&nbsp;&nbsp;</td>
-						<td><a href="#" class="start-1player-game-button btn btn-small">Remove</a></td>
+						<td><a href="{{ path('remove_player', {'id':player.id}) }}" class="start-1player-game-button btn btn-small">Remove</a></td>
 					</tr>
 				{% endif %}
 			{% endfor %}
