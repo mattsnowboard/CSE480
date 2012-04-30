@@ -88,6 +88,7 @@ class GameControllerProvider implements ControllerProviderInterface
             /** @todo Check for failure (null game or exception?) **/
             
             // send player to new game
+            //return new Response('no redirect');
             return $app->redirect($app['url_generator']->generate('single_player', array(
                 'id' => $game->getId()
             )));
