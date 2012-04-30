@@ -90,7 +90,7 @@ class GamePlay
         $this->conn->beginTransaction();
         try {
             // store new guess in database
-            $this->guessMapper->CreateGuess($guess);
+            $okay = $this->guessMapper->CreateGuess($guess);
             
             // check if the game is now over
             if ($game->isGuessed()) {
@@ -111,6 +111,7 @@ class GamePlay
         } catch (\Exception $e) {
             // already exists
             $this->conn->rollback();
+            throw $e;
         }
 		if ($game->isOver())
 		{
@@ -185,6 +186,7 @@ class GamePlay
         } catch (\Exception $e) {
             // already exists
             $this->conn->rollback();
+            throw $e;
         }
 		
 		if ($game->isOver())

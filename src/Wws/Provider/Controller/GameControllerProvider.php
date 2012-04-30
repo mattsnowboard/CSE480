@@ -161,40 +161,51 @@ class GameControllerProvider implements ControllerProviderInterface
             // check post params, we get either 'letter' or 'word' and want to guess it
             $letter = $request->get('letter');
             $word = $request->get('word');
+            $isWordGuess = true;
             
-            // word can have precendence over letter
-            if (!is_null($word) && !empty($word)) {
-                // guessed the full word
-                $app['session']->setFlash('gamemsg', 'The word "' . $word . '"');
+            try {
+                // word can have precendence over letter
+                if (!is_null($word) && !empty($word)) {
+                    // guessed the full word
+                    $app['session']->setFlash('gamemsg', 'The word "' . $word . '"');
 
-                if (!$app['wws.gameplay']->userCanGuessWord($game, $app['wws.user'])) {
-                    // trying to make a 4th letter guess
-                    $app['session']->setFlash('gamemsg', 'You cannot guess the letter 4 times');
-                } else {
-                    $correct = $app['wws.gameplay']->makeWordGuess($game, $app['wws.user'], $word);
-                    if ($correct) {
-                        $app['session']->setFlash('gamemsg', 'The Word "' . $word . '" is correct! YOU WIN!');
+                    if (!$app['wws.gameplay']->userCanGuessWord($game, $app['wws.user'])) {
+                        // trying to make a 4th letter guess
+                        $app['session']->setFlash('gamemsg', 'You cannot guess the letter 4 times');
                     } else {
-                        $app['session']->setFlash('gamemsg', 'The Word "' . $word . '" is NOT the word! YOU LOSE!');
-                    }
+                        $correct = $app['wws.gameplay']->makeWordGuess($game, $app['wws.user'], $word);
+                        if ($correct) {
+                            $app['session']->setFlash('gamemsg', 'The Word "' . $word . '" is correct! YOU WIN!');
+                        } else {
+                            $app['session']->setFlash('gamemsg', 'The Word "' . $word . '" is NOT the word! YOU LOSE!');
+                        }
 
-                }
-            } else if (!is_null($letter) && !empty($letter)) {
-                $app['monolog']->addDebug('The user: "' . $app['wws.user']->getId() .'" guessed the letter "' . $letter
-                    . '" for the game: "' . $game->getId() . '"');
-                if (!$app['wws.gameplay']->userCanGuessLetter($game, $app['wws.user'])) {
-                    // trying to make a 4th letter guess
-                    $app['session']->setFlash('gamemsg', 'You cannot guess the letter 4 times');
-                } else {
-                    $correct = $app['wws.gameplay']->makeLetterGuess($game, $app['wws.user'], $letter);
-                    if ($correct) {
-                        $app['session']->setFlash('gamemsg', 'The letter "' . $letter . '" is in the word!');
-                    } else {
-                        $app['session']->setFlash('gamemsg', 'The letter "' . $letter . '" is NOT in the word!');
                     }
+                } else if (!is_null($letter) && !empty($letter)) {
+                    $isWordGuess = false;
+                    $app['monolog']->addDebug('The user: "' . $app['wws.user']->getId() .'" guessed the letter "' . $letter
+                        . '" for the game: "' . $game->getId() . '"');
+                    if (!$app['wws.gameplay']->userCanGuessLetter($game, $app['wws.user'])) {
+                        // trying to make a 4th letter guess
+                        $app['session']->setFlash('gamemsg', 'You cannot guess the letter 4 times');
+                    } else {
+                        $correct = $app['wws.gameplay']->makeLetterGuess($game, $app['wws.user'], $letter);
+                        if ($correct) {
+                            $app['session']->setFlash('gamemsg', 'The letter "' . $letter . '" is in the word!');
+                        } else {
+                            $app['session']->setFlash('gamemsg', 'The letter "' . $letter . '" is NOT in the word!');
+                        }
+                    }
+                } else {
+                    // no guess made
                 }
-            } else {
-                // no guess made
+            } catch (\Exception $e) {
+                $app['monolog']->addDebug('Exception in guess, duplicate?');
+                if ($isWordGuess) {
+                    $app['session']->setFlash('gamemsg', 'The word "' . $word . '" has already been guessed! Try something new');
+                } else {
+                    $app['session']->setFlash('gamemsg', 'The letter "' . $letter . '" has already been guessed! Try something new');
+                }
             }
             
             $app['monolog']->addDebug('After guessing the Game score is: ' . $game->getScore1() . ' to ' . $game->getScore2());
@@ -246,40 +257,51 @@ class GameControllerProvider implements ControllerProviderInterface
             // check post params, we get either 'letter' or 'word' and want to guess it
             $letter = $request->get('letter');
             $word = $request->get('word');
+            $isWordGuess = true;
             
-            // word can have precendence over letter
-            if (!is_null($word) && !empty($word)) {
-                // guessed the full word
-                $app['session']->setFlash('gamemsg', 'The word "' . $word . '"');
+            try {
+                // word can have precendence over letter
+                if (!is_null($word) && !empty($word)) {
+                    // guessed the full word
+                    $app['session']->setFlash('gamemsg', 'The word "' . $word . '"');
 
-                if (!$app['wws.gameplay']->userCanGuessWord($game, $app['wws.user'])) {
-                    // trying to make a 20th letter guess
-                    $app['session']->setFlash('gamemsg', 'You cannot guess anymore letters');
-                } else {
-                    $correct = $app['wws.gameplay']->makeWordGuess($game, $app['wws.user'], $word);
-                    if ($correct) {
-                        $app['session']->setFlash('gamemsg', 'The Word "' . $word . '" is correct! YOU WIN!');
+                    if (!$app['wws.gameplay']->userCanGuessWord($game, $app['wws.user'])) {
+                        // trying to make a 20th letter guess
+                        $app['session']->setFlash('gamemsg', 'You cannot guess anymore letters');
                     } else {
-                        $app['session']->setFlash('gamemsg', 'The Word "' . $word . '" is NOT the word! YOU LOSE!');
-                    }
+                        $correct = $app['wws.gameplay']->makeWordGuess($game, $app['wws.user'], $word);
+                        if ($correct) {
+                            $app['session']->setFlash('gamemsg', 'The Word "' . $word . '" is correct! YOU WIN!');
+                        } else {
+                            $app['session']->setFlash('gamemsg', 'The Word "' . $word . '" is NOT the word! YOU LOSE!');
+                        }
 
-                }
-            } else if (!is_null($letter) && !empty($letter)) {
-                $app['monolog']->addDebug('The user: "' . $app['wws.user']->getId() .'" guessed the letter "' . $letter
-                    . '" for the game: "' . $game->getId() . '"');
-                if (!$app['wws.gameplay']->userCanGuessLetter($game, $app['wws.user'])) {
-                    // trying to make a 4th letter guess
-                    $app['session']->setFlash('gamemsg', 'You cannot guess the letter 4 times');
-                } else {
-                    $correct = $app['wws.gameplay']->makeLetterGuess($game, $app['wws.user'], $letter);
-                    if ($correct) {
-                        $app['session']->setFlash('gamemsg', 'The letter "' . $letter . '" is in the word!');
-                    } else {
-                        $app['session']->setFlash('gamemsg', 'The letter "' . $letter . '" is NOT in the word!');
                     }
+                } else if (!is_null($letter) && !empty($letter)) {
+                    $isWordGuess = false;
+                    $app['monolog']->addDebug('The user: "' . $app['wws.user']->getId() .'" guessed the letter "' . $letter
+                        . '" for the game: "' . $game->getId() . '"');
+                    if (!$app['wws.gameplay']->userCanGuessLetter($game, $app['wws.user'])) {
+                        // trying to make a 4th letter guess
+                        $app['session']->setFlash('gamemsg', 'You cannot guess the letter 4 times');
+                    } else {
+                        $correct = $app['wws.gameplay']->makeLetterGuess($game, $app['wws.user'], $letter);
+                        if ($correct) {
+                            $app['session']->setFlash('gamemsg', 'The letter "' . $letter . '" is in the word!');
+                        } else {
+                            $app['session']->setFlash('gamemsg', 'The letter "' . $letter . '" is NOT in the word!');
+                        }
+                    }
+                } else {
+                    // no guess made
                 }
-            } else {
-                // no guess made
+            } catch (\Exception $e) {
+                $app['monolog']->addDebug('Exception in guess, duplicate?');
+                if ($isWordGuess) {
+                    $app['session']->setFlash('gamemsg', 'The word "' . $word . '" has already been guessed! Try something new');
+                } else {
+                    $app['session']->setFlash('gamemsg', 'The letter "' . $letter . '" has already been guessed! Try something new');
+                }
             }
             
             $app['monolog']->addDebug('After guessing the Game score is: ' . $game->getScore1() . ' to ' . $game->getScore2());
