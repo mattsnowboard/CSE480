@@ -20,7 +20,7 @@
 		<ul id="challenge-list">
 			{% for challenge in recievedChallenges %}
 				{% include 'challenge-rcv-list-item.html.twig'
-                    with { 'id' : challenge.challengerId, 'cid' : challenge.id }%}
+                    with { 'id' : challenge.challengerId, 'name' : challenge.challengerName, 'cid' : challenge.id }%}
             {% else %}
                 <li> No challenges </li>
 			{% endfor %}
@@ -31,7 +31,7 @@
 		<ul id="sent-challenge-list">
 			{% for challenge in sentChallenges %}
 				{% include 'challenge-sent-list-item.html.twig' with
-                    { 'id' : challenge.recipientId, 'game' : challenge.gameId, 'status' : challenge.status }%}
+                    { 'id' : challenge.recipientId, 'name' : challenge.recipientName, 'game' : challenge.gameId, 'status' : challenge.status }%}
             {% else %}
                 <li> No challenges </li>
 			{% endfor %}
@@ -42,7 +42,7 @@
 		<ul id="accepted-challenge-list">
 			{% for challenge in acceptedChallenges %}
 				{% include 'challenge-sent-list-item.html.twig' with
-                    { 'id' : challenge.recipientId, 'game' : challenge.gameId, 'status' : challenge.status }%}
+                    { 'id' : challenge.recipientId, 'name' : challenge.recipientName, 'game' : challenge.gameId, 'status' : challenge.status }%}
             {% else %}
                 <li> No challenges </li>
 			{% endfor %}
@@ -108,7 +108,7 @@
                         for (challenge in data) {
                             var newLi = $(
                                 '<li id="from-' + data[challenge].challengerId
-                                + '">Challenge from ' + data[challenge].challengerId
+                                + '">Challenge from ' + data[challenge].challengerName
                                 + '<a href="' + data[challenge].acceptLink
                                 + '" class="start-1player-game-button btn btn-small">Accept</a>'
                                 + '<a href="' + data[challenge].declineLink
@@ -143,7 +143,7 @@
                             if (!$('#sent-challenge-list #to-' + data.pending[challenge].recipientId).length) {
                                 // new pending challenge?
                                 newItem = '<li id="to-' + data.pending[challenge].recipientId
-                                    + '">Challenge to ' + data.pending[challenge].recipientId
+                                    + '">Challenge to ' + data.pending[challenge].recipientName
                                     + 'pending</li>';
                                 $('#accepted-challenge-list').append(newItem);
                                 $(newItem).effect("highlight", {}, 5000);
@@ -158,7 +158,7 @@
                                 }
                                 // create new item
                                 newItem = '<li id="to-' + data.accepted[challenge].recipientId
-                                    + '">Challenge to ' + data.accepted[challenge].recipientId
+                                    + '">Challenge to ' + data.accepted[challenge].recipientName
                                     + '<a href="' + data.accepted[challenge].gameLink
                                     + '" class="start-1player-game-button btn btn-small">Go to game</a></li>';
                                 $('#accepted-challenge-list').append(newItem);

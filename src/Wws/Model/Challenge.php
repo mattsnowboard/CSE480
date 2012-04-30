@@ -23,6 +23,10 @@ class Challenge
     private $challengerId;
     
     private $recipientId;
+    
+    private $challegerName;
+    
+    private $recipientName;
 
     /**
      * Create a Challenge with an optional array of parameters
@@ -37,6 +41,8 @@ class Challenge
             $this->challengerId = $c['challenger_id'];
             $this->recipientId = $c['recipient_id'];
             $this->gameId = $c['game_id'];
+            $this->challengerName = $c['challenger_name'];
+            $this->recipientName = $c['recipient_name'];
         }
     }
 
@@ -86,7 +92,7 @@ class Challenge
         $this->gameId = $gameId;
     }
 
-        public function toArray() 
+    public function toArray() 
     {
         $properties = get_object_vars($this);
         $array = array();
@@ -95,4 +101,25 @@ class Challenge
         }
         return $array;
     }
+    
+    public function getRecipientName()
+    {
+        return $this->recipientName;
+    }
+
+    public function setRecipientName($recipientName)
+    {
+        $this->recipientName = $recipientName;
+    }
+
+    public function getChallengerName()
+    {
+        return $this->challengerName;
+    }
+
+    public function setChallengerName($challengerName)
+    {
+        $this->challengerName = $challengerName;
+    }
+
 }

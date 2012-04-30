@@ -30,7 +30,12 @@ class ChallengeMapper
      */
     public function FindById($id)
     {
-        $challengeArr = $this->db->fetchAssoc('SELECT * FROM challenge WHERE id = ?', array((int) $id));
+        $challengeArr = $this->db->fetchAssoc('SELECT c.*, p1.username AS challenger_name, p2.username AS recipient_name
+                FROM challenge c
+                LEFT JOIN game g ON c.game_id = g.id
+                LEFT JOIN player p1 ON c.challenger_id = p1.id
+                LEFT JOIN player p2 ON c.recipient_id = p2.id
+                WHERE id = ?', array((int) $id));
         return $this->returnChallenge($challengeArr);
     }
 
@@ -43,12 +48,20 @@ class ChallengeMapper
     public function FindSentChallengesByUserId($id, $status, $gamesInProgress = false)
     {
         if ($gamesInProgress) {
-            $challengeArr = $this->db->fetchAll('SELECT c.* FROM challenge c
+            $challengeArr = $this->db->fetchAll('SELECT c.*, p1.username AS challenger_name, p2.username AS recipient_name
+                FROM challenge c
                 LEFT JOIN game g ON c.game_id = g.id
+                LEFT JOIN player p1 ON c.challenger_id = p1.id
+                LEFT JOIN player p2 ON c.recipient_id = p2.id
                 WHERE challenger_id=:id AND status = :status AND g.winner_flag = \'playing\'',
                 array('id' => (int) $id, 'status' => $status));
         } else {
-            $challengeArr = $this->db->fetchAll('SELECT * FROM challenge WHERE challenger_id=:id AND status = :status',
+            $challengeArr = $this->db->fetchAll('SELECT c.*, p1.username AS challenger_name, p2.username AS recipient_name
+                FROM challenge c
+                LEFT JOIN game g ON c.game_id = g.id
+                LEFT JOIN player p1 ON c.challenger_id = p1.id
+                LEFT JOIN player p2 ON c.recipient_id = p2.id
+                WHERE challenger_id=:id AND status = :status',
                 array('id' => (int) $id, 'status' => $status));
         }
 
@@ -63,7 +76,12 @@ class ChallengeMapper
      */
     public function FindRecievedChallengesByUserId($id, $status)
     {
-        $challengeArr = $this->db->fetchAll('SELECT * FROM challenge WHERE recipient_id = :id AND status = :status',
+        $challengeArr = $this->db->fetchAll('SELECT c.*, p1.username AS challenger_name, p2.username AS recipient_name
+            FROM challenge c
+            LEFT JOIN game g ON c.game_id = g.id
+            LEFT JOIN player p1 ON c.challenger_id = p1.id
+            LEFT JOIN player p2 ON c.recipient_id = p2.id
+            WHERE recipient_id = :id AND status = :status',
                 array('id' => (int) $id, 'status' => $status));
 
         return $this->returnChallenges($challengeArr);
