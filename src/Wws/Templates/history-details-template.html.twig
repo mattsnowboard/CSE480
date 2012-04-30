@@ -3,15 +3,15 @@
 {% block main %}
 	
     <section id="history-details">
-        <h1>History for Game {{game.id}}</h1>
+        <h1>History for {% if game.numPlayers == "2" %}{{game.player1Name}} vs. {{game.player2Name}} {% endif %} ({{game.timestamp}})</h1>
 		{% if game.winnerFlag == "draw" %} The game was a draw! 
-		{% elseif game.winnerFlag == "lose" %} You lost this single-player game.
-		{% elseif game.winnerFlag == "1" and game.numPlayers == "1" %} You won this single-player game!
-		{% else %} Player {{game.winnerFlag}} won this multi-player game.
+		{% elseif game.winnerFlag == "lose" %} {{game.player1Name}} lost this single-player game.
+		{% elseif game.winnerFlag == "1" and game.numPlayers == "1" %} {{game.player1Name}} won this single-player game!
+		{% else %} {% if game.winnerFlag == "1" %} {{game.player1Name}} {% else %} {{game.player2Name}} {% endif %} won this multi-player game.
 		{% endif %}
         <ul>
             {% for guess in guesses %}
-			<li> {% if game.numPlayers == "1" %} You {% else %} Player {{guess.playerId}} {% endif %} guessed {% if guess.isFullWord %} {{guess.word}} {% else %} {{guess.letter}} {% endif %}</li>
+			<li>{% if guess.playerId == game.player1Id %} {{game.player1Name}} {% else %} {{game.player2Name}} {% endif %} guessed {% if guess.isFullWord %} {{guess.word}} {% else %} {{guess.letter}} {% endif %}</li>
 			{% endfor %}
         </ul>
     </section>
