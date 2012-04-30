@@ -5,15 +5,15 @@
     <section id="players">
         <h1>Words with Strangers Players</h1>
         <table>
-            {% for player in players %}
-				{% if player.username != 'admin' %}
-					<tr>
-						<td><strong>{{player.username}}</strong></td><td>&nbsp;&nbsp;</td>
-						<td><a href="{{ path('player_history', {'id':player.id}) }}" class="start-1player-game-button btn btn-small">View History</a></td><td>&nbsp;&nbsp;</td>
-						<td><a href="{{ path('player_stats', {'id':player.id}) }}" class="start-1player-game-button btn btn-small">View Stats</a></td><td>&nbsp;&nbsp;</td>
-						<td><a href="{{ path('remove_player', {'id':player.id}) }}" class="start-1player-game-button btn btn-small">Remove</a></td>
-					</tr>
-				{% endif %}
+            {% for p in players %}
+				<tr>
+					<td><strong>{{p.username}}</strong></td><td>&nbsp;&nbsp;</td>
+					<td><a href="{{ path('player_history', {'id':p.id}) }}" class="start-1player-game-button btn btn-small">View History</a></td><td>&nbsp;&nbsp;</td>
+					<td><a href="{{ path('player_stats', {'id':p.id}) }}" class="start-1player-game-button btn btn-small">View Stats</a></td><td>&nbsp;&nbsp;</td>
+					{% if p.isAdmin != 1 %}
+						<td><a href="{{ path('remove_player', {'id':p.id}) }}" class="start-1player-game-button btn btn-small">Remove</a></td>
+					{% endif %}
+				</tr>
 			{% endfor %}
         </table>
     </section>

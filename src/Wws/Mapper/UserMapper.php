@@ -235,13 +235,14 @@ class UserMapper
 	*/
 	public function GetAllPlayers()
 	{
-		$sqlResult = $this->db->fetchAll('SELECT id, username, is_admin FROM player WHERE is_admin is null ORDER BY username ASC');
+		$sqlResult = $this->db->fetchAll('SELECT id, username, is_admin FROM player ORDER BY username ASC');
 		$playerResults = array();
         if (!is_null($sqlResult) && $sqlResult !== false && !empty($sqlResult)) {
             foreach ($sqlResult as $player) {
 				$newplayer = new User();
 				$newplayer->setId($player['id']);
 				$newplayer->setUsername($player['username']);
+				$newplayer->setIsAdmin($player['is_admin']);
 				$playerResults[] = $newplayer;
 			}
         }
