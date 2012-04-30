@@ -19,7 +19,7 @@
 		<h2>Challenges</h2>
 		<ul id="challenge-list">
 			{% for challenge in recievedChallenges %}
-				{% include 'ajax/challenge-rcv-list-item.html.twig'
+				{% include 'challenge-rcv-list-item.html.twig'
                     with { 'id' : challenge.challengerId, 'cid' : challenge.id }%}
             {% else %}
                 <li> No challenges </li>
@@ -30,7 +30,7 @@
 		<h2>Sent Challenges</h2>
 		<ul id="sent-challenge-list">
 			{% for challenge in sentChallenges %}
-				{% include 'ajax/challenge-sent-list-item.html.twig' with
+				{% include 'challenge-sent-list-item.html.twig' with
                     { 'id' : challenge.recipientId, 'game' : challenge.gameId, 'status' : challenge.status }%}
             {% else %}
                 <li> No challenges </li>
@@ -41,7 +41,7 @@
 		<h2>Accepted Challenges</h2>
 		<ul id="accepted-challenge-list">
 			{% for challenge in acceptedChallenges %}
-				{% include 'ajax/challenge-sent-list-item.html.twig' with
+				{% include 'challenge-sent-list-item.html.twig' with
                     { 'id' : challenge.recipientId, 'game' : challenge.gameId, 'status' : challenge.status }%}
             {% else %}
                 <li> No challenges </li>
