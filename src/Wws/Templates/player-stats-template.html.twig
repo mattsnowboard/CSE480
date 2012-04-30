@@ -11,7 +11,12 @@
 			<li>Total Wins: <strong>{{ wins.winCount }}</strong></li>
 			<li>Total Losses: <strong>{{ losses.lossCount }}</strong> </li>
 			<li>Total Draws: <strong>{{ draws.drawCount }} </strong></li>
-			<li>Top 3 Most Frequently Guessed Letters:<strong></strong> </li>
+			<li>Top 3 Most Frequently Guessed Letters
+				<ol>
+					{% for item in topLetters %}
+						<li> <strong>{{ item.letter}}</strong>, guessed {{ item.amount }} time(s) </li>
+					{% endfor %}
+				</ol>
 			<li>Player Profile:
 				<ul>
 					<li>First Name: {{ player.firstName }}</li>

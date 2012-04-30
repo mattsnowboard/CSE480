@@ -257,6 +257,7 @@ class DefaultControllerProvider implements ControllerProviderInterface
 			$wins = $app['wws.mapper.game']->CountWinsById($id);
 			$draws = $app['wws.mapper.game']->CountDrawsById($id);
 			$losses = $app['wws.mapper.game']->CountLossesById($id);
+			$topLetters = $app['wws.mapper.guess']->FindTopLetters($id);
 
             return $app['twig']->render('player-stats-template.html.twig', array(
                 'player' => $player,
@@ -264,7 +265,8 @@ class DefaultControllerProvider implements ControllerProviderInterface
 				'multiPlayerGames' => $multiPlayerGames,
 				'wins' => $wins,
 				'draws' => $draws,
-				'losses' => $losses
+				'losses' => $losses,
+				'topLetters' => $topLetters
             ));
         })
         ->middleware($app['wws.auth.must_be_admin'])
