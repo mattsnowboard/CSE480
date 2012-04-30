@@ -180,7 +180,28 @@ class DefaultControllerProvider implements ControllerProviderInterface
         })
         ->middleware($app['wws.auth.must_be_logged_in'])
         ->bind('history');
-        
+		
+		
+		/**
+         * @route '/player-history/{id}'
+         * @name history
+         * @pre User is logged in
+         * 
+         * This page is shown when an ADMIN clicks the History link a certain player
+         */
+        $controllers->get('/player-history/{id}', function(Application $app, $id) {
+            
+            $games = $app['wws.mapper.game']->GetGamesForHistory($id);
+
+            return $app['twig']->render('history-template.html.twig', array(
+                'games' => $games
+            ));
+        })
+        ->middleware($app['wws.auth.must_be_admin'])
+        ->bind('player_history');
+		
+		
+		
 		/**
          * @route '/history-details/{id}'
          * @name history-details
@@ -220,6 +241,34 @@ class DefaultControllerProvider implements ControllerProviderInterface
         })
         ->middleware($app['wws.auth.must_be_admin'])
         ->bind('view_players');
+		
+		/**
+         * @route '/player-stats'
+         * @name player-stats
+         * @pre User is logged in
+         * 
+         * This page is shown when an ADMIN clicks the View Stats button for a player
+         */
+        $controllers->get('/player-stats/{id}', function(Application $app, $id) {
+            
+            $player = $app['wws.mapper.user']->FindById($id);
+			$singlePlayerGames = $app['wws.mapper.game']->CountSinglePlayerGamesById($id);
+			$multiPlayerGames = $app['wws.mapper.game']->CountMultiPlayerGamesById($id);
+			$wins = $app['wws.mapper.game']->CountWinsById($id);
+			$draws = $app['wws.mapper.game']->CountDrawsById($id);
+			$losses = $app['wws.mapper.game']->CountLossesById($id);
+
+            return $app['twig']->render('player-stats-template.html.twig', array(
+                'player' => $player,
+				'singlePlayerGames' => $singlePlayerGames,
+				'multiPlayerGames' => $multiPlayerGames,
+				'wins' => $wins,
+				'draws' => $draws,
+				'losses' => $losses
+            ));
+        })
+        ->middleware($app['wws.auth.must_be_admin'])
+        ->bind('player_stats');
 		
 		/**
          * @route '/remove_player'

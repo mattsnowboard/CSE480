@@ -236,4 +236,46 @@ class GameMapper
         
         return $this->returnGames($gameArr);
     }
+	
+	public function CountSinglePlayerGamesById($uid)
+	{
+		$sqlResult = $this->db->fetchAssoc('SELECT COUNT(*) as gameCount FROM game WHERE num_players = 1 AND player1_id = :uid' 
+					. ' AND winner_flag<>"playing"', array('uid'=>$uid));
+		
+		return $sqlResult;
+	}
+	
+	public function CountMultiPlayerGamesById($uid)
+	{
+		$sqlResult = $this->db->fetchAssoc('SELECT COUNT(*) as gameCount FROM game WHERE num_players = 2 AND (player1_id = :uid' 
+					. ' OR player2_id = :uid) AND winner_flag<>"playing"', array('uid'=>$uid));
+		
+		return $sqlResult;
+	}
+	
+	public function CountWinsById($uid)
+	{
+		$sqlResult = $this->db->fetchAssoc('SELECT COUNT(*) as winCount FROM game WHERE (winner_flag = "1" AND player1_id = :uid) '
+				. 'OR (winner_flag = "2" AND player2_id = :uid)', array('uid'=>$uid));
+		
+		return $sqlResult;
+	}
+	
+	public function CountDrawsById($uid)
+	{
+		$sqlResult = $this->db->fetchAssoc('SELECT COUNT(*) as drawCount FROM game WHERE (player1_id = :uid OR player2_id = :uid) AND winner_flag = "draw"', array('uid'=>$uid));
+		
+		return $sqlResult;
+	}
+	
+	public function CountLossesById($uid)
+	{
+		$sqlResult = $this->db->fetchAssoc('SELECT COUNT(*) as lossCount FROM game WHERE '
+				. '(winner_flag = "lose" AND num_players = 1 AND player1_id = :uid) OR '
+				. '(winner_flag = "1" AND player1_id <> :uid AND player2_id = :uid) OR '
+				. '(winner_flag = "2" AND player1_id = :uid AND player2_id <> :uid)', array('uid'=>$uid));
+		
+		return $sqlResult;
+	}
+	
 }

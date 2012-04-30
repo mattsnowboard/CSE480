@@ -1,0 +1,31 @@
+{% extends "base-template.html.twig" %}
+
+{% block main %}
+	
+    <section id="player-stats">
+        <h1>Stats for {{player.username}} </h1>
+        <ul>
+            <li>Current Total Score: <strong>{{ player.totalScore }}</strong></li>
+			<li>Single-Player Games Completed: <strong> {{ singlePlayerGames.gameCount }}</strong> </li>
+			<li>Multi-Player Games Completed: <strong>{{ multiPlayerGames.gameCount }}</strong></li>
+			<li>Total Wins: <strong>{{ wins.winCount }}</strong></li>
+			<li>Total Losses: <strong>{{ losses.lossCount }}</strong> </li>
+			<li>Total Draws: <strong>{{ draws.drawCount }} </strong></li>
+			<li>Top 3 Most Frequently Guessed Letters:<strong></strong> </li>
+			<li>Player Profile:
+				<ul>
+					<li>First Name: {{ player.firstName }}</li>
+					<li>Last Name: {{ player.lastName }}</li>
+					<li>Email: {{ player.email }}</li>
+					<li>Phone: {{ player.phone }}</li>
+					<li>Date Joined: {{ player.joinDate }}</li>
+					<li>Birthdate: {{ player.birthDate|date("F j Y") }}</li>
+					<li>City: {{ player.city }}</li>
+					<li>State: {{ player.state }}</li>
+					<li>Country: {{ player.country }}</li>
+				</ul>
+			</li>
+        </ul>
+    </section>
+
+{% endblock %}
