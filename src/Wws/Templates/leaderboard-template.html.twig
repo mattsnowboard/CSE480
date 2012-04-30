@@ -4,11 +4,15 @@
 	
     <section id="leaders">
         <h1>Words with Strangers Leaderboard</h1>
-        <ul>
+        <ol>
             {% for leader in leaders %}
-			<li>{{leader.username}}, {{leader.totalScore}} {% if leader.isActive %} Online {% else %} Offline {% endif %}</li>
+			<li>{{leader.username}}</li>
+			<ul>
+				<li>Total Score: {{leader.totalScore}}</li>
+				<li>Current Status: {% if leader.isActive %}Online {% else %}Offline {% endif %}</li>
+			</ul>
 			{% endfor %}
-        </ul>
+        </ol>
     </section>
 
 {% endblock %}

@@ -125,7 +125,8 @@ class DefaultControllerProvider implements ControllerProviderInterface
          */
         $controllers->get('/welcome', function(Application $app) {
             
-            $games = $app['wws.mapper.game']->FindGamesByUserId($app['wws.user']->GetID(), 1, 'playing');
+            $singlePlayerGamesInProgress = $app['wws.mapper.game']->FindGamesByUserId($app['wws.user']->GetID(), 1, 'playing');
+			$multiPlayerGamesInProgress = $app['wws.mapper.game']->FindGamesByUserId($app['wws.user']->GetID(), 2, 'playing');
 
             $recievedChallenges = $app['wws.mapper.challenge']->FindRecievedChallengesByUserId($app['wws.user']->GetID(), 'pending');
             $sentChallenges = $app['wws.mapper.challenge']->FindSentChallengesByUserId($app['wws.user']->GetID(), 'pending');
@@ -134,7 +135,8 @@ class DefaultControllerProvider implements ControllerProviderInterface
 
 
             return $app['twig']->render('welcome-template.html.twig', array(
-                'games' => $games,
+                'singlePlayerGamesInProgress' => $singlePlayerGamesInProgress,
+				'multiPlayerGamesInProgress' => $multiPlayerGamesInProgress,
                 'recievedChallenges' => $recievedChallenges,
                 'sentChallenges' => $sentChallenges,
                 'acceptedChallenges' => $acceptedChallenges

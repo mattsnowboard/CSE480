@@ -65,17 +65,16 @@ class GameMapper
                         . 'WHERE game.word_id = dictionary.id and num_players = :numPlayers and winner_flag = :result and player1_id = :uid',
                     array( 'numPlayers' => (int) $numPlayers, 'uid' => $uid, 'result' => $result));
 			}
-			else
+			else if ((int)$numPlayers == 2)
 			{	// returns in-progress multi-player games involving given userID
-				$gameArr = $this->db->fetchAll('SELECT *, game.id AS id FROM game, dictionary '
-                        . 'WHERE num_players = :numPlayers and (player1_id = :uid or player2_id = :uid',
-                    array( 'numPlayers' => $numPlayers,
-                            'uid' => $uid));
+				$gameArr = $this->db->fetchAll('SELECT *, game.id AS id FROM game, dictionary WHERE game.word_id = dictionary.id '
+					. 'AND num_players = :numPlayers AND (player1_id = :uid OR player2_id = :uid) AND game.winner_flag = :result',
+                    array('numPlayers' => (int) $numPlayers, 'uid' => $uid, 'result' => $result));
 			}
 		}
 		else
 		{
-			
+			$gameArr = $this->db->fetchAll('SELECT *, game.id AS id FROM game WHERE game.word_id = dictionary.id AND (player1_id = :uid OR player2_id = :uid)', array ('uid' => $uid));
 		}
 		
         return $this->returnGames($gameArr);
