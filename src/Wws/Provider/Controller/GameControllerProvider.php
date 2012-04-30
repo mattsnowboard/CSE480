@@ -269,13 +269,7 @@ class GameControllerProvider implements ControllerProviderInterface
                         // trying to make a 20th letter guess
                         $app['session']->setFlash('gamemsg', 'You cannot guess anymore letters');
                     } else {
-                        $correct = $app['wws.gameplay']->makeWordGuess($game, $app['wws.user'], $word);
-                        if ($correct) {
-                            $app['session']->setFlash('gamemsg', 'The Word "' . $word . '" is correct! YOU WIN!');
-                        } else {
-                            $app['session']->setFlash('gamemsg', 'The Word "' . $word . '" is NOT the word! YOU LOSE!');
-                        }
-
+                        $app['session']->setFlash('gamemsg', 'The Word "' . $word . '" is NOT the word!');
                     }
                 } else if (!is_null($letter) && !empty($letter)) {
                     $isWordGuess = false;

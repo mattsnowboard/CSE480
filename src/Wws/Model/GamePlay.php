@@ -133,7 +133,7 @@ class GamePlay
      */
     public function makeWordGuess(Game $game, User $user, $word)
     {
-      /*if (!$this->userCanGuessWord($game, $user)) {
+ /*if (!$this->userCanGuessWord($game, $user)) {
             throw new GamePlayException('User is not allowed to guess more letters');
 	    }*/
         
@@ -188,7 +188,7 @@ class GamePlay
             $this->conn->rollback();
             throw $e;
         }
-		
+
 		if ($game->isOver())
 		{
 			$game->endGame(false, $user);
