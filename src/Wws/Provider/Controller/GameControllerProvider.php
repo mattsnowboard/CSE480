@@ -267,9 +267,14 @@ class GameControllerProvider implements ControllerProviderInterface
 
                     if (!$app['wws.gameplay']->userCanGuessWord($game, $app['wws.user'])) {
                         // trying to make a 20th letter guess
-                        $app['session']->setFlash('gamemsg', 'You cannot guess anymore letters');
+                        $app['session']->setFlash('gamemsg', 'You cannot guess anymore letters, the game is now over');
                     } else {
-                        $app['session']->setFlash('gamemsg', 'The Word "' . $word . '" is NOT the word!');
+                        $correct = $app['wws.gameplay']->makeWordGuess($game, $app['wws.user'], $word);
+                        if ($correct) {
+                            $app['session']->setFlash('gamemsg', 'The Word "' . $word . '" is correct!');
+                        } else {
+                            $app['session']->setFlash('gamemsg', 'The Word "' . $word . '" is NOT the word!');
+                        }
                     }
                 } else if (!is_null($letter) && !empty($letter)) {
                     $isWordGuess = false;
@@ -277,7 +282,7 @@ class GameControllerProvider implements ControllerProviderInterface
                         . '" for the game: "' . $game->getId() . '"');
                     if (!$app['wws.gameplay']->userCanGuessLetter($game, $app['wws.user'])) {
                         // trying to make a 4th letter guess
-                        $app['session']->setFlash('gamemsg', 'You cannot guess the letter 4 times');
+                        $app['session']->setFlash('gamemsg', 'You cannot make more than 10 guesses, the game is now over');
                     } else {
                         $correct = $app['wws.gameplay']->makeLetterGuess($game, $app['wws.user'], $letter);
                         if ($correct) {
@@ -297,6 +302,8 @@ class GameControllerProvider implements ControllerProviderInterface
                     $app['session']->setFlash('gamemsg', 'The letter "' . $letter . '" has already been guessed! Try something new');
                 }
             }
+            
+            $app['wws.gameplay']->checkGuessLimit($game);
             
             $app['monolog']->addDebug('After guessing the Game score is: ' . $game->getScore1() . ' to ' . $game->getScore2());
             

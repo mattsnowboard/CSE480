@@ -79,6 +79,7 @@ class GamePlay
         $guess->SetIsFullWord(false);
         $guess->SetLetter(strtolower($letter));
         $guess->SetIsCorrect($correct);
+        $game->addGuess($guess);
                 
         // tell the game that the guess was made so it can update the score and turn
         $game->updateGuess($user, $correct);
@@ -147,6 +148,7 @@ class GamePlay
         $guess->SetIsFullWord(true);
         $guess->SetWord(strtolower($word));
         $guess->SetIsCorrect($correct);
+        $game->addGuess($guess);
         
         // NOTE: for multiplayer, we need to add/subtract a point
         if ($game->getNumPlayers() == 2) {
@@ -267,5 +269,25 @@ class GamePlay
 			$this->userMapper->UpdateScore($game->getPlayer2Id(), $game->getScore2());
             $this->gameMapper->UpdateGame($game);
         }
+    }
+    
+    /**
+     * Check if there are 20 guesses
+     * 
+     * @param Game $game
+     * 
+     * @return true if the game exits after this
+     */
+    public function checkGuessLimit(Game $game)
+    {
+        if (count($game->getGuesses()) >= 20) {
+            // sets the status to draw
+            $game->endGame(false);
+            $this->userMapper->UpdateScore($game->getPlayer1Id(), $game->getScore1());
+			$this->userMapper->UpdateScore($game->getPlayer2Id(), $game->getScore2());
+            $this->gameMapper->UpdateGame($game);
+            return true;
+        }
+        return false;
     }
 }

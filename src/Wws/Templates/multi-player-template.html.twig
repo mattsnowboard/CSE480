@@ -47,7 +47,7 @@
 		<div id="play">
 			<form id="guess-form" method="post" action="{{ path('guess_multi_player', {'id': game.id} ) }}">
 				{% if game.IsOver == false %}
-					{% if (game.guesses | length) < 20 and ((game.playerTurn == '1' and game.player1Id == user.id) or (game.playerTurn == '2' and game.player2Id == user.id)) %}
+					{% if ((game.playerTurn == '1' and game.player1Id == user.id) or (game.playerTurn == '2' and game.player2Id == user.id)) %}
 						<div id="char-guess">Guess a
 						character: <input type="text"
 						name="letter" size="3" maxlength="1"
@@ -97,7 +97,7 @@
 {% block scripts %}
     {{ parent() }}
      
-    {% if not game.isOver and (game.guesses | length) < 20 and not ((game.playerTurn == '1' and game.player1Id == user.id) or (game.playerTurn == '2' and game.player2Id == user.id)) %}
+    {% if not game.isOver and not ((game.playerTurn == '1' and game.player1Id == user.id) or (game.playerTurn == '2' and game.player2Id == user.id)) %}
 	<script>
         $(document).ready(function(){
             // poll for new challenges, update page
