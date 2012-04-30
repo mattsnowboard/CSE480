@@ -65,7 +65,7 @@ class AuthServiceProvider implements ServiceProviderInterface
          * This is used to get users and authenticate them or register them
          */
         $app['wws.auth.user_provider'] = $app->share(function($app) {
-            return new \Wws\Security\UserProvider($app['wws.mapper.user'], $app['session']);
+            return new \Wws\Security\UserProvider($app['wws.mapper.user'], $app['wws.mapper.challenge'], $app['session']);
         });
     }
 }

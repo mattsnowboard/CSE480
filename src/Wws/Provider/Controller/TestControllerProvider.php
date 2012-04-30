@@ -70,6 +70,10 @@ class TestControllerProvider implements ControllerProviderInterface
             return var_dump($test);
         });
 		
+        $controllers->get('/topletters/{id}', function(Application $app, $id) {
+            $test = $app['wws.mapper.guess']->FindTopLetters($id);
+            return var_dump($test);
+        });
         
         /**
          * 

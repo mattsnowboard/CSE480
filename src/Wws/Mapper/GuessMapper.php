@@ -62,6 +62,25 @@ class GuessMapper
             'letter' => $letter));
         return $this->returnGuess($guessArr);
     }
+    
+    /**
+     * Find the frequently guessed letters
+     * @param integer $uid which user
+     * @param integer $lim how many letters to get
+     * @return array of letters
+     */
+    public function FindTopLetters($uid, $lim = 3)
+    {
+        $letters = $this->db->fetchAll('SELECT letter, count(*) AS amount FROM guess '
+                . 'WHERE player_id = :pid '
+                . 'GROUP BY letter '
+                . 'ORDER BY count(*) '
+                . 'LIMIT ' . (int)$lim, array(
+            'pid' => (int)$uid
+        ));
+        
+        return $letters;
+    }
 
     /**
      * Return a Guess object for an associative array result set
