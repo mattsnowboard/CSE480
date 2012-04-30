@@ -161,8 +161,9 @@ class GameMapper
     {
         $games = array();
         if (!is_null($sqlResult) && $sqlResult !== false && !empty($sqlResult)) {
-            foreach ($sqlResult as $game)
-            $games[] =$this->returnGame($game);
+            foreach ($sqlResult as $game) {
+                $games[] =$this->returnGame($game);
+            }
         }
         return $games;
     }
@@ -195,6 +196,12 @@ class GameMapper
         return $count == 1;
     }
     
+    /**
+     * Update a Game (state, turn, score, is it over?)
+     * @param \Wws\Model\Game $game
+     * 
+     * @return boolean True if successful
+     */
     public function UpdateGame(\Wws\Model\Game $game)
     {
         $count = $this->db->executeUpdate("UPDATE game "
@@ -213,4 +220,20 @@ class GameMapper
         return $count == 1;
     }
 	
+    /**
+     * Get the last 3 single player games, used to check if we do a bonus round
+     * @param \Wws\Model\User $user
+     * @return Game[]
+     */
+    public function GetLastThreeSingle(\Wws\Model\User $user)
+    {
+        $gameArr = $this->db->fetchAll('SELECT *, game.id AS id FROM game '
+                . 'JOIN dictionary ON game.word_id = dictionary.id  '
+                . 'WHERE num_players = 1 AND player1_id = :uid '
+                . 'ORDER BY timestamp DESC '
+                . 'LIMIT 3',
+            array('uid' => $user->GetId()));
+        
+        return $this->returnGames($gameArr);
+    }
 }

@@ -4,6 +4,7 @@ namespace Wws\Mapper;
 
 use Wws\Model\User;
 
+
 /**
  * This class can look up users by ID
  * 

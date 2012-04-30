@@ -24,6 +24,17 @@ class AuthServiceProvider implements ServiceProviderInterface
                 return $app->redirect($app['url_generator']->generate('home'));
             }
         });
+		
+		/**
+        * This is used for routes that are only for logged in users
+        * @var closure
+        */
+        $app['wws.auth.must_be_admin'] = $app->protect(function(\Symfony\Component\HttpFoundation\Request $request) use($app) {
+            if ($app['wws.user']->getIsAdmin() != 1) {
+                $app['session']->setFlash('infobar', 'You must be an admin to view that page');
+                return $app->redirect($app['url_generator']->generate('welcome'));
+            }
+        });
         
         /**
         * This is the opposite of the above

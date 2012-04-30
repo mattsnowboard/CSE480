@@ -161,7 +161,7 @@ class GamePlay
             if ($game->getNumPlayers() == 1 || $game->isGuessed()) {
 
                 // they guessed it, end the game
-                $game->endGame($false, $user);
+                $game->endGame(false, $user);
                 // update scores
                 $this->userMapper->UpdateScore($game->getPlayer1Id(), $game->getScore1());
                 if ($game->getNumPlayers() > 1 && !is_null($game->getPlayer2Id())) {
@@ -215,18 +215,14 @@ class GamePlay
     
     public function userCanGuessLetter(Game $game, User $user)
     {
+        $guesses = $game->getGuesses();
+        if (is_null($guesses)) {
+            throw new \Exception('The guesses were not retrieved from the database');
+        }
         if ($game->getNumPlayers() == 1) {
-            $guesses = $game->getGuesses();
-            if (is_null($guesses)) {
-                throw new \Exception('The guesses were not retrieved from the database');
-            }
             return count($guesses) < 3;
         }
 		else {
-			$guesses = $game->getGuesses();
-			if (is_null($guesses)) {
-                throw new \Exception('The guesses were not retrieved from the database');
-            }
             return count($guesses) < 20;
 		}
         return false;
@@ -234,11 +230,11 @@ class GamePlay
 
     public function userCanGuessWord(Game $game, User $user)
     {
+        $guesses = $game->getGuesses();
+        if (is_null($guesses)) {
+            throw new \Exception('The guesses were not retrieved from the database');
+        }
         if ($game->getNumPlayers() == 1) {
-            $guesses = $game->getGuesses();
-            if (is_null($guesses)) {
-                throw new \Exception('The guesses were not retrieved from the database');
-            }
             return count($guesses) < 4;
         }
 		else if ($game->getNumPlayers() == 2) {
@@ -264,7 +260,7 @@ class GamePlay
             $this->gameMapper->UpdateGame($game);
         }
 		else {
-            $game->endGame(true);
+            $game->endGame(true, $user);
             $this->userMapper->UpdateScore($game->getPlayer1Id(), $game->getScore1());
 			$this->userMapper->UpdateScore($game->getPlayer2Id(), $game->getScore2());
             $this->gameMapper->UpdateGame($game);

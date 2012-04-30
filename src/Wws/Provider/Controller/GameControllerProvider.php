@@ -6,6 +6,7 @@ use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Silex\ControllerCollection;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
@@ -87,6 +88,7 @@ class GameControllerProvider implements ControllerProviderInterface
             /** @todo Check for failure (null game or exception?) **/
             
             // send player to new game
+            //return new Response('no redirect');
             return $app->redirect($app['url_generator']->generate('single_player', array(
                 'id' => $game->getId()
             )));
@@ -282,6 +284,7 @@ class GameControllerProvider implements ControllerProviderInterface
             
             $app['monolog']->addDebug('After guessing the Game score is: ' . $game->getScore1() . ' to ' . $game->getScore2());
             
+            //return new Response('no redirect');
             return $app->redirect($app['url_generator']->generate('multi_player', array(
                 'id' => $game->getId()
             )));
@@ -538,6 +541,30 @@ class GameControllerProvider implements ControllerProviderInterface
         ->middleware($app['wws.auth.must_be_logged_in'])
         ->bind('decline_challenge');
 
+        /**
+         * @route '/are-we-there-yet'
+         * @name check_if_turn
+         * 
+         * Keep pinging a game to see if it is your turn
+         */
+        $controllers->match('/are-we-there-yet/{id}', function(Application $app, Request $request, $id) {
+            
+            try {
+                /**
+                 * @var \Wws\Model\Game $game
+                 */
+                $game = $app['wws.mapper.game']->FindById($id, $app['wws.user']);
+            } catch (\Wws\Exception\NotAuthorizedException $e) {
+                throw new HttpException(403, $e->getMessage());
+            }
+            
+            if ($app['wws.gameplay']->isUserTurn($game, $app['wws.user']) || $game->isOver()) {
+                return new Response('YES');
+            } else {
+                return new Response('NO');
+            }
+        })
+        ->bind('check_if_turn');
         
         return $controllers;
     }

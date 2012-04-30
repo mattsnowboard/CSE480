@@ -54,8 +54,19 @@ class GameFactory
         $game->setNumPlayers(1);
         $game->setTimestamp(time());
         $game->setPlayer1Id($user->getId());
-        /** @todo Query database for this */
-        $game->setIsBonus(false);
+        
+        $lastGames = $this->gameMapper->GetLastThreeSingle($user);
+        $bonus = false;
+        if (count($lastGames) == 3) {
+            $bonus = true;
+            foreach ($lastGames as $g) {
+                if ($g->getWinnerFlag() != '1') {
+                    $bonus = false;
+                    break;
+                }
+            }
+        }
+        $game->setIsBonus($bonus);
         
         // Now persist in DB
         $this->gameMapper->CreateGame($game);
