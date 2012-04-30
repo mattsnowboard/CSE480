@@ -6,91 +6,86 @@
 {% endblock %}
 
 {% block main %}
-	 {% if app.session.hasFlash('gamemsg') %}
-		<div id="flash-game-msg">
-		{{ app.session.flash('gamemsg') }}
-		</div>
+    {% if app.session.hasFlash('gamemsg') %}
+    <div id="flash-game-msg">
+        {{ app.session.flash('gamemsg') }}
+    </div>
     {% endif %}
-	
-	<div id="game-nav-buttons"> 
-		{% if game.isOver == false %}
-    		<a href="{{ path('exit_multi_player', {'id': game.id, } ) }}" class="btn-danger btn" title="Forfeit">Forfeit</a>
-	
 
-		{% else %}
-			<a href="{{ path('welcome') }}" class="return-home-button btn" >Return to Home Page</a>
-		{% endif %}
-	</div>
+    <div id="game-nav-buttons"> 
+        {% if game.isOver == false %}
+        <a href="{{ path('exit_multi_player', {'id': game.id, } ) }}" class="btn-danger btn" title="Forfeit">Forfeit</a>
 
-	<section id="player1-stats">
-	
-	</section>
-	
-	<section id="game-display">
-		{% if (game.player1Id == user.id) %}
-			<br/>&nbsp;&nbsp;&nbsp;<strong>You are Player 1</strong><br/><br/>
-			{% elseif (game.player2Id == user.id) %}
-				<br/>&nbsp;&nbsp;&nbsp;<strong>You are Player 2</strong><br/><br/>
-		{% endif %}
-		<div id="game-state">
-            {% for letter in game.lettersArray %}
-            {% if letter !='_' %}
-            <div class="letter">
-            {% else %}
-            <div class="letter blank">
-            {% endif %}
+        {% else %}
+        <a href="{{ path('welcome') }}" class="return-home-button btn" >Return to Home Page</a>
+        {% endif %}
+    </div>
+
+    <section id="player1-stats">
+
+    </section>
+
+    <section id="game-display">
+        {% if (game.player1Id == user.id) %}
+        <br/>&nbsp;&nbsp;&nbsp;<strong>You are Player 1</strong><br/><br/>
+        {% elseif (game.player2Id == user.id) %}
+        <br/>&nbsp;&nbsp;&nbsp;<strong>You are Player 2</strong><br/><br/>
+        {% endif %}
+        <div id="game-state">
+        {% for letter in game.lettersArray %}
+            <div class="letter{% if letter =='_' %} blank{% endif %}">
                 {{ letter }}
             </div>
-            {% endfor %}
+        {% endfor %}
         </div>
-		<div id="definition"><p>Definition: {{game.dictionary.definition}} </p></div>
-		<div id="play">
-			<form id="guess-form" method="post" action="{{ path('guess_multi_player', {'id': game.id} ) }}">
-				{% if game.IsOver == false %}
-					{% if ((game.playerTurn == '1' and game.player1Id == user.id) or (game.playerTurn == '2' and game.player2Id == user.id)) %}
-						<div id="char-guess">Guess a
-						character: <input type="text"
-						name="letter" size="3" maxlength="1"
-						/></div>
-					
-						<div id="word-guess">Guess a word:
-						<input type="text" name="word"
-						size="40" /></div>
-						
-						<input type="submit" value="Submit" />
-						
-		
-						{% else %}
-							
-							{% if game.isOver == false %}
-								<strong>It's not your turn right now!</strong>
-							{% endif %}
-					{% endif %}
-	
-				{% elseif game.isOver == true and ((game.player1Id == user.id and game.winnerFlag  == '1' ) or (game.player2Id == user.id and game.winnerFlag == '2')) %}
-								<strong>You Win!</strong>
-								{% elseif game.isOver == true %}
-									<strong>You Lose!</strong>
-				{% endif %}
-			</form>
-			<div id="guessed-chars">
-				<p>Characters guessed:
-					{% for guess in game.guesses %}
-						{{guess.letter}}
-						{% else %}
-							{{game.guesses[0]}}
-							none
-					{% endfor %}
-				</p>
-			</div>
-			<div id="p1-points">Player 1 points: {{ game.score1 }}</div>
-			<div id="p1-points">Player 2 points: {{ game.score2 }}</div>
-		</div>
-	</section>
-	
-	<section id="player2-stats">
-	
-	</section>
+        <div id="definition"><p>Definition: {{game.dictionary.definition}} </p></div>
+        <div id="play">
+            <form id="guess-form" method="post" action="{{ path('guess_multi_player', {'id': game.id} ) }}">
+            {% if not game.IsOver %}
+                {% if ((game.playerTurn == '1' and game.player1Id == user.id) or (game.playerTurn == '2' and game.player2Id == user.id)) %}
+                <div id="char-guess">
+                    <label for="letter">Guess a character:</label> 
+                    <input type="text" name="letter" size="3" maxlength="1" />
+                </div>
+
+                <div id="word-guess">
+                    <label for="word">Guess a word:</label>
+                    <input type="text" name="word" size="40" />
+                </div>
+
+                <input type="submit" value="Submit" />
+
+
+                {% else %}
+                <strong>It's not your turn right now!</strong>
+                {% endif %}
+
+            {% elseif game.isOver == true and ((game.player1Id == user.id and game.winnerFlag  == '1' ) or (game.player2Id == user.id and game.winnerFlag == '2')) %}
+                <strong>You Win!</strong>
+            {% elseif game.isOver and game.winnerFlag == 'draw' %}
+                <strong>Draw!</strong>
+            {% else %}
+                <strong>You Lose!</strong>
+            {% endif %}
+            </form>
+            <div id="guessed-chars">
+                <p>Characters guessed:
+                    {% for guess in game.guesses %}
+                    {{guess.letter}}
+                    {% else %}
+                    {{game.guesses[0]}}
+                    none
+                    {% endfor %}
+                </p>
+            </div>
+            <div id="p1-points">Player 1 points: {{ game.score1 }}</div>
+            <div id="p1-points">Player 2 points: {{ game.score2 }}</div>
+        </div>
+    </section>
+
+    <section id="player2-stats">
+
+    </section>
 
 {% endblock %}
 
