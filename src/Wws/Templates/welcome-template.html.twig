@@ -6,7 +6,7 @@
         <h1>Player Information</h1>
         <ul>
             <li>Current Total Score: {{ user.totalScore }}</li>
-			<li>Member Since: {{ user.joinDate }}</li>
+			<li>Member Since: {{ user.joinDate|date("m-d-Y") }}</li>
         </ul>
     </section>
 

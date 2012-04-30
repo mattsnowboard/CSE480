@@ -6,7 +6,7 @@
         <h1>Player Game History</h1>
             {% for game in games %}
 			<ul>
-			<li>Game began: {{game.timestamp}}</li>
+			<li>Game began: {{game.timestamp|date("m-d-Y h:i a")}}</li>
 			<li>{{game.numPlayers}}-player game{% if game.numPlayers == 2 %}: {{game.player1Name}} vs. {{game.player2Name}}  {% endif %}</li>
 			<li><a href="{{path("history_details", {"id":game.id})}}">View Details</a></li>
 			</ul>
