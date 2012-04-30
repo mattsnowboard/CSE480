@@ -163,7 +163,9 @@ class GamePlay
                 // they guessed it, end the game
                 $game->endGame(false, $user);
                 // update scores
+				
                 $this->userMapper->UpdateScore($game->getPlayer1Id(), $game->getScore1());
+				
                 if ($game->getNumPlayers() > 1 && !is_null($game->getPlayer2Id())) {
                     $this->userMapper->UpdateScore($game->getPlayer2Id(), $game->getScore2());
                 }
@@ -171,11 +173,17 @@ class GamePlay
 			else if ($game->getNumPlayers() == 2 || $game->isGuessed()) {
 
                 // they guessed it, end the game
-                $game->endGame(false,$user);
+				if ($game->isGuessed()){
+                	$game->endGame(false,$user);
+				}
                 // update scores
-                $this->userMapper->UpdateScore($game->getPlayer1Id(), $game->getScore1());
-                if ($game->getNumPlayers() > 1 && !is_null($game->getPlayer2Id())) {
-                    $this->userMapper->UpdateScore($game->getPlayer2Id(), $game->getScore2());
+				if ($game->isGuessed() == false and $user->getId() == $game->getPlayer1Id()){
+                	$this->userMapper->UpdateScore($game->getPlayer1Id(), -1);
+				}
+                else if ($game->getNumPlayers() > 1 && !is_null($game->getPlayer2Id())) {
+					if ($game->isGuessed() == false and $user->getId() == $game->getPlayer2Id()){
+                    	$this->userMapper->UpdateScore($game->getPlayer2Id(), -1);
+					}
                 }
             }
 
