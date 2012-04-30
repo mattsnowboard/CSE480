@@ -3,7 +3,7 @@
 {% block main %}
 	
     <section id="history-details">
-        <h1>History for {% if game.numPlayers == "2" %}{{game.player1Name}} vs. {{game.player2Name}} {% else %} {{game.player1Name}}'s Single-Player Game {% endif %} ({{game.timestamp}})</h1>
+        <h1>History for {% if game.numPlayers == "2" %}{{game.player1Name}} vs. {{game.player2Name}} {% else %} {{game.player1Name}}'s Single-Player Game {% endif %} ({{game.timestamp|date("m-d-Y h:i a")}})</h1>
 		{% if game.winnerFlag == "draw" %} The game was a draw! 
 		{% elseif game.winnerFlag == "lose" %} {{game.player1Name}} lost this single-player game.
 		{% elseif game.winnerFlag == "1" and game.numPlayers == "1" %} {{game.player1Name}} won this single-player game!
