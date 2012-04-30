@@ -112,6 +112,11 @@ class ChallengeMapper
         return $count == 1;
 
     }
+	
+	public function removeChallenges($id)
+	{
+		$this->db->executeUpdate("DELETE FROM challenge WHERE status = 'pending' AND challenger_id = :id1 OR recipient_id = :id2", array('id1' => (int)$id, 'id2' => (int)$id));
+	}
     
     public function addGame(\Wws\Model\Challenge $challenge, \Wws\Model\Game $game)
     {

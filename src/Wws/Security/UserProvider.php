@@ -17,6 +17,12 @@ class UserProvider
      */
     protected $mapper;
     
+	
+	    /**
+     * @var Wws\Mapper\UserMapper
+     */
+    protected $cMapper;
+	
     /**
      * @var Symfony\Component\HttpFoundation\Session\Session 
      */
@@ -27,9 +33,10 @@ class UserProvider
      */
     protected $hasher;
     
-    public function __construct(\Wws\Mapper\UserMapper $mapper, \Symfony\Component\HttpFoundation\Session\Session $session)
+    public function __construct(\Wws\Mapper\UserMapper $mapper, \Wws\Mapper\ChallengeMapper $cMapper,\Symfony\Component\HttpFoundation\Session\Session $session)
     {
         $this->mapper = $mapper;
+		$this->cMapper = $cMapper;
         $this->session = $session;
         // not dependency injected
         $this->hasher = new \PasswordHash(8, false);
@@ -59,13 +66,15 @@ class UserProvider
      * @param \Symfony\Component\HttpFoundation\Request $request Has Cookies and other stuff, but is more testable than the GLOBALS
      * 
      */
-    public function RemoveUser($id)
+    public function RemoveUserData($id)
     {
         // check for the cookie
         if ($this->session->has('user')) {
-            $this->db->executeDelete("DELETE FROM player WHERE id = :id", array('id' => (int)$id));
-			$this->db->executeDelete("DELETE FROM challenge WHERE status = 'pending' AND challenger_id = :id1 OR recipient_id = :id2", array('id1' => (int)$id, 'id2' => (int)$id));
+            $this->mapper->RemoveUser($id);
+			$this->cMapper->removeChallenges($id);
+			return true;
         }
+		return false;
     }
     
     /**
