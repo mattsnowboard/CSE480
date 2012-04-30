@@ -41,7 +41,7 @@
 		<h2>Accepted Challenges</h2>
 		<ul id="accepted-challenge-list">
 			{% for challenge in acceptedChallenges %}
-				{% include 'ajax/challenge-sent-list-item.html.twig' with
+				{% include 'challenge-sent-list-item.html.twig' with
                     { 'id' : challenge.recipientId, 'game' : challenge.gameId, 'status' : challenge.status }%}
             {% else %}
                 <li> No challenges </li>
