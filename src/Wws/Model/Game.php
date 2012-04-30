@@ -354,23 +354,23 @@ class Game
             }
         }
 		else {
-            if ($isExit) {
-                $this->score1 -= 1;
-            }
-            if ($this->getWinnerFlag() == 'playing') {
-                // update state to Player 1 wins
+            if ($this->isGuessed()) {
+                // update state to this player wins
                 $this->winnerFlag = ($this->player1Id == $user->getId()) ? '1' : '2';
+            } else if ($isExit) {
+                // update state to OTHEr player wins
+                $this->winnerFlag = ($this->player1Id == $user->getId()) ? '2' : '1';
+            } else {
+                $this->winnerFlag = 'draw';
+            }
 				
-				if ($this->winnerFlag == '1') {
-					$this->score1 += 11;
-					$this->score2 -= 5;
-				}
-				else {
-					$this->score2 += 11;
-					$this->score1 -= 5;
-				}
-				
-            } 
+            if ($this->winnerFlag == '1') {
+                $this->score1 += 10;
+                $this->score2 -= 5;
+            } else if ($this->winnerFlag == '2') {
+                $this->score2 += 10;
+                $this->score1 -= 5;
+            }
         }
     }
     
