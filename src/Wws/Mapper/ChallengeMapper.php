@@ -35,7 +35,7 @@ class ChallengeMapper
                 LEFT JOIN game g ON c.game_id = g.id
                 LEFT JOIN player p1 ON c.challenger_id = p1.id
                 LEFT JOIN player p2 ON c.recipient_id = p2.id
-                WHERE id = ?', array((int) $id));
+                WHERE c.id = ?', array((int) $id));
         return $this->returnChallenge($challengeArr);
     }
 
