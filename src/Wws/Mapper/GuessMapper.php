@@ -72,9 +72,9 @@ class GuessMapper
     public function FindTopLetters($uid, $lim = 3)
     {
         $letters = $this->db->fetchAll('SELECT letter, count(*) AS amount FROM guess '
-                . 'WHERE player_id = :pid '
+                . 'WHERE player_id = :pid AND NOT letter IS NULL'
                 . 'GROUP BY letter '
-                . 'ORDER BY count(*) '
+                . 'ORDER BY count(*) DESC '
                 . 'LIMIT ' . (int)$lim, array(
             'pid' => (int)$uid
         ));
