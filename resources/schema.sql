@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 3.2.4
+-- version 3.4.9
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Mar 30, 2012 at 07:40 PM
--- Server version: 5.1.44
--- PHP Version: 5.3.1
+-- Generation Time: Apr 29, 2012 at 10:19 PM
+-- Server version: 5.5.8
+-- PHP Version: 5.3.5
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -16,7 +17,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `CSE480`
+-- Database: `cse480`
 --
 
 -- --------------------------------------------------------
@@ -35,11 +36,7 @@ CREATE TABLE IF NOT EXISTS `challenge` (
   KEY `fk_challenge_game1` (`game_id`),
   KEY `fk_challenge_player1` (`challenger_id`),
   KEY `fk_challenge_player2` (`recipient_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `challenge`
---
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ;
 
 
 -- --------------------------------------------------------
@@ -940,10 +937,6 @@ CREATE TABLE IF NOT EXISTS `game` (
   KEY `fk_game_player2` (`player2_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ;
 
---
--- Dumping data for table `game`
---
-
 -- --------------------------------------------------------
 
 --
@@ -959,14 +952,12 @@ CREATE TABLE IF NOT EXISTS `guess` (
   `player_id` int(11) NOT NULL,
   `game_id` int(11) NOT NULL,
   PRIMARY KEY (`timestamp`,`game_id`),
-  UNIQUE KEY `unique_letter_game` (`letter`,`game_id`,`word`),
+  UNIQUE KEY `unique_letter_game` (`game_id`,`letter`),
+  UNIQUE KEY `unique_word_game` (`game_id`,`word`),
   KEY `fk_guess_player1` (`player_id`),
   KEY `fk_guess_game1` (`game_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `guess`
---
 -- --------------------------------------------------------
 
 --
@@ -979,7 +970,7 @@ CREATE TABLE IF NOT EXISTS `player` (
   `email` varchar(64) NOT NULL,
   `password` varchar(64) NOT NULL,
   `last_active` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `total_score` int(11) NOT NULL DEFAULT 0,
+  `total_score` int(11) NOT NULL DEFAULT '0',
   `birthdate` date DEFAULT NULL,
   `join_date` date DEFAULT NULL,
   `city` varchar(64) DEFAULT NULL,
@@ -989,6 +980,7 @@ CREATE TABLE IF NOT EXISTS `player` (
   `last_name` varchar(64) CHARACTER SET latin7 COLLATE latin7_estonian_cs DEFAULT NULL,
   `phone` varchar(11) DEFAULT NULL,
   `is_admin` tinyint(1) DEFAULT NULL,
+  `in_game` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username_UNIQUE` (`username`),
   UNIQUE KEY `email_UNIQUE` (`email`)
@@ -998,11 +990,11 @@ CREATE TABLE IF NOT EXISTS `player` (
 -- Dumping data for table `player`
 --
 
-INSERT INTO `player` (`id`, `username`, `email`, `password`, `last_active`, `total_score`, `birthdate`, `join_date`, `city`, `state`, `country`, `first_name`, `last_name`, `phone`, `is_admin`) VALUES
-(1, 'devan', 'saylesd1@msu.edu', '$2a$08$gJvm8Wh2Rb8cCpoeAwqEku7OAGKjmKvmHVAYkL9KICh5sAfJ10/fO', '2012-03-16 13:38:22', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(2, 'matt', 'durakmat@msu.edu', '$2a$08$HS7T2AWfsUaTlNkC6FgyLeSDkeGqnbbqGwKOjsVAmB/GGsqjBwmpC', '2012-03-16 14:44:59', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(3, 'chelsea', 'carrche2@msu.edu', '$2a$08$5o1qmwqNYd0xaNoF2/1bpuC2AdLkZfRakR3dLAwNLd.MrwyQyp7Ii', '2012-03-16 14:45:28', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(4, 'stranger', 'stranger@msu.edu', '$2a$08$dznb3tb.Du3ROYFiVLg0tuIU2zcKKyfBBuHO1yMl/I7ICg9SttA2W', '2012-03-16 14:50:44', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `player` (`id`, `username`, `email`, `password`, `last_active`, `total_score`, `birthdate`, `join_date`, `city`, `state`, `country`, `first_name`, `last_name`, `phone`, `is_admin`, `in_game`) VALUES
+(1, 'devan', 'saylesd1@msu.edu', '$2a$08$gJvm8Wh2Rb8cCpoeAwqEku7OAGKjmKvmHVAYkL9KICh5sAfJ10/fO', '2012-04-30 02:19:56', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 0),
+(2, 'matt', 'durakmat@msu.edu', '$2a$08$QUJE76KIRtwbD.sqynDPieMkzpt6R/Awbl7fIWWPXMEfCJvDd9d8i', '2012-04-30 02:19:55', 0, '1990-02-22', NULL, 'East Lansing', 'MI', 'USA', 'Matt', 'Durak', '3209458345', 1, 0),
+(3, 'chelsea', 'carrche2@msu.edu', '$2a$08$5o1qmwqNYd0xaNoF2/1bpuC2AdLkZfRakR3dLAwNLd.MrwyQyp7Ii', '2012-04-24 21:47:03', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 0),
+(4, 'stranger', 'stranger@msu.edu', '$2a$08$dznb3tb.Du3ROYFiVLg0tuIU2zcKKyfBBuHO1yMl/I7ICg9SttA2W', '2012-04-02 02:36:58', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
 
 --
 -- Constraints for dumped tables
@@ -1013,20 +1005,24 @@ INSERT INTO `player` (`id`, `username`, `email`, `password`, `last_active`, `tot
 --
 ALTER TABLE `challenge`
   ADD CONSTRAINT `fk_challenge_game1` FOREIGN KEY (`game_id`) REFERENCES `game` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_challenge_player1` FOREIGN KEY (`challenger_id`) REFERENCES `player` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_challenge_player2` FOREIGN KEY (`recipient_id`) REFERENCES `player` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_challenge_player1` FOREIGN KEY (`challenger_id`) REFERENCES `player` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_challenge_player2` FOREIGN KEY (`recipient_id`) REFERENCES `player` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `game`
 --
 ALTER TABLE `game`
   ADD CONSTRAINT `fk_game_dictionary` FOREIGN KEY (`word_id`) REFERENCES `dictionary` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_game_player1` FOREIGN KEY (`player1_id`) REFERENCES `player` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_game_player2` FOREIGN KEY (`player2_id`) REFERENCES `player` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+  ADD CONSTRAINT `game_ibfk_2` FOREIGN KEY (`player1_id`) REFERENCES `player` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `game_ibfk_3` FOREIGN KEY (`player2_id`) REFERENCES `player` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `guess`
 --
 ALTER TABLE `guess`
-  ADD CONSTRAINT `fk_guess_game1` FOREIGN KEY (`game_id`) REFERENCES `game` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_guess_player1` FOREIGN KEY (`player_id`) REFERENCES `player` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+  ADD CONSTRAINT `guess_ibfk_1` FOREIGN KEY (`player_id`) REFERENCES `player` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `guess_ibfk_2` FOREIGN KEY (`game_id`) REFERENCES `game` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
