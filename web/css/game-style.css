@@ -13,6 +13,10 @@
 	background: #FFF;
 }
 
+#game-display.bonus {
+    background-color: #dddd99 !important;
+}
+
 #game-state {
 	font-size: 40px;
 	text-align: center;

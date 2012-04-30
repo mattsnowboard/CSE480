@@ -65,35 +65,71 @@ class GameMapper
                         . 'WHERE game.word_id = dictionary.id and num_players = :numPlayers and winner_flag = :result and player1_id = :uid',
                     array( 'numPlayers' => (int) $numPlayers, 'uid' => $uid, 'result' => $result));
 			}
-			else
+			else if ((int)$numPlayers == 2)
 			{	// returns in-progress multi-player games involving given userID
-				$gameArr = $this->db->fetchAll('SELECT *, game.id AS id FROM game, dictionary '
-                        . 'WHERE num_players = :numPlayers and (player1_id = :uid or player2_id = :uid',
-                    array( 'numPlayers' => $numPlayers,
-                            'uid' => $uid));
+				$gameArr = $this->db->fetchAll('SELECT *, game.id AS id FROM game, dictionary WHERE game.word_id = dictionary.id '
+					. 'AND num_players = :numPlayers AND (player1_id = :uid OR player2_id = :uid) AND game.winner_flag = :result',
+                    array('numPlayers' => (int) $numPlayers, 'uid' => $uid, 'result' => $result));
 			}
 		}
 		else
 		{
-			// returns all finished games associated with a given userID
-			$gameArr = $this->db->fetchAll('SELECT *, game.id AS id FROM game, dictionary WHERE game.word_id = dictionary.id '
-				. 'AND winner_flag <> "playing" and (player1_id = :uid OR player2_id = :uid) ORDER BY timestamp DESC', array( 'uid' => $uid));
+			$gameArr = $this->db->fetchAll('SELECT *, game.id AS id FROM game WHERE game.word_id = dictionary.id AND (player1_id = :uid OR player2_id = :uid)', array ('uid' => $uid));
 		}
 		
         return $this->returnGames($gameArr);
     }
 	
+	public function GetGamesForHistory($uid)
+	{
+		// returns all finished games associated with a given userID 
+		//  to be displayed on the History page
+		$sqlResult = $this->db->fetchAll('SELECT dictionary.*, game.id AS gameId, game.num_players, game.timestamp as gameTimestamp, '
+				. 'p1.username as P1username, p2.username as P2username FROM game JOIN dictionary ON game.word_id = dictionary.id '
+				. 'LEFT JOIN player p1 ON game.player1_id = p1.id LEFT JOIN player p2 ON game.player2_id = p2.id WHERE winner_flag <> "playing" '
+				. 'AND (player1_id = :uid OR player2_id = :uid) ORDER BY timestamp DESC', array( 'uid' => $uid));
+		
+		$games = array();
+		if (!is_null($sqlResult) && $sqlResult !== false && !empty($sqlResult)) 
+		{
+            foreach ($sqlResult as $result)
+			{
+				// create new Word object
+				$dict = new Dictionary();
+				$dict->setID($result['id']);
+				$dict->setWord($result['word']);
+				$dict->setDefinition($result['definition']);
+
+				$game = new Game();
+				$game->setDictionary($dict);
+				$game->setPlayer1Name($result['P1username']);
+				$game->setPlayer2Name($result['P2username']);
+				$game->setNumPlayers($result['num_players']);
+				$game->setTimestamp($result['gameTimestamp']);
+				$game->setId($result['gameId']);
+			
+				$games[] = $game;
+			}
+		}
+		return $games;
+	}
 	/**
      * Get details for a specific game to be displayed from the History page
      * 
      * @param int $id
      * @return type 
-     */
+     */ 
 	public function GetGameDetails($id)
-	{
-		$gameArr = $this->db->fetchAssoc('SELECT *,  game.id AS id FROM game, dictionary '
-                . 'WHERE game.word_id = dictionary.id', array((int)$id));
+	{	
+		$sqlResult = $this->db->fetchAssoc('SELECT game.*, p1.username as P1username, p2.username as P2username FROM game LEFT JOIN player p1 ON game.player1_id = p1.id '
+			. 'LEFT JOIN player p2 ON game.player2_id = p2.id WHERE game.id = :id ', array('id' => $id));
+		$game = new Game($sqlResult);
+		$game->setPlayer1Name($sqlResult['P1username']);
+		$game->setPlayer2Name($sqlResult['P2username']);
+		
+		return $game;
 	}
+	
 	
 	
 	/**
@@ -102,6 +138,7 @@ class GameMapper
      * @param mixed $sqlResult
      * @return \Wws\Model\Game|null
      */
+	 
     protected function returnGame($sqlResult)
     {
         if (!is_null($sqlResult) && $sqlResult !== false && !empty($sqlResult)) {
@@ -124,8 +161,9 @@ class GameMapper
     {
         $games = array();
         if (!is_null($sqlResult) && $sqlResult !== false && !empty($sqlResult)) {
-            foreach ($sqlResult as $game)
-            $games[] =$this->returnGame($game);
+            foreach ($sqlResult as $game) {
+                $games[] =$this->returnGame($game);
+            }
         }
         return $games;
     }
@@ -158,6 +196,12 @@ class GameMapper
         return $count == 1;
     }
     
+    /**
+     * Update a Game (state, turn, score, is it over?)
+     * @param \Wws\Model\Game $game
+     * 
+     * @return boolean True if successful
+     */
     public function UpdateGame(\Wws\Model\Game $game)
     {
         $count = $this->db->executeUpdate("UPDATE game "
@@ -176,4 +220,20 @@ class GameMapper
         return $count == 1;
     }
 	
+    /**
+     * Get the last 3 single player games, used to check if we do a bonus round
+     * @param \Wws\Model\User $user
+     * @return Game[]
+     */
+    public function GetLastThreeSingle(\Wws\Model\User $user)
+    {
+        $gameArr = $this->db->fetchAll('SELECT *, game.id AS id FROM game '
+                . 'JOIN dictionary ON game.word_id = dictionary.id  '
+                . 'WHERE num_players = 1 AND player1_id = :uid '
+                . 'ORDER BY timestamp DESC '
+                . 'LIMIT 3',
+            array('uid' => $user->GetId()));
+        
+        return $this->returnGames($gameArr);
+    }
 }

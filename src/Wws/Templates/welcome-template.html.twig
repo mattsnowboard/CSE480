@@ -5,7 +5,8 @@
     <section id="userInfo">
         <h1>Player Information</h1>
         <ul>
-            <li>Your Score: {{ user.totalScore }}</li>
+            <li>Current Total Score: {{ user.totalScore }}</li>
+			<li>Member Since: {{ user.joinDate }}</li>
         </ul>
     </section>
 
@@ -48,10 +49,19 @@
 	</section>
 
 	<section id="gamelist">
-		<h2>Games in Progress</h2>
+		<h2>Single-Player Games in Progress</h2>
 		<ul>
-			{% for game in games %}
+			{% for game in singlePlayerGamesInProgress %}
 				<li><a href="{{path("single_player", {'id':game.id})}}">Game {{ game.id}}</a>:
+                    Current state: {{game.currentState}} (Score: {{game.score1}})</li>
+				{% else %}
+					<li> No games </li>
+			{% endfor %}
+		</ul>
+		<h2>Multi-Player Games in Progress</h2>
+		<ul>
+			{% for game in multiPlayerGamesInProgress %}
+				<li><a href="{{path("multi_player", {'id':game.id})}}">Game {{ game.id}}</a>:
                     Current state: {{game.currentState}} (Score: {{game.score1}})</li>
 				{% else %}
 					<li> No games </li>

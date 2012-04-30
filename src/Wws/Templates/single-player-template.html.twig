@@ -25,7 +25,7 @@
 		{% endif %}
 	</div>
 	
-	<section id="game-display">
+	<section id="game-display"{% if game.isBonus %} class="bonus"{% endif %}>
 		<div id="game-state">
             {% for letter in game.lettersArray %}
             {% if letter !='_' %}
