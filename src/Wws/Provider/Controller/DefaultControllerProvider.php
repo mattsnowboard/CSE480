@@ -228,10 +228,21 @@ class DefaultControllerProvider implements ControllerProviderInterface
          * 
          * This page is shown when the user clicks the Leaderboard link
          */
-        $controllers->get('/remove_player/{id}', function(Application $app, $id) {
+        $controllers->get('/remove-player/{id}', function(Application $app, $id) {
             
-            $players = $app['wws.mapper.user']->GetAllPlayers();
+			try {
+				$success = $app['wws.auth.user_provider']->RemoveUserData($id);
+				if (!$success) {
+					$app['session']->setFlash('edit', 'User could not be removed');
+				}
+			} catch (Exception $e) {
+				// password is too long?
+				$app['session']->setFlash('edit', 'FAIL');
+			}
 
+			$app['session']->setFlash('infobar', 'User Successfully removed.');
+			
+			$players = $app['wws.mapper.user']->GetAllPlayers();
             return $app['twig']->render('view-players-template.html.twig', array(
                 'players' => $players
             ));

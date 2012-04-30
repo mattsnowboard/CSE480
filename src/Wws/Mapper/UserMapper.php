@@ -69,6 +69,15 @@ class UserMapper
             'id' => $id
         ));
     }
+	
+	 /**
+     * Remove User
+     * @param int $id Which user
+     */
+    public function RemoveUser($id)
+    {
+        $this->db->executeUpdate("DELETE FROM player WHERE id = :id", array('id' => (int)$id));
+    }
 
     /**
      * Update the in game status of a user
