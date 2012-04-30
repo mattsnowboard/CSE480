@@ -144,17 +144,15 @@
                                 if ($('#sent-challenge-list #to-' + data.accepted[challenge].recipientId).length) {
                                     // move from pending to accepted
                                     toMove = $('#sent-challenge-list #to-' + data.accepted[challenge].recipientId);
-                                    $('#accepted-challenge-list').append(toMove);
-                                    $(toMove).effect("highlight", {}, 5000);
-                                } else {
-                                    // create new item
-                                    newItem = '<li id="to-' + data.accepted[challenge].recipientId
-                                        + '">Challenge to ' + data.accepted[challenge].recipientId
-                                        + '<a href="' + data.accepted[challenge].gameLink
-                                        + '" class="start-1player-game-button btn btn-small">Go to game</a></li>';
-                                    $('#accepted-challenge-list').append(newItem);
-                                    $(newItem).effect("highlight", {}, 5000);
+                                    $(toMove).remove();
                                 }
+                                // create new item
+                                newItem = '<li id="to-' + data.accepted[challenge].recipientId
+                                    + '">Challenge to ' + data.accepted[challenge].recipientId
+                                    + '<a href="' + data.accepted[challenge].gameLink
+                                    + '" class="start-1player-game-button btn btn-small">Go to game</a></li>';
+                                $('#accepted-challenge-list').append(newItem);
+                                $(newItem).effect("highlight", {}, 5000);
                             }
                         }
                         for (challenge in data.declined) {
