@@ -215,8 +215,26 @@ class DefaultControllerProvider implements ControllerProviderInterface
                 'players' => $players
             ));
         })
-        ->middleware($app['wws.auth.must_be_logged_in'])
+        ->middleware($app['wws.auth.must_be_admin'])
         ->bind('view_players');
+		
+		/**
+         * @route '/remove_player'
+         * @name remove-players
+         * @pre User is logged in
+         * 
+         * This page is shown when the user clicks the Leaderboard link
+         */
+        $controllers->get('/remove_player/{id}', function(Application $app, $id) {
+            
+            $players = $app['wws.mapper.user']->GetAllPlayers();
+
+            return $app['twig']->render('view-players-template.html.twig', array(
+                'players' => $players
+            ));
+        })
+        ->middleware($app['wws.auth.must_be_admin'])
+        ->bind('remove_player');
 		
 		 /**
          * @route '/edit_profile'

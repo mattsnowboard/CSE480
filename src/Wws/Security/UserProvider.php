@@ -5,6 +5,7 @@ namespace Wws\Security;
 require_once(__DIR__.'/../../../vendor/phpass-0.3/PasswordHash.php');
 
 use Wws\Model\User;
+use Wws\Model\Challenge;
 
 /**
  * This is used to authenticate users or retrieve users by cookie 
@@ -49,6 +50,22 @@ class UserProvider
             return $user;
         }
         return null;
+    }
+	
+	 /**
+     * Removes the User selected by the admin
+     * This could be changed to use Sessions or be more secure...
+     * 
+     * @param \Symfony\Component\HttpFoundation\Request $request Has Cookies and other stuff, but is more testable than the GLOBALS
+     * 
+     */
+    public function RemoveUser($id)
+    {
+        // check for the cookie
+        if ($this->session->has('user')) {
+            $this->db->executeDelete("DELETE FROM player WHERE id = :id", array('id' => (int)$id));
+			$this->db->executeDelete("DELETE FROM challenge WHERE status = 'pending' AND challenger_id = :id1 OR recipient_id = :id2", array('id1' => (int)$id, 'id2' => (int)$id));
+        }
     }
     
     /**
