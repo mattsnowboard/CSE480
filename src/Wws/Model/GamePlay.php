@@ -132,7 +132,7 @@ class GamePlay
      */
     public function makeWordGuess(Game $game, User $user, $word)
     {
-      /*if (!$this->userCanGuessWord($game, $user)) {
+ /*if (!$this->userCanGuessWord($game, $user)) {
             throw new GamePlayException('User is not allowed to guess more letters');
 	    }*/
         
@@ -147,6 +147,11 @@ class GamePlay
         $guess->SetWord(strtolower($word));
         $guess->SetIsCorrect($correct);
         
+        // NOTE: for multiplayer, we need to add/subtract a point
+        if ($game->getNumPlayers() == 2) {
+            $game->updateGuess($user, $correct);
+        }
+        
         if ($correct) {
             // update the Game state
             $game->SetCurrentState(strtolower($correctWord));
@@ -159,31 +164,18 @@ class GamePlay
             
             // check if the game is now over (1 player games only get one shot)
             if ($game->getNumPlayers() == 1 || $game->isGuessed()) {
-
                 // they guessed it, end the game
                 $game->endGame(false, $user);
                 // update scores
-				
                 $this->userMapper->UpdateScore($game->getPlayer1Id(), $game->getScore1());
-				
                 if ($game->getNumPlayers() > 1 && !is_null($game->getPlayer2Id())) {
                     $this->userMapper->UpdateScore($game->getPlayer2Id(), $game->getScore2());
                 }
-            }
-			else if ($game->getNumPlayers() == 2 || $game->isGuessed()) {
-
-                // they guessed it, end the game
-				if ($game->isGuessed()){
-                	$game->endGame(false,$user);
-				}
+            } else if ($game->getNumPlayers() == 2) {
                 // update scores
-				if ($game->isGuessed() == false and $user->getId() == $game->getPlayer1Id()){
-                	$this->userMapper->UpdateScore($game->getPlayer1Id(), -1);
-				}
-                else if ($game->getNumPlayers() > 1 && !is_null($game->getPlayer2Id())) {
-					if ($game->isGuessed() == false and $user->getId() == $game->getPlayer2Id()){
-                    	$this->userMapper->UpdateScore($game->getPlayer2Id(), -1);
-					}
+                $this->userMapper->UpdateScore($game->getPlayer1Id(), $game->getScore1());
+                if ($game->getNumPlayers() > 1 && !is_null($game->getPlayer2Id())) {
+                    $this->userMapper->UpdateScore($game->getPlayer2Id(), $game->getScore2());
                 }
             }
 
@@ -194,7 +186,7 @@ class GamePlay
             // already exists
             $this->conn->rollback();
         }
-		
+
 		if ($game->isOver())
 		{
 			$game->endGame(false, $user);
