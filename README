@@ -1,7 +1,11 @@
 CSE 480 Project
-I'M CHANGING EVERYTHING!
-Directory structure:
+===============
 
-src - Our actual application, including the Model, View, and Controller
-vendor - Holds libraries like Silex and anything we end up using
-web - The publicly accessible directory with CSS/Javascript/images and a front controller index.php
+This is a project for CSE 480 at MSU. It is a word game written in PHP using the Silex framework
+
+Directory structure:
+--------------------
+
+* src - Our actual application, including the Model, View, and Controller
+* vendor - Holds libraries like Silex and anything we end up using
+* web - The publicly accessible directory with CSS/Javascript/images and a front controller index.php
